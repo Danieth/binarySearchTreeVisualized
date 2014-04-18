@@ -39,6 +39,7 @@ public class NodeShape extends TreeNode {
     private boolean selected = false;
     private long timeSelected;
     private static final int GROW_RATE = 200;
+    private static final int SHRINK_RATE = 50;
     private static final String FONT_NAME = "Georgia";
     private static final int MIN_FONT_SIZE = 4;
     private static final int MAX_FONT_SIZE = 6;
@@ -118,11 +119,21 @@ public class NodeShape extends TreeNode {
                 shape = new RoundRectangle2D.Double(center.x - size, center.y
                         - size, size * 2, size * 2, 30, 18);
             }
-        } else if (size != RADIUS) {
-            size -= (int) ((System.currentTimeMillis() - timeSelected) / 50);
-            size = Math.max(size, RADIUS);
-            shape = new RoundRectangle2D.Double(center.x - size, center.y
-                    - size, size * 2, size * 2, 30, 18);
+            if (fontSize != MAX_FONT_SIZE) {
+                fontSize += (int) ((System.currentTimeMillis() - timeSelected) / GROW_RATE);
+                fontSize = Math.min(fontSize, MAX_FONT_SIZE);
+            }
+        } else {
+            if (size != RADIUS) {
+                size -= (int) ((System.currentTimeMillis() - timeSelected) / SHRINK_RATE);
+                size = Math.max(size, RADIUS);
+                shape = new RoundRectangle2D.Double(center.x - size, center.y
+                        - size, size * 2, size * 2, 30, 18);
+            }
+            if (fontSize != MIN_FONT_SIZE) {
+                fontSize -= (int) ((System.currentTimeMillis() - timeSelected) / SHRINK_RATE);
+                fontSize = Math.max(fontSize, MIN_FONT_SIZE);
+            }
         }
         gd.fill(shape);
         gd.setColor(getColor());
@@ -149,11 +160,15 @@ public class NodeShape extends TreeNode {
 
         gd.setFont(new Font(FONT_NAME, Font.PLAIN, fontSize));
 
-        int max = max(first.length(), last.length(), age.length(), state.length());
-        gd.drawString(first, (int) center.x - max, (int) center.y - 7);
-        gd.drawString(last, (int) center.x - max, (int) center.y - 1);
-        gd.drawString(age, (int) center.x - max, (int) center.y + 5);
-        gd.drawString(state, (int) center.x - max, (int) center.y + 11);
+        int alignX = size - 2;
+        int scale = (black) ? 2 : 6;
+        int alignY = fontSize + scale;
+        int deltaY = black ? 5 : 10;
+
+        gd.drawString(first, (int) (center.x - alignX), (int) center.y - alignY);
+        gd.drawString(last, (int) (center.x - alignX), (int) (center.y - alignY + deltaY));
+        gd.drawString(age, (int) (center.x - alignX), (int) (center.y - alignY + (deltaY * 2)));
+        gd.drawString(state, (int) (center.x - alignX), (int) center.y - alignY + (deltaY * 3));
     }
 
     private int max(int... ints) {
