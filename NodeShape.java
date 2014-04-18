@@ -161,9 +161,9 @@ public class NodeShape extends TreeNode {
         gd.setFont(new Font(FONT_NAME, Font.PLAIN, fontSize));
 
         int alignX = size - 2;
-        int scale = (black) ? 2 : 6;
+        int scale = !selected ? 2 : 6;
         int alignY = fontSize + scale;
-        int deltaY = black ? 5 : 10;
+        int deltaY = !selected ? 5 : 10;
 
         gd.drawString(first, (int) (center.x - alignX), (int) center.y - alignY);
         gd.drawString(last, (int) (center.x - alignX), (int) (center.y - alignY + deltaY));
