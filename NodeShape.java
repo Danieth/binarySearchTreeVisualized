@@ -32,7 +32,6 @@ public class NodeShape extends TreeNode {
     final private static int MAX_RADIUS = 30;
     final private static int X_SHIFT = 50;
     final private static int Y_SHIFT = 50;
-    final private static double CONSTANT_OF_CENTER = 1.177793508745657;
     Point2D.Double center = null;
     Shape shape = null;
     private boolean black = true;
