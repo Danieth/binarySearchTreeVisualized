@@ -184,7 +184,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                                         ((JButton) e.getSource())
                                                 .setText(values[v = ((v + 1) % values.length)]
                                                         + base);
-                                        bstObjPanel.lockUnlockZoom();
+                                        bstObjPanel.toggleZoom();
                                     }
                                 });
                             }
@@ -202,7 +202,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                                         ((JButton) e.getSource())
                                                 .setText(values[v = ((v + 1) % values.length)]
                                                         + base);
-                                        bstObjPanel.lockUnlockScreenPanning();
+                                        bstObjPanel.toggleScreenPanning();
                                     }
                                 });
                             }
@@ -319,11 +319,11 @@ public class BstObjPanel extends JPanel implements Runnable {
 
     }
 
-    public void lockUnlockZoom() {
+    public void toggleZoom() {
         zoomIsLocked = !zoomIsLocked;
     }
 
-    public void lockUnlockScreenPanning() {
+    public void toggleScreenPanning() {
         screenIsLocked = !screenIsLocked;
     }
 
