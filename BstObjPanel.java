@@ -109,18 +109,19 @@ public class BstObjPanel extends JPanel implements Runnable {
             }
         });
     }
+    
+    private static NodeShape generateNodes(PersonGenerator ps, double percent, double decrement) {
+        if(Math.random()<=percent) {
+            percent-=decrement;
+            return new NodeShape(ps.generateRandomPerson(),generateNodes(ps,percent,decrement),generateNodes(ps,percent,decrement));
+        } else {
+            return null;
+        }
+    }
 
     public static void main(String[] args) throws Exception {
         final BstObjPanel bstObjPanel = new BstObjPanel();
-        NodeShape rightLeftLeftLeft = new NodeShape(bstObjPanel.personGenerator.generateRandomPerson(), null, null);
-        NodeShape rightLeftLeft = new NodeShape(bstObjPanel.personGenerator.generateRandomPerson(), rightLeftLeftLeft, null);
-        NodeShape rightLeft = new NodeShape(bstObjPanel.personGenerator.generateRandomPerson(), rightLeftLeft, null);
-        NodeShape leftRightLeft = new NodeShape(bstObjPanel.personGenerator.generateRandomPerson(), null, null);
-        NodeShape leftRightRight = new NodeShape(bstObjPanel.personGenerator.generateRandomPerson(), null, null);
-        NodeShape leftRight = new NodeShape(bstObjPanel.personGenerator.generateRandomPerson(), leftRightLeft, leftRightRight);
-        NodeShape left = new NodeShape(bstObjPanel.personGenerator.generateRandomPerson(), null, leftRight);
-        NodeShape right = new NodeShape(bstObjPanel.personGenerator.generateRandomPerson(), rightLeft, null);
-        bstObjPanel.treeShape.root = new NodeShape(bstObjPanel.personGenerator.generateRandomPerson(), left, right);
+        bstObjPanel.treeShape.root = generateNodes(bstObjPanel.personGenerator,1.0,0.10);
 
 
         final Thread thread = new Thread(bstObjPanel);
