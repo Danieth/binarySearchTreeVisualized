@@ -1,7 +1,8 @@
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /* Clarifications:
  * This code is all the work of Daniel Ackerman. I used no other code but
@@ -26,29 +27,26 @@ import java.util.HashSet;
  */
 
 public class PersonGenerator {
-    
+
+    private Set<String> used;
+    private List<String> firstNames;
+    private List<String> lastNames;
+
+    public PersonGenerator() {
+        firstNames = new ArrayList<>();
+        generateFirstNames();
+        lastNames = new ArrayList<>();
+        generateLastNames();
+        used = new HashSet<>();
+    }
+
     public static void main(String[] args) {
         PersonGenerator ps = new PersonGenerator();
-        for(int i = 0; i < 100; i++) {
+        for (int i = 0; i < 100; i++) {
             System.out.println(ps.generateRandomPerson().allFields());
         }
     }
-    
-    private HashSet<String> used;
-    private HashMap<String,String> states;
-    private ArrayList<String> firstNames;
-    private ArrayList<String> lastNames;
-    
-    public PersonGenerator() {
-        states = new HashMap<String,String>();
-        generateStates();
-        firstNames = new ArrayList<String>();
-        generateFirstNames();
-        lastNames = new ArrayList<String>();
-        generateLastNames();
-        used = new HashSet<String>();
-    }
-    
+
     private void generateFirstNames() {
         firstNames.add("Michael");
         firstNames.add("James");
@@ -130,7 +128,7 @@ public class PersonGenerator {
         firstNames.add("Pamela");
         firstNames.add("Nicole");
     }
-    
+
     private void generateLastNames() {
         lastNames.add("Samuel");
         lastNames.add("Johnson");
@@ -213,76 +211,24 @@ public class PersonGenerator {
         lastNames.add("Gray");
     }
 
-    private void generateStates() {
-        states.put("Alabama","AL");
-        states.put("Missouri","MO");
-        states.put("Alaska","AK");
-        states.put("Montana","MT");
-        states.put("Arizona","AZ");
-        states.put("Nebraska","NE");
-        states.put("Arkansas","AR");
-        states.put("Nevada","NV");
-        states.put("California","CA");
-        states.put("NewHampshire","NH");
-        states.put("Colorado","CO");
-        states.put("NewJersey","NJ");
-        states.put("Connecticut","CT");
-        states.put("NewMexico","NM");
-        states.put("Delaware","DE");
-        states.put("NewYork","NY");
-        states.put("NorthCarolina","NC");
-        states.put("Florida","FL");
-        states.put("NorthDakota","ND");
-        states.put("Georgia","GA");
-        states.put("Ohio","OH");
-        states.put("Hawaii","HI");
-        states.put("Oklahoma","OK");
-        states.put("Idaho","ID");
-        states.put("Oregon","OR");
-        states.put("Illinois","IL");
-        states.put("Pennsylvania","PA");
-        states.put("Indiana","IN");
-        states.put("RhodeIsland","RI");
-        states.put("Iowa","IA");
-        states.put("SouthCarolina","SC");
-        states.put("Kansas","KS");
-        states.put("SouthDakota","SD");
-        states.put("Kentucky","KY");
-        states.put("Tennessee","TN");
-        states.put("Louisiana","LA");
-        states.put("Texas","TX");
-        states.put("Maine","ME");
-        states.put("Utah","UT");
-        states.put("Maryland","MD");
-        states.put("Vermont","VT");
-        states.put("Massachusetts","MA");
-        states.put("Virginia","VA");
-        states.put("Michigan","MI");
-        states.put("Washington","WA");
-        states.put("Minnesota","MN");
-        states.put("WestVirginia","WV");
-        states.put("Mississippi","MS");
-        states.put("Wisconsin","WI");
-    }
-    
     public Person generateRandomPerson() {
         Collections.shuffle(firstNames);
         Collections.shuffle(lastNames);
         String firstName = firstNames.get(0);
         String lastName = lastNames.get(0);
-        while(used.contains(firstName+lastName)) {
+        while (used.contains(firstName + lastName)) {
             Collections.shuffle(firstNames);
             Collections.shuffle(lastNames);
             firstName = firstNames.get(0);
             lastName = lastNames.get(0);
         }
         used.add(firstName + lastName);
-        String state = (String)(states.values().toArray()[(int) (Math.random()*states.size())]);
-        int age = (int) Math.rint(((Math.log(Math.random()*100+1)*2250/101+20) % 97)+3);
+        int state = (int) (Math.random() * 50);
+        int age = (int) Math.rint(((Math.log(Math.random() * 100 + 1) * 2250 / 101 + 20) % 97) + 3);
         return new Person(firstName, lastName, age, state);
     }
-    
-    public void reset()  {
+
+    public void reset() {
         used.clear();
     }
 }
