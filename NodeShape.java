@@ -37,7 +37,6 @@ public class NodeShape extends TreeNode {
     final private static int radius = 17;
     final private static int xShift = 50;
     final private static int yShift = 50;
-    final private static String INSULT = "YO MOMMA IS SO FAT";
 
     /**
      * The center can EASILY be extracted from shape, but I want to finish the algorithms first
