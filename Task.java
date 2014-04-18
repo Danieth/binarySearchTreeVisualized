@@ -126,25 +126,25 @@ public class Task {
                 break;
             case FIND_SUCCESSOR:
                 //TODO finds the in order successor from the node given, add it with bst.addTaskArgument(inOrderSuccessor)
-                if (node.getRkid() != null) {
+                if (node != null && node.getRkid() != null) {
                     bst.addTaskToFront(new Task(MIN, null, node.getRkid()));
                     bst.addTaskToFront(new Task(DISPLAY, "This node has a right child, so we will go to the right tree and find the minimum value"));
-                } else if (node.getLkid() != null) {
+                } else if (node != null && node.getLkid() != null) {
                     bst.addTaskToFront(new Task(MAX, null, node.getLkid()));
                     bst.addTaskToFront(new Task(DISPLAY, "This node has a left child, so we will go to the left tree and find the maximum value"));
                 }
                 break;
             case MIN:
-                if (node.getLkid() == null) { // Found
+                if (node != null && node.getLkid() == null) { // Found
                     bst.addTaskArgument(node);
-                } else {
+                } else if (node != null) {
                     bst.addTaskToFront(new Task(MIN, null, node.getLkid()));
                 }
                 break;
             case MAX:
-                if (node.getRkid() == null) { // Found
+                if (node != null && node.getRkid() == null) { // Found
                     bst.addTaskArgument(node);
-                } else {
+                } else if (node != null) {
                     bst.addTaskToFront(new Task(MAX, null, node.getRkid()));
                 }
                 break;
