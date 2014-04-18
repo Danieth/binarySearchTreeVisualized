@@ -26,6 +26,7 @@ import java.awt.geom.Point2D;
 
 public class BstObjShape {
     public NodeShape root = null;
+    private boolean needsPreparation = true;
     
     public BstObjShape() {
     }
@@ -34,12 +35,23 @@ public class BstObjShape {
         this.root = root;
     }
     
+    public void insert() {
+        needsPreparation = true;
+    }
+    public void delete() {
+        needsPreparation = true;
+    }
+    
     public void draw(Graphics2D gd, Point2D.Double initialPoint) {
         if(root == null) {
             return;
         } else {
             gd.setFont(new Font("Georgia", Font.PLAIN, 4));
-            root.drawAbsolutely(gd, initialPoint);
+            if(needsPreparation) {
+                root.prepareDrawFromThisNode();   
+            }
+            root.draw(gd);
+            needsPreparation = false;
         }
     }
     

@@ -85,22 +85,21 @@ public class NodeShape extends TreeNode {
         return res;
     }
 
-    public void drawAbsolutely(Graphics2D gd, Point2D.Double initialPoint) {
-        this.center = initialPoint;
-        this.shape = new RoundRectangle2D.Double(initialPoint.x - radius, initialPoint.y
+    public void prepareDrawFromThisNode() {
+        this.center = new Point2D.Double();
+        this.shape = new RoundRectangle2D.Double(center.x - radius, center.y
                 - radius, radius * 2, radius * 2,30,14);
         if (this.getRkid() != null) {
-            ((NodeShape) getRkid()).prepare(initialPoint, true);
+            ((NodeShape) getRkid()).prepare(center, true);
         }
         if (this.getLkid() != null) {
-            ((NodeShape) getLkid()).prepare(initialPoint, false);
+            ((NodeShape) getLkid()).prepare(center, false);
         }
-        draw(gd);
     }
     
     static int re = 0;
 
-    private void draw(Graphics2D gd) {
+    public void draw(Graphics2D gd) {
         if (this.getRkid() != null) {
             NodeShape rightKid = ((NodeShape)getRkid());
             gd.draw(new Line2D.Double(this.center, rightKid.center));
