@@ -1,30 +1,18 @@
+import javax.swing.*;
 import java.awt.*;
-import java.awt.Image.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Line2D;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
-import java.awt.geom.QuadCurve2D;
-import java.awt.geom.Point2D.Double;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.EventListener;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import javax.imageio.ImageIO;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.plaf.SliderUI;
 
 public class BstObjPanel extends JPanel implements Runnable {
 
@@ -118,7 +106,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                 };
                 frame.setLayout(new GridBagLayout());
                 frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                frame.setDefaultLookAndFeelDecorated(true);
+                JFrame.setDefaultLookAndFeelDecorated(true);
 
                 // Create the weights for the main graphical panel
                 GridBagConstraints c = new GridBagConstraints();
