@@ -86,7 +86,7 @@ public class Person {
      * @return <code>fistName + lastName + age + stateFrom;</code>
      */
     public String allFields() {
-        return lastName() + "," + firstName() + "," + age() + "," + state();
+        return firstName() + "," + lastName() + "," + age() + "," + state();
     }
 
     /**
