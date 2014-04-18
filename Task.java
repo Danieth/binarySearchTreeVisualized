@@ -22,14 +22,14 @@
 
 public class Task {
 
-    private final static String delete = "delete";
-    private final static String insert = "insert";
-    private final static String find = "find";
-    private final static String findForDelete = "findForDelete";
-    private final static String findSuccessor = "findSuccessor";
-    private final static String min = "min";
-    private final static String max = "max";
-    private final static String display = "display";
+    private final static String DELETE = "delete";
+    private final static String INSERT = "insert";
+    private final static String FIND = "find";
+    private final static String FIND_FOR_DELETE = "findForDelete";
+    private final static String FIND_SUCCESSOR = "findSuccessor";
+    private final static String MIN = "min";
+    private final static String MAX = "max";
+    private final static String DISPLAY = "display";
     private final String type;
     private final Object[] args;
 
@@ -62,18 +62,18 @@ public class Task {
         }
 
         switch (type) {
-            case delete:
+            case DELETE:
                 if (bst.getTaskArgumentsSize() == 0) {
                     bst.addTaskToFront(this);
-                    bst.addTaskToFront(new Task(findForDelete, person));
-                    bst.addTaskToFront(new Task(display, "Searching for "
+                    bst.addTaskToFront(new Task(FIND_FOR_DELETE, person));
+                    bst.addTaskToFront(new Task(DISPLAY, "Searching for "
                             + person + " to delete them"));
                 } else if (bst.getTaskArgumentsSize() == 2) { // We have the node with the person
                     node = (TreeNode) bst.getNextTaskArgument();
                     parentNode = (TreeNode) bst.getNextTaskArgument();
                     if (node == null) {
                         // the node was not found
-                        bst.addTaskToFront(new Task(display,
+                        bst.addTaskToFront(new Task(DISPLAY,
                                 "Could not find the person " + person));
                     } else {
                         // node was found, so delete it
@@ -82,9 +82,9 @@ public class Task {
                         bst.addTaskArgument(node, parentNode);
 
                         // find the successor
-                        bst.addTaskToFront(new Task(delete, person));
-                        bst.addTaskToFront(new Task(findSuccessor, null, node));
-                        bst.addTaskToFront(new Task(display,
+                        bst.addTaskToFront(new Task(DELETE, person));
+                        bst.addTaskToFront(new Task(FIND_SUCCESSOR, null, node));
+                        bst.addTaskToFront(new Task(DISPLAY,
                                 "Found the node containing " + person + " so now we will search for the in-order successor"));
                     }
                 } else if (bst.getTaskArgumentsSize() == 3) { // We found the in order successor
@@ -94,7 +94,7 @@ public class Task {
                     //bst.addTaskToFront(newTask);
 
                     if (inOrderSuccessorNode == null) {
-                        bst.addTaskToFront(new Task(display,
+                        bst.addTaskToFront(new Task(DISPLAY,
                                 "The value has no in order successor, so we delete the reference to it from the parent"));
                         if (parentNode != null) {
                             if (parentNode.getLkid() != null && parentNode.getLkid().getVal()
@@ -112,49 +112,49 @@ public class Task {
                             // Either refactor code to include reference to the bst, or delete the shady way
                         }
                     } else if (inOrderSuccessorNode != null) {
-                        bst.addTaskToFront(new Task(display,
+                        bst.addTaskToFront(new Task(DISPLAY,
                                 "Found the in-order successor, so now we will swap the values, and delete the in order successor node"));
                         node.setVal(inOrderSuccessorNode.getVal());
                         inOrderSuccessorNode.setVal(node.getVal());
-                        bst.addTaskArgument(delete, person, node, parentNode);
+                        bst.addTaskArgument(DELETE, person, node, parentNode);
                     }
                 }
                 break;
-            case findForDelete:
+            case FIND_FOR_DELETE:
                 //TODO special case of find. Finds the value and adds it with bst.addTaskArgument(foundNode)
 
                 break;
-            case findSuccessor:
+            case FIND_SUCCESSOR:
                 //TODO finds the in order successor from the node given, add it with bst.addTaskArgument(inOrderSuccessor)
                 if (node.getRkid() != null) {
-                    bst.addTaskToFront(new Task(min, null, node.getRkid()));
-                    bst.addTaskToFront(new Task(display, "This node has a right child, so we will go to the right tree and find the minimum value"));
+                    bst.addTaskToFront(new Task(MIN, null, node.getRkid()));
+                    bst.addTaskToFront(new Task(DISPLAY, "This node has a right child, so we will go to the right tree and find the minimum value"));
                 } else if (node.getLkid() != null) {
-                    bst.addTaskToFront(new Task(max, null, node.getLkid()));
-                    bst.addTaskToFront(new Task(display, "This node has a left child, so we will go to the left tree and find the maximum value"));
+                    bst.addTaskToFront(new Task(MAX, null, node.getLkid()));
+                    bst.addTaskToFront(new Task(DISPLAY, "This node has a left child, so we will go to the left tree and find the maximum value"));
                 }
                 break;
-            case min:
+            case MIN:
                 if (node.getLkid() == null) { // Found
                     bst.addTaskArgument(node);
                 } else {
-                    bst.addTaskToFront(new Task(min, null, node.getLkid()));
+                    bst.addTaskToFront(new Task(MIN, null, node.getLkid()));
                 }
                 break;
-            case max:
+            case MAX:
                 if (node.getRkid() == null) { // Found
                     bst.addTaskArgument(node);
                 } else {
-                    bst.addTaskToFront(new Task(max, null, node.getRkid()));
+                    bst.addTaskToFront(new Task(MAX, null, node.getRkid()));
                 }
                 break;
-            case insert:
+            case INSERT:
                 // TODO person, person to insert
                 // node, currentNode
 
                 break;
 
-            case find:
+            case FIND:
 
                 break;
         }
