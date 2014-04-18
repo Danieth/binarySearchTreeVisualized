@@ -44,6 +44,12 @@ public class NodeShape extends TreeNode {
     private static final int MIN_FONT_SIZE = 4;
     private static final int MAX_FONT_SIZE = 6;
     private int fontSize = MIN_FONT_SIZE;
+    private static final int MIN_Y_SCALE = 2;
+    private static final int MAX_Y_SCALE = 6;
+    private int yScale = MIN_Y_SCALE;
+    private static final int MIN_DELTA_Y = 5;
+    private static final int MAX_DELTA_Y = 10;
+    private int deltaY = MIN_DELTA_Y;
 
     public NodeShape(Person pVal, TreeNode pLkid, TreeNode pRkid) {
         super(pVal, pLkid, pRkid);
@@ -123,6 +129,14 @@ public class NodeShape extends TreeNode {
                 fontSize += (int) ((System.currentTimeMillis() - timeSelected) / GROW_RATE);
                 fontSize = Math.min(fontSize, MAX_FONT_SIZE);
             }
+            if (yScale != MAX_Y_SCALE) {
+                yScale += (int) ((System.currentTimeMillis() - timeSelected) / GROW_RATE);
+                yScale = Math.min(yScale, MAX_Y_SCALE);
+            }
+            if (deltaY != MAX_DELTA_Y) {
+                deltaY += (int) ((System.currentTimeMillis() - timeSelected) / GROW_RATE);
+                deltaY = Math.min(deltaY, MAX_DELTA_Y);
+            }
         } else {
             if (size != RADIUS) {
                 size -= (int) ((System.currentTimeMillis() - timeSelected) / SHRINK_RATE);
@@ -133,6 +147,14 @@ public class NodeShape extends TreeNode {
             if (fontSize != MIN_FONT_SIZE) {
                 fontSize -= (int) ((System.currentTimeMillis() - timeSelected) / SHRINK_RATE);
                 fontSize = Math.max(fontSize, MIN_FONT_SIZE);
+            }
+            if (yScale != MIN_Y_SCALE) {
+                yScale -= (int) ((System.currentTimeMillis() - timeSelected) / SHRINK_RATE);
+                yScale = Math.max(yScale, MIN_Y_SCALE);
+            }
+            if (deltaY != MIN_DELTA_Y) {
+                deltaY -= (int) ((System.currentTimeMillis() - timeSelected) / SHRINK_RATE);
+                deltaY = Math.max(deltaY, MIN_Y_SCALE);
             }
         }
         gd.fill(shape);
@@ -161,9 +183,7 @@ public class NodeShape extends TreeNode {
         gd.setFont(new Font(FONT_NAME, Font.PLAIN, fontSize));
 
         int alignX = size - 2;
-        int scale = !selected ? 2 : 6;
-        int alignY = fontSize + scale;
-        int deltaY = !selected ? 5 : 10;
+        int alignY = fontSize + yScale;
 
         gd.drawString(first, (int) (center.x - alignX), (int) center.y - alignY);
         gd.drawString(last, (int) (center.x - alignX), (int) (center.y - alignY + deltaY));
