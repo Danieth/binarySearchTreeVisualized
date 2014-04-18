@@ -16,84 +16,109 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class BstObjPanel extends JPanel implements Runnable {
 
+    private final static double zoomMax = 5;
+    private final static double zoomMin = 0.5;
+    final public BstObjShape treeShape = new BstObjShape();
+    final public Point2D.Double initialPoint = new Point2D.Double();
+    private final int delay = 1000;
+    private final ConcurrentLinkedDeque<Task> tasksToExecute = new ConcurrentLinkedDeque<Task>();
+    private final LinkedList taskArguments = new LinkedList();
     private double x;
     private double y;
-
     private double mouseX;
     private double mouseY;
-
     /**
-     * If true, the panel will not allow zooming. If false, use the scroll wheel
-     * to zoom in and out.
+     * If true, the panel will not allow zooming. If false, use the scroll wheel to zoom in and out.
      */
     private boolean zoomIsLocked = false;
-
     /**
-     * If true, the panel will not allow panning. If false, the panel will pan
-     * when the mouse clicks, and then drags.
+     * If true, the panel will not allow panning. If false, the panel will pan when the mouse clicks, and then drags.
      */
     private boolean screenIsLocked = false;
-
     /**
      * A zoom value of 1 means that the images are being displayed normally.
      */
     private double zoom = 1;
     /**
-     * The last x value for the mouse before the affine transform was applied,
-     * and the frame was updated
+     * The last x value for the mouse before the affine transform was applied, and the frame was updated
      */
     private double lastX;
     /**
-     * The last y value for the mouse before the affine transform was applied,
-     * and the frame was updated
+     * The last y value for the mouse before the affine transform was applied, and the frame was updated
      */
     private double lastY;
-
-    private final int delay = 1000;
-
     private volatile boolean running = true;
     private volatile boolean paused = false;
 
-    private final ConcurrentLinkedDeque<Task> tasksToExecute = new ConcurrentLinkedDeque<Task>();
-    private final LinkedList taskArguments = new LinkedList();
+    public BstObjPanel() {
+        setOpaque(false);
+        setVisible(true);
+        setFocusable(true);
 
-    public void run() {
-        while (running) {
-            int sleepForNMilleseconds = delay;
-
-            System.out.println("Hi!");
-
-            repaint();
-            try {
-                do {
-                    Thread.sleep(sleepForNMilleseconds);
-                    if (paused) {
-                        while (paused) {
-                            Thread.sleep(100);
-                        }
-                        continue;
-                    }
-                    break;
-                } while (true);
-            } catch (InterruptedException e) {
+        addMouseWheelListener(new MouseWheelListener() {
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                if (e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL
+                        && !zoomIsLocked) {
+                    incrementZoom(.05 * -(double) e.getWheelRotation());
+                }
             }
-        }
+        });
 
+        addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                if (!screenIsLocked) {
+                    lastX = e.getX();
+                    lastY = e.getY();
+                }
+            }
+        });
+
+        addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                x = e.getX();
+                y = e.getY();
+            }
+
+            public void mouseDragged(MouseEvent e) {
+                if (!screenIsLocked) {
+                    final int newMouseX = e.getX();
+                    final int newMouseY = e.getY();
+
+                    Point2D adjPreviousPoint = getAffineTranslatedPoint(new Point2D.Double(
+                            lastX, lastY));
+
+                    lastX = newMouseX;
+                    lastY = newMouseY;
+
+                    Point2D adjNewPoint = getAffineTranslatedPoint(new Point2D.Double(
+                            newMouseX, newMouseY));
+
+                    double newX = adjNewPoint.getX() - adjPreviousPoint.getX();
+                    double newY = adjNewPoint.getY() - adjPreviousPoint.getY();
+
+                    mouseX += newX;
+                    mouseY += newY;
+
+                    repaint();
+                }
+            }
+        });
     }
 
     public static void main(String[] args) throws Exception {
         final BstObjPanel bstObjPanel = new BstObjPanel();
-        NodeShape rightLeftLeftLeft = new NodeShape(new Person("rightLeftLeft","Node",1,"VA"),null,null);
-        NodeShape rightLeftLeft = new NodeShape(new Person("rightLeft","Node",1,"VA"),rightLeftLeftLeft,null);
-        NodeShape rightLeft = new NodeShape(new Person("rightLeft","Node",1,"VA"),rightLeftLeft,null);
-        NodeShape leftRightLeft = new NodeShape(new Person("leftRightLeft","Node",2,"VA"),null,null);
-        NodeShape leftRightRight = new NodeShape(new Person("leftRightRight","Node",2,"VA"),null,null);
-        NodeShape leftRight = new NodeShape(new Person("leftRight","Node",2,"VA"),leftRightLeft,leftRightRight);
-        NodeShape left = new NodeShape(new Person("Left","Node",1,"VA"),null,leftRight);
-        NodeShape right = new NodeShape(new Person("right","Node",1,"VA"),rightLeft,null);
-        bstObjPanel.treeShape.root = new NodeShape(new Person("root!","Node",0,"Hi"),left,right);
-        
-        
+        NodeShape rightLeftLeftLeft = new NodeShape(new Person("rightLeftLeft", "Node", 1, "VA"), null, null);
+        NodeShape rightLeftLeft = new NodeShape(new Person("rightLeft", "Node", 1, "VA"), rightLeftLeftLeft, null);
+        NodeShape rightLeft = new NodeShape(new Person("rightLeft", "Node", 1, "VA"), rightLeftLeft, null);
+        NodeShape leftRightLeft = new NodeShape(new Person("leftRightLeft", "Node", 2, "VA"), null, null);
+        NodeShape leftRightRight = new NodeShape(new Person("leftRightRight", "Node", 2, "VA"), null, null);
+        NodeShape leftRight = new NodeShape(new Person("leftRight", "Node", 2, "VA"), leftRightLeft, leftRightRight);
+        NodeShape left = new NodeShape(new Person("Left", "Node", 1, "VA"), null, leftRight);
+        NodeShape right = new NodeShape(new Person("right", "Node", 1, "VA"), rightLeft, null);
+        bstObjPanel.treeShape.root = new NodeShape(new Person("root!", "Node", 0, "Hi"), left, right);
+
+
         final Thread thread = new Thread(bstObjPanel);
         EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -150,8 +175,8 @@ public class BstObjPanel extends JPanel implements Runnable {
                             {
                                 this.addActionListener(new ActionListener() {
                                     private String base = " Zoom";
-                                    private String[] values = { "Lock",
-                                            "Unlock" };
+                                    private String[] values = {"Lock",
+                                            "Unlock"};
                                     private int v = 0;
 
                                     @Override
@@ -168,8 +193,8 @@ public class BstObjPanel extends JPanel implements Runnable {
                             {
                                 this.addActionListener(new ActionListener() {
                                     private String base = " Panning";
-                                    private String[] values = { "Lock",
-                                            "Unlock" };
+                                    private String[] values = {"Lock",
+                                            "Unlock"};
                                     private int v = 0;
 
                                     @Override
@@ -259,10 +284,10 @@ public class BstObjPanel extends JPanel implements Runnable {
                 };
                 frame.add(sidePanel, c);
                 frame.setUndecorated(true);
-                
+
                 Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
                 frame.setSize(screenSize.width, screenSize.height);
-                frame.setExtendedState(Frame.MAXIMIZED_BOTH);  
+                frame.setExtendedState(Frame.MAXIMIZED_BOTH);
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -270,60 +295,28 @@ public class BstObjPanel extends JPanel implements Runnable {
         thread.run();
     }
 
-    public BstObjPanel() {
-        setOpaque(false);
-        setVisible(true);
-        setFocusable(true);
+    public void run() {
+        while (running) {
+            int sleepForNMilleseconds = delay;
 
-        addMouseWheelListener(new MouseWheelListener() {
-            public void mouseWheelMoved(MouseWheelEvent e) {
-                if (e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL
-                        && !zoomIsLocked) {
-                    incrementZoom(.05 * -(double) e.getWheelRotation());
-                }
+            System.out.println("Hi!");
+
+            repaint();
+            try {
+                do {
+                    Thread.sleep(sleepForNMilleseconds);
+                    if (paused) {
+                        while (paused) {
+                            Thread.sleep(100);
+                        }
+                        continue;
+                    }
+                    break;
+                } while (true);
+            } catch (InterruptedException e) {
             }
-        });
+        }
 
-        addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                if (!screenIsLocked) {
-                    lastX = e.getX();
-                    lastY = e.getY();
-                }
-            }
-        });
-
-        addMouseMotionListener(new MouseMotionAdapter() {
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                x = e.getX();
-                y = e.getY();
-            }
-
-            public void mouseDragged(MouseEvent e) {
-                if (!screenIsLocked) {
-                    final int newMouseX = e.getX();
-                    final int newMouseY = e.getY();
-
-                    Point2D adjPreviousPoint = getAffineTranslatedPoint(new Point2D.Double(
-                            lastX, lastY));
-
-                    lastX = newMouseX;
-                    lastY = newMouseY;
-
-                    Point2D adjNewPoint = getAffineTranslatedPoint(new Point2D.Double(
-                            newMouseX, newMouseY));
-
-                    double newX = adjNewPoint.getX() - adjPreviousPoint.getX();
-                    double newY = adjNewPoint.getY() - adjPreviousPoint.getY();
-
-                    mouseX += newX;
-                    mouseY += newY;
-
-                    repaint();
-                }
-            }
-        });
     }
 
     public void lockUnlockZoom() {
@@ -334,28 +327,22 @@ public class BstObjPanel extends JPanel implements Runnable {
         screenIsLocked = !screenIsLocked;
     }
 
-    private final static double zoomMax = 5;
-    private final static double zoomMin = 0.5;
-
     public void incrementZoom(double amount) {
         if (amount < 0) {
             zoom -= Math.min(.5, (Math.pow(2,
                     (zoom + Math.abs(amount) - (zoomMax + zoomMin) / 2))) / 25);
-        }
-        else {
+        } else {
             zoom += Math
                     .min(.5,
                             (Math.pow(
                                     2,
-                                    -(zoom + Math.abs(amount) - (zoomMax + zoomMin) / 2))) / 25);
+                                    -(zoom + Math.abs(amount) - (zoomMax + zoomMin) / 2))) / 25
+                    );
         }
         zoom = Math.min(zoomMax, Math.max(zoomMin, zoom));
         repaint();
     }
-    
-    final public BstObjShape treeShape = new BstObjShape();
-    final public Point2D.Double initialPoint = new Point2D.Double();
-    
+
     public void paintComponent(Graphics g) {
         Graphics2D gd = (Graphics2D) g.create();
 
@@ -380,7 +367,7 @@ public class BstObjPanel extends JPanel implements Runnable {
         gd.setFont(new Font("Georgia", Font.PLAIN, 8));
         gd.drawString("Hi!", 0, 0);
         treeShape.draw(gd, initialPoint);
-        
+
         // Dispose of the graphics
         gd.dispose();
     }
@@ -439,7 +426,7 @@ public class BstObjPanel extends JPanel implements Runnable {
 
     /**
      * Get the next argument
-     * 
+     *
      * @return
      */
     public Object getNextTaskArgument() {
