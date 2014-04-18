@@ -54,4 +54,36 @@ public class BstObjShape {
             needsPreparation = false;
         }
     }
+    
+    public void buildRandomTree(PersonGenerator ps, double percent, double decrement) {
+        buildRandomTree(ps,percent,decrement,false);
+    }
+    
+    public void buildRandomTree(PersonGenerator ps, double percent, double decrement, boolean full) {
+        insert();
+        if(full) {
+            root = generateNodesFull(ps,percent,decrement);
+        } else {
+            root = generateNodes(ps,percent,decrement);
+        }
+    }
+    
+    private NodeShape generateNodes(PersonGenerator ps, double percent, double decrement) {
+        if(Math.random()<=percent) {
+            percent-=decrement;
+            return new NodeShape(ps.generateRandomPerson(),generateNodes(ps,percent,decrement),generateNodes(ps,percent,decrement));
+        } else {
+            return null;
+        }
+    }
+    private NodeShape generateNodesFull(PersonGenerator ps, double percent, double decrement) {
+        NodeShape one = null;
+        NodeShape two = null;
+        if(Math.random() <= percent) {
+            percent-=decrement;
+        one = generateNodesFull(ps,percent,decrement);
+        two = generateNodesFull(ps,percent,decrement);
+        }
+        return new NodeShape(ps.generateRandomPerson(),one,two);
+    }
 }

@@ -111,18 +111,10 @@ public class BstObjPanel extends JPanel implements Runnable {
         });
     }
     
-    private static NodeShape generateNodes(PersonGenerator ps, double percent, double decrement) {
-        if(Math.random()<=percent) {
-            percent-=decrement;
-            return new NodeShape(ps.generateRandomPerson(),generateNodes(ps,percent,decrement),generateNodes(ps,percent,decrement));
-        } else {
-            return null;
-        }
-    }
 
     public static void main(String[] args) throws Exception {
         final BstObjPanel bstObjPanel = new BstObjPanel();
-        bstObjPanel.treeShape.root = generateNodes(bstObjPanel.personGenerator,1.0,0.10);
+        bstObjPanel.treeShape.buildRandomTree(bstObjPanel.personGenerator,1.0,0.25,true);
 
 
         final Thread thread = new Thread(bstObjPanel);
@@ -260,7 +252,17 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 });
                             }
                         });
-                        add(new JButton("dolor"));
+                        // TODO delete this button or replace it with something that is not immediate. Useful for debug though.
+                        add(new JButton("Randomize Tree") {
+                            {
+                                this.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        bstObjPanel.treeShape.buildRandomTree(bstObjPanel.personGenerator,1.0,0.25,true);
+                                    }
+                                });
+                            }
+                        });
                         add(new JButton("sit"));
                         add(new JButton("amet"));
                         add(new JButton("consectetur"));
