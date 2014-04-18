@@ -169,15 +169,19 @@ public class NodeShape extends TreeNode {
         gd.setColor(Color.black);
         String first;
         String last;
-        String age = "Age: " + words[2];
-        String state = "State: " + words[3];
+        String age;
+        String state;
 
-        if (black) {
+        if (!selected || size != MAX_RADIUS) {
             first = "First: " + words[0];
             last = "Last: " + words[1];
+            age = "Age: " + words[2];
+            state = "State: " + words[3];
         } else {
             first = "First Name: " + words[0];
             last = "Last Name: " + words[1];
+            age = "Current Age: " + words[2];
+            state = "Home State: " + words[3];
         }
 
         gd.setFont(new Font(FONT_NAME, Font.PLAIN, fontSize));
