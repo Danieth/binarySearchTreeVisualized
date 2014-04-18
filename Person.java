@@ -33,6 +33,7 @@ public class Person {
     private String lastName;
     private int age;
     private String stateFrom;
+    private static final int LENGTH_CAP = 10;
 
     /**
      * Initialize this Person to the given parameters.
@@ -85,7 +86,52 @@ public class Person {
      * @return <code>fistName + lastName + age + stateFrom;</code>
      */
     public String allFields() {
-        return lastName + "," + firstName + "," + age + "," + stateFrom;
+        return lastName() + "," + firstName() + "," + age() + "," + state();
+    }
+
+    /**
+     * Gets the last name of this Person as a String with a length cap of LENGTH_CAP.
+     * @return capped length last name
+     */
+    private String lastName() {
+        if (lastName.length() > LENGTH_CAP) {
+            return lastName.substring(0, LENGTH_CAP);
+        }
+        return lastName;
+    }
+
+    /**
+     * Gets the first name of this Person as a String with a length cap of LENGTH_CAP.
+     * @return capped length first name
+     */
+    private String firstName() {
+        if (firstName.length() > LENGTH_CAP) {
+            return firstName.substring(0, LENGTH_CAP);
+        }
+        return firstName;
+    }
+
+    /**
+     * Gets the age of this Person as a String with a length cap of LENGTH_CAP.
+     * @return capped length age
+     */
+    private String age() {
+        String s = String.valueOf(age);
+        if (s.length() > LENGTH_CAP) {
+            return s.substring(0, LENGTH_CAP);
+        }
+        return s;
+    }
+
+    /**
+     * Gets the state of this Person as a String with a length cap of LENGTH_CAP.
+     * @return capped length state
+     */
+    private String state() {
+        if (stateFrom.length() > LENGTH_CAP) {
+            return stateFrom.substring(0, LENGTH_CAP);
+        }
+        return stateFrom;
     }
 
     /**
