@@ -1,5 +1,4 @@
-import java.awt.Font;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.geom.Point2D;
 
 /* Clarifications:
@@ -46,7 +45,6 @@ public class BstObjShape {
         if(root == null) {
             return;
         } else {
-            gd.setFont(new Font("Georgia", Font.PLAIN, 4));
             if(needsPreparation) {
                 root.prepareDrawFromThisNode();   
             }

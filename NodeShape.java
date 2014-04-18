@@ -39,6 +39,10 @@ public class NodeShape extends TreeNode {
     private boolean selected = false;
     private long timeSelected;
     private static final int GROW_RATE = 200;
+    private static final String FONT_NAME = "Georgia";
+    private static final int MIN_FONT_SIZE = 4;
+    private static final int MAX_FONT_SIZE = 6;
+    private int fontSize = MIN_FONT_SIZE;
 
     public NodeShape(Person pVal, TreeNode pLkid, TreeNode pRkid) {
         super(pVal, pLkid, pRkid);
@@ -143,7 +147,9 @@ public class NodeShape extends TreeNode {
             last = "Last Name: " + words[1];
         }
 
-        int max = (int) (max(first.length(), last.length(), age.length(), state.length()) / (CONSTANT_OF_CENTER));
+        gd.setFont(new Font(FONT_NAME, Font.PLAIN, fontSize));
+
+        int max = max(first.length(), last.length(), age.length(), state.length());
         gd.drawString(first, (int) center.x - max, (int) center.y - 7);
         gd.drawString(last, (int) center.x - max, (int) center.y - 1);
         gd.drawString(age, (int) center.x - max, (int) center.y + 5);
