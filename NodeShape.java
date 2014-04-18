@@ -33,10 +33,7 @@ public class NodeShape extends TreeNode {
     final private static int xShift = 50;
     final private static int yShift = 50;
     final private static double CONSTANT_OF_CENTER = 1.177793508745657;
-
-    /**
-     * The center can EASILY be extracted from shape, but I want to finish the algorithms first
-     */
+    
     Point2D.Double center = null;
     Shape shape = null;
     private boolean black = true;
@@ -97,8 +94,6 @@ public class NodeShape extends TreeNode {
         }
     }
     
-    static int re = 0;
-
     public void draw(Graphics2D gd) {
         if (this.getRkid() != null) {
             NodeShape rightKid = ((NodeShape)getRkid());
@@ -121,8 +116,8 @@ public class NodeShape extends TreeNode {
         }
         // centers the text for each node
         gd.setColor(Color.black);
-        String first = "First: " + words[1];
-        String last = "Last: " + words[0];
+        String first = "First: " + words[0];
+        String last = "Last: " + words[1];
         String age = "Age: " + words[2];
         String state = "State: " + words[3];
         int max = (int) (max(first.length(), last.length(), age.length(), state.length()) / (CONSTANT_OF_CENTER));

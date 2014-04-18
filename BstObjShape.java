@@ -54,13 +54,4 @@ public class BstObjShape {
             needsPreparation = false;
         }
     }
-    
-    /*
-     * For drawing, we pass in the depth as we work our way down
-     */
-    
-    
-    // BstObjShape is going to be very inefficient, but that is ok because we
-    // have limited time. Consider refactoring so inserts change the depth.
-    
 }

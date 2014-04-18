@@ -22,7 +22,7 @@ public class BstObjPanel extends JPanel implements Runnable {
     final public Point2D.Double initialPoint = new Point2D.Double();
     private final int delay = 1000;
     private final ConcurrentLinkedDeque<Task> tasksToExecute = new ConcurrentLinkedDeque<Task>();
-    private final LinkedList taskArguments = new LinkedList();
+    private final LinkedList<Object> taskArguments = new LinkedList<Object>();
     private double x;
     private double y;
     private double mouseX;
@@ -166,6 +166,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                 c.gridx = GridBagConstraints.RELATIVE;
                 c.anchor = GridBagConstraints.LINE_START;
 
+                //TODO make this print out data to the lower right corner
                 final JLabel[] data = null;// = new JLabel[];
                 final JPanel dataPanel = new JPanel() {
                     {
@@ -461,11 +462,7 @@ public class BstObjPanel extends JPanel implements Runnable {
             return null;
         }
     }
-
-    /*
-     * Technically, under this calling pause twice then unpause once unpauses it
-     * for good....Consider refactoring to counters.
-     */
+    
     public void pause() {
         this.paused = true;
     }
