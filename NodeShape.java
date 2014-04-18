@@ -32,23 +32,23 @@ public class NodeShape extends TreeNode {
     final private static int MAX_RADIUS = 30;
     final private static int X_SHIFT = 50;
     final private static int Y_SHIFT = 50;
+    private static final int GROW_RATE = 200;
+    private static final int SHRINK_RATE = 50;
+    private static final String FONT_NAME = "Georgia";
+    private static final int MIN_FONT_SIZE = 4;
+    private int fontSize = MIN_FONT_SIZE;
+    private static final int MAX_FONT_SIZE = 6;
+    private static final int MIN_Y_SCALE = 2;
+    private int yScale = MIN_Y_SCALE;
+    private static final int MAX_Y_SCALE = 6;
+    private static final int MIN_DELTA_Y = 5;
+    private int deltaY = MIN_DELTA_Y;
+    private static final int MAX_DELTA_Y = 10;
     Point2D.Double center = null;
     Shape shape = null;
     private boolean black = true;
     private boolean selected = false;
     private long timeSelected;
-    private static final int GROW_RATE = 200;
-    private static final int SHRINK_RATE = 50;
-    private static final String FONT_NAME = "Georgia";
-    private static final int MIN_FONT_SIZE = 4;
-    private static final int MAX_FONT_SIZE = 6;
-    private int fontSize = MIN_FONT_SIZE;
-    private static final int MIN_Y_SCALE = 2;
-    private static final int MAX_Y_SCALE = 6;
-    private int yScale = MIN_Y_SCALE;
-    private static final int MIN_DELTA_Y = 5;
-    private static final int MAX_DELTA_Y = 10;
-    private int deltaY = MIN_DELTA_Y;
 
     public NodeShape(Person pVal, TreeNode pLkid, TreeNode pRkid) {
         super(pVal, pLkid, pRkid);
