@@ -34,7 +34,7 @@ public class Person {
 
     private static final int SHORT_LENGTH_CAP = 10;
     private static final int LONG_LENGTH_CAP = 14;
-    private static final LinkedHashMap<String, String> STATE_MAP = new LinkedHashMap<>();
+    static final LinkedHashMap<String, String> STATE_MAP = new LinkedHashMap<>();
 
     static {
         STATE_MAP.put("Alabama", "AL");
@@ -136,7 +136,7 @@ public class Person {
         } catch (Exception e) {
             throw new IllegalArgumentException();
         }
-        if (stateFrom < 0 || stateFrom > 49) {
+        if (stateFrom < 0 || stateFrom > STATE_MAP.size()) {
             throw new IllegalArgumentException();
         }
         firstName = s[0];
