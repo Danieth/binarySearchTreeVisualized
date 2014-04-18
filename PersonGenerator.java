@@ -278,7 +278,7 @@ public class PersonGenerator {
         }
         used.add(firstName + lastName);
         String state = (String)(states.values().toArray()[(int) (Math.random()*states.size())]);
-        int age = (int) ((Math.random()*90)+5);
+        int age = (int) Math.rint(((Math.log(Math.random()*100+1)*2250/101+20) % 97)+3);
         return new Person(firstName, lastName, age, state);
     }
 }
