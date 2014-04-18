@@ -119,10 +119,19 @@ public class NodeShape extends TreeNode {
         for(String s: getVal().allFields().split(",")) {
             words[i++] = s;
         }
-        gd.drawString("First: " + words[1], (int)center.x-15, (int)center.y-7);
-        gd.drawString("Last: " + words[0], (int)center.x-15, (int)center.y-1);
-        gd.drawString("Age: " + words[2], (int)center.x-15, (int)center.y+5);
-        gd.drawString("State: " + words[3], (int)center.x-15, (int)center.y+11);
+        // centers the text for each node
+        String first = "First: " + words[1];
+        String last = "Last: " + words[0];
+        String age = "Age: " + words[2];
+        String state = "State: " + words[3];
+        int firstCenter = (int) (7 + Math.round(words[1].length() / (3D/2)));
+        int lastCenter = (int) (6 + Math.round(words[0].length() / (3D/2)));
+        int ageCenter = (int) (5 + Math.round(words[2].length() / (3D/2)));
+        int stateCenter = (int) (7 + Math.round(words[3].length() / (3D/2)));
+        gd.drawString(first, (int)center.x-firstCenter, (int)center.y-7);
+        gd.drawString(last, (int)center.x-lastCenter, (int)center.y-1);
+        gd.drawString(age, (int)center.x-ageCenter, (int)center.y+5);
+        gd.drawString(state, (int)center.x-stateCenter, (int)center.y+11);
     }
     
     public void toggleColor() {
