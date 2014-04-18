@@ -340,7 +340,6 @@ public class BstObjPanel extends JPanel implements Runnable {
             System.out.println((System.currentTimeMillis()-startTime) +"");
             repaint();
             try {
-                do {
                     for(int i = 0; i <= delay - (delay*speed)/10; i+=10) {
                         Thread.sleep(10);
                         updateMouse();
@@ -349,10 +348,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                         while (paused) {
                             Thread.sleep(100);
                         }
-                        continue;
                     }
-                    break;
-                } while (true);
             } catch (InterruptedException e) {
             }
         }
