@@ -120,6 +120,7 @@ public class NodeShape extends TreeNode {
             words[i++] = s;
         }
         // centers the text for each node
+        gd.setColor(Color.black);
         String first = "First: " + words[1];
         String last = "Last: " + words[0];
         String age = "Age: " + words[2];
