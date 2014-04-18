@@ -364,8 +364,6 @@ public class BstObjPanel extends JPanel implements Runnable {
         // Apply translation for data
         gd.translate(30, -getHeight() / 2 + 50);
         // Draw the Binary Search tree
-        gd.setFont(new Font("Georgia", Font.PLAIN, 8));
-        gd.drawString("Hi!", 0, 0);
         treeShape.draw(gd, initialPoint);
 
         // Dispose of the graphics

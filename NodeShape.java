@@ -9,6 +9,7 @@ import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.RoundRectangle2D;
 
 /* Clarifications:
  * This code is all the work of Daniel Ackerman. I used no other code but
@@ -33,15 +34,16 @@ import java.awt.geom.Rectangle2D;
  */
 
 public class NodeShape extends TreeNode {
-    final private static int radius = 25;
+    final private static int radius = 17;
     final private static int xShift = 50;
     final private static int yShift = 50;
 
     /**
-     * The center can EASILY be extracted from circle, but I want to finish the algorithms first
+     * The center can EASILY be extracted from shape, but I want to finish the algorithms first
      */
     Point2D.Double center = null;
-    Ellipse2D.Double circle = null;
+    Shape shape = null;
+    private boolean black = true;
 
     public NodeShape(Person pVal, TreeNode pLkid, TreeNode pRkid) {
         super(pVal, pLkid, pRkid);
@@ -54,8 +56,8 @@ public class NodeShape extends TreeNode {
      * @return
      */
     public NodeShape contains(Point2D.Double arg0) {
-        if (circle != null) {
-            if (circle.contains(arg0)) {
+        if (shape != null) {
+            if (shape.contains(arg0)) {
                 return this;
             }
             else {
@@ -121,8 +123,8 @@ public class NodeShape extends TreeNode {
 
     public void drawAbsolutely(Graphics2D gd, Point2D.Double initialPoint) {
         this.center = initialPoint;
-        this.circle = new Ellipse2D.Double(initialPoint.x - radius, initialPoint.y
-                - radius, radius * 2, radius * 2);
+        this.shape = new RoundRectangle2D.Double(initialPoint.x - radius, initialPoint.y
+                - radius, radius * 2, radius * 2,10,10);
         int depth = 0; // when drawing absolutely we assume the depth at this node is 0
         if (this.getRkid() != null) {
             ((NodeShape) getRkid()).prepare(initialPoint, true, depth + 1);
@@ -147,17 +149,47 @@ public class NodeShape extends TreeNode {
             leftKid.draw(gd);
         }
         gd.setColor(gd.getBackground());
-        gd.fill(circle);
-        gd.setColor(Color.black);
-        gd.draw(circle);
-        gd.drawString(getVal().sortKey(), (int)center.x, (int)center.y);
+        gd.fill(shape);
+        gd.setColor(getColor());
+        gd.draw(shape);
+        int iter = -8;
+        /*
+         *             if(i == 2) {
+                gd.drawString("Age: " +s, (int)center.x-16, (int)center.y + iter);  
+            } else {
+                gd.drawString(s, (int)center.x-16, (int)center.y + iter);
+            }
+            iter+=6;
+            i++;
+         */
+        String[] words = new String[4];
+        int i = 0;
+        for(String s: getVal().allFields().split(",")) {
+            words[i++] = s;
+        }
+        gd.drawString("First: " + words[1], (int)center.x-14, (int)center.y-8);
+        gd.drawString("Last: " + words[0], (int)center.x-14, (int)center.y-2);
+        gd.drawString("Age: " + words[2], (int)center.x-14, (int)center.y+4);
+        gd.drawString("State: " + words[3], (int)center.x-14, (int)center.y+10);
+    }
+    
+    public void toggleColor() {
+        black = !black;
+    }
+
+    private Color getColor() {
+        if(black) {
+            return Color.black;
+        } else {
+            return Color.red;
+        }
     }
 
     /**
      * @param gd
      * @param initialPoint
      * @param depth
-     * @return the center of the circle that is drawn
+     * @return the center of the shape that is drawn
      */
     private void prepare(Double initialPoint, boolean rightOfParent, int depth) {
 
@@ -186,8 +218,8 @@ public class NodeShape extends TreeNode {
                 + initialPoint.getX();
 
         this.center = new Point2D.Double(centerOfCircleXCoordinate, centerOfCircleYCoordinate);
-        this.circle = new Ellipse2D.Double(center.x - radius, center.y
-                - radius, radius * 2, radius * 2);
+        this.shape = new RoundRectangle2D.Double(center.x - radius, center.y
+                - radius, radius * 2, radius * 2,10,10);
         
         if (this.getRkid() != null) {
             ((NodeShape) getRkid()).prepare(center, true, depth + 1);
