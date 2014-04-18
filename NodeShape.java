@@ -119,6 +119,7 @@ public class NodeShape extends TreeNode {
         for(String s: getVal().allFields().split(",")) {
             words[i++] = s;
         }
+        gd.setColor(Color.black);
         gd.drawString("First: " + words[1], (int)center.x-15, (int)center.y-7);
         gd.drawString("Last: " + words[0], (int)center.x-15, (int)center.y-1);
         gd.drawString("Age: " + words[2], (int)center.x-15, (int)center.y+5);
