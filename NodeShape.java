@@ -1,14 +1,9 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.Shape;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
-import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
-import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 
 /* Clarifications:
@@ -89,48 +84,15 @@ public class NodeShape extends TreeNode {
         return res;
     }
 
-    /*
-     * TopNode has its coordinates locked
-     * 
-     * The direction the node is being pointed at is critical to drawing it. It
-     * has to be adjusted IFF it has kids in the opposite direction. Otherwise
-     * we are ok drawing them in the normal fashion.
-     * 
-     * DrawRoot DrawKid requires direction of parent(boolean) If child is right
-     * child, we need the absolute maximum count of nodes to the right. We shift
-     * the drawing of this node that many 'shifts' in the direction the parent
-     * is pointing to us.
-     * 
-     * 
-     * 50 0 60 56 70
-     * 
-     * Because of 56 in the above tree we have to shift the drawing of 60 by one
-     * width. Once we know the x coordinate of the 60, we infer the y coordinate
-     * based on the depth of the node, and then directly draw it to the screen
-     * like the root. Drawing the children follows the same process based on the
-     * coordinates of the parents.
-     * 
-     * 50 will always and forever be drawn in the same location, because that
-     * greately simplifies the algorithm.
-     * 
-     * To sum the process is, get coordinates of parent, get direction from
-     * parent, find the number of steps from that parent you have to take and
-     * then draw the node, recursively iterate for children.
-     * 
-     * Once we KNOW the coordinates of the node, it is much easier to draw the
-     * children.
-     */
-
     public void drawAbsolutely(Graphics2D gd, Point2D.Double initialPoint) {
         this.center = initialPoint;
         this.shape = new RoundRectangle2D.Double(initialPoint.x - radius, initialPoint.y
-                - radius, radius * 2, radius * 2,10,10);
-        int depth = 0; // when drawing absolutely we assume the depth at this node is 0
+                - radius, radius * 2, radius * 2,30,14);
         if (this.getRkid() != null) {
-            ((NodeShape) getRkid()).prepare(initialPoint, true, depth + 1);
+            ((NodeShape) getRkid()).prepare(initialPoint, true);
         }
         if (this.getLkid() != null) {
-            ((NodeShape) getLkid()).prepare(initialPoint, false, depth + 1);
+            ((NodeShape) getLkid()).prepare(initialPoint, false);
         }
         draw(gd);
     }
@@ -152,25 +114,15 @@ public class NodeShape extends TreeNode {
         gd.fill(shape);
         gd.setColor(getColor());
         gd.draw(shape);
-        int iter = -8;
-        /*
-         *             if(i == 2) {
-                gd.drawString("Age: " +s, (int)center.x-16, (int)center.y + iter);  
-            } else {
-                gd.drawString(s, (int)center.x-16, (int)center.y + iter);
-            }
-            iter+=6;
-            i++;
-         */
         String[] words = new String[4];
         int i = 0;
         for(String s: getVal().allFields().split(",")) {
             words[i++] = s;
         }
-        gd.drawString("First: " + words[1], (int)center.x-14, (int)center.y-8);
-        gd.drawString("Last: " + words[0], (int)center.x-14, (int)center.y-2);
-        gd.drawString("Age: " + words[2], (int)center.x-14, (int)center.y+4);
-        gd.drawString("State: " + words[3], (int)center.x-14, (int)center.y+10);
+        gd.drawString("First: " + words[1], (int)center.x-15, (int)center.y-7);
+        gd.drawString("Last: " + words[0], (int)center.x-15, (int)center.y-1);
+        gd.drawString("Age: " + words[2], (int)center.x-15, (int)center.y+5);
+        gd.drawString("State: " + words[3], (int)center.x-15, (int)center.y+11);
     }
     
     public void toggleColor() {
@@ -189,24 +141,18 @@ public class NodeShape extends TreeNode {
      * @param gd
      * @param initialPoint
      * @param depth
-     * @return the center of the shape that is drawn
      */
-    private void prepare(Double initialPoint, boolean rightOfParent, int depth) {
-
+    private void prepare(Double initialPoint, boolean rightOfParent) {
         double centerOfCircleYCoordinate = initialPoint.getY() + yShift;
         double centerOfCircleXCoordinate = 1;
 
-        // to get the xShift, we completely ignore the nodes in the opposite
-        // direction of the parent. We only worry about the the nodes
-        // 'in-between' this node and the parent node, which is the total of
-        // number of nodes in the tree towards the parent
         if (rightOfParent) {
             if (getLkid() != null) {
                 centerOfCircleXCoordinate += ((NodeShape) getLkid())
                         .totalNodesInTree();
             }
         }
-        else { // leftOfParent
+        else {
             if (getRkid() != null) {
                 centerOfCircleXCoordinate += ((NodeShape) getRkid())
                         .totalNodesInTree();
@@ -219,13 +165,13 @@ public class NodeShape extends TreeNode {
 
         this.center = new Point2D.Double(centerOfCircleXCoordinate, centerOfCircleYCoordinate);
         this.shape = new RoundRectangle2D.Double(center.x - radius, center.y
-                - radius, radius * 2, radius * 2,10,10);
+                - radius, radius * 2, radius * 2,30,18);
         
         if (this.getRkid() != null) {
-            ((NodeShape) getRkid()).prepare(center, true, depth + 1);
+            ((NodeShape) getRkid()).prepare(center, true);
         }
         if (this.getLkid() != null) {
-            ((NodeShape) getLkid()).prepare(center, false, depth + 1);
+            ((NodeShape) getLkid()).prepare(center, false);
         }
     }
 
