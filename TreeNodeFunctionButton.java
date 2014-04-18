@@ -32,27 +32,30 @@ public class TreeNodeFunctionButton extends JButton {
             @Override
             public void actionPerformed(ActionEvent e) {
                 bstObjPanel.pause();
+                String extraWords = "";
+                String defaultText = "";
                 while (true) {
                     String response = JOptionPane.showInputDialog(topFrame,
                             "Please enter the data of the person you would like to "
                                     + command
-                                    + " as follows: firstName,lastName,age,state\n(Take your time - the visualization was paused)"
-                    );
+                                    + "! " + extraWords + "\n(take your time - the visualization was paused)", defaultText);
+                    if (response == null) {
+                        break;
+                    }
                     Person person;
                     try {
                         person = new Person(response);
                     } catch (IllegalArgumentException e1) {
+                        extraWords = "You must enter a number for the age parameter";
+                        defaultText = "first name, last name, age, state";
                         continue;
                     } catch (Exception e2) {
                         e2.printStackTrace();
                         continue;
                     }
-                    if (response != null) {
-                        bstObjPanel.addTaskToEnd(new Task(command, person, bstObjPanel.treeShape.root, null));
-                        break;
-                    }
+                    bstObjPanel.addTaskToEnd(new Task(command, person, bstObjPanel.treeShape.root, null));
+                    break;
                 }
-                // until here
                 bstObjPanel.unpause();
             }
         });

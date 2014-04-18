@@ -263,9 +263,10 @@ public class BstObjPanel extends JPanel implements Runnable {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
                                         bstObjPanel.paused = true;
+                                        
                                         bstObjPanel.treeShape.buildRandomTree(
                                                 bstObjPanel.personGenerator,
-                                                1.0, 0.25, true);
+                                                1.0, 0.04, false);
                                         bstObjPanel.paused = false;
                                     }
                                 });

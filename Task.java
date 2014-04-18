@@ -154,7 +154,8 @@ public class Task {
                 // TODO person, person to insert
                 // node, currentNode
                 if(node == null) {
-                    node = new NodeShape(person, null, null);
+                    bst.treeShape.insert();
+                    bst.treeShape.root = new NodeShape(person, null, null);
                 } else {
                     node.select(1000);
                     if(node.getVal().compareTo(person) < 0) {
