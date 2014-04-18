@@ -48,6 +48,8 @@ public class BstObjPanel extends JPanel implements Runnable {
      */
     private double lastY;
     
+    private PersonGenerator personGenerator = new PersonGenerator();
+    
     private int speed = 0;
     private volatile boolean running = true;
     private volatile boolean paused = false;
@@ -110,15 +112,15 @@ public class BstObjPanel extends JPanel implements Runnable {
 
     public static void main(String[] args) throws Exception {
         final BstObjPanel bstObjPanel = new BstObjPanel();
-        NodeShape rightLeftLeftLeft = new NodeShape(new Person("rightLeftLeft", "Node", 1, "VA"), null, null);
-        NodeShape rightLeftLeft = new NodeShape(new Person("rightLeft", "Node", 1, "VA"), rightLeftLeftLeft, null);
-        NodeShape rightLeft = new NodeShape(new Person("rightLeft", "Node", 1, "VA"), rightLeftLeft, null);
-        NodeShape leftRightLeft = new NodeShape(new Person("leftRightLeft", "Node", 2, "VA"), null, null);
-        NodeShape leftRightRight = new NodeShape(new Person("leftRightRight", "Node", 2, "VA"), null, null);
-        NodeShape leftRight = new NodeShape(new Person("leftRight", "Node", 2, "VA"), leftRightLeft, leftRightRight);
-        NodeShape left = new NodeShape(new Person("Left", "Node", 1, "VA"), null, leftRight);
-        NodeShape right = new NodeShape(new Person("right", "Node", 1, "VA"), rightLeft, null);
-        bstObjPanel.treeShape.root = new NodeShape(new Person("root!", "Node", 0, "Hi"), left, right);
+        NodeShape rightLeftLeftLeft = new NodeShape(bstObjPanel.personGenerator.generateRandomPerson(), null, null);
+        NodeShape rightLeftLeft = new NodeShape(bstObjPanel.personGenerator.generateRandomPerson(), rightLeftLeftLeft, null);
+        NodeShape rightLeft = new NodeShape(bstObjPanel.personGenerator.generateRandomPerson(), rightLeftLeft, null);
+        NodeShape leftRightLeft = new NodeShape(bstObjPanel.personGenerator.generateRandomPerson(), null, null);
+        NodeShape leftRightRight = new NodeShape(bstObjPanel.personGenerator.generateRandomPerson(), null, null);
+        NodeShape leftRight = new NodeShape(bstObjPanel.personGenerator.generateRandomPerson(), leftRightLeft, leftRightRight);
+        NodeShape left = new NodeShape(bstObjPanel.personGenerator.generateRandomPerson(), null, leftRight);
+        NodeShape right = new NodeShape(bstObjPanel.personGenerator.generateRandomPerson(), rightLeft, null);
+        bstObjPanel.treeShape.root = new NodeShape(bstObjPanel.personGenerator.generateRandomPerson(), left, right);
 
 
         final Thread thread = new Thread(bstObjPanel);
