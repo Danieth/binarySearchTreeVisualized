@@ -1,6 +1,4 @@
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Shape;
+import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
@@ -29,18 +27,18 @@ import java.awt.geom.RoundRectangle2D;
  */
 
 public class NodeShape extends TreeNode {
-    final private static int radius = 17;
-    final private static int maxRadius = 30;
-    final private static int xShift = 50;
-    final private static int yShift = 50;
+    final private static int RADIUS = 17;
+    private int size = RADIUS;
+    final private static int MAX_RADIUS = 30;
+    final private static int X_SHIFT = 50;
+    final private static int Y_SHIFT = 50;
     final private static double CONSTANT_OF_CENTER = 1.177793508745657;
-    
     Point2D.Double center = null;
     Shape shape = null;
     private boolean black = true;
     private boolean selected = false;
-    private int size = radius;
     private long timeSelected;
+    private static final int GROW_RATE = 200;
 
     public NodeShape(Person pVal, TreeNode pLkid, TreeNode pRkid) {
         super(pVal, pLkid, pRkid);
@@ -48,7 +46,7 @@ public class NodeShape extends TreeNode {
 
     /**
      * Gives you the node that is contained in the point
-     * 
+     *
      * @param point2d
      * @return
      */
@@ -56,8 +54,7 @@ public class NodeShape extends TreeNode {
         if (shape != null) {
             if (shape.contains(point2d)) {
                 return this;
-            }
-            else {
+            } else {
                 if (getRkid() != null) {
                     NodeShape temp = ((NodeShape) getRkid()).contains(point2d);
                     if (temp != null) {
@@ -89,7 +86,7 @@ public class NodeShape extends TreeNode {
     public void prepareDrawFromThisNode() {
         this.center = new Point2D.Double();
         this.shape = new RoundRectangle2D.Double(center.x - size, center.y
-                - size, size * 2, size * 2,30,14);
+                - size, size * 2, size * 2, 30, 14);
         if (this.getRkid() != null) {
             ((NodeShape) getRkid()).prepare(center, true);
         }
@@ -97,51 +94,60 @@ public class NodeShape extends TreeNode {
             ((NodeShape) getLkid()).prepare(center, false);
         }
     }
-    
+
     public void draw(Graphics2D gd) {
         if (this.getRkid() != null) {
-            NodeShape rightKid = ((NodeShape)getRkid());
+            NodeShape rightKid = ((NodeShape) getRkid());
             gd.draw(new Line2D.Double(this.center, rightKid.center));
             rightKid.draw(gd);
         }
         if (this.getLkid() != null) {
-            NodeShape leftKid = ((NodeShape)getLkid());
+            NodeShape leftKid = ((NodeShape) getLkid());
             gd.draw(new Line2D.Double(this.center, leftKid.center));
             leftKid.draw(gd);
         }
         gd.setColor(gd.getBackground());
         if (selected) {
-            if(size != maxRadius) {
-                size += (int)((System.currentTimeMillis()-timeSelected)/200);
-                size = Math.min(size, maxRadius);
+            if (size != MAX_RADIUS) {
+                size += (int) ((System.currentTimeMillis() - timeSelected) / GROW_RATE);
+                size = Math.min(size, MAX_RADIUS);
                 shape = new RoundRectangle2D.Double(center.x - size, center.y
-                        - size, size * 2, size * 2,30,18);
+                        - size, size * 2, size * 2, 30, 18);
             }
-        } else if (size != radius) {
-            size -= (int)((System.currentTimeMillis()-timeSelected)/50);
-            size = Math.max(size, radius); 
+        } else if (size != RADIUS) {
+            size -= (int) ((System.currentTimeMillis() - timeSelected) / 50);
+            size = Math.max(size, RADIUS);
             shape = new RoundRectangle2D.Double(center.x - size, center.y
-                    - size, size * 2, size * 2,30,18);
+                    - size, size * 2, size * 2, 30, 18);
         }
         gd.fill(shape);
         gd.setColor(getColor());
         gd.draw(shape);
         String[] words = new String[4];
         int i = 0;
-        for(String s: getVal().allFields().split(",")) {
+        for (String s : getVal().allFields().split(",")) {
             words[i++] = s;
         }
         // centers the text for each node
         gd.setColor(Color.black);
-        String first = "First: " + words[0];
-        String last = "Last: " + words[1];
+        String first;
+        String last;
         String age = "Age: " + words[2];
         String state = "State: " + words[3];
+
+        if (black) {
+            first = "First: " + words[0];
+            last = "Last: " + words[1];
+        } else {
+            first = "First Name: " + words[0];
+            last = "Last Name: " + words[1];
+        }
+
         int max = (int) (max(first.length(), last.length(), age.length(), state.length()) / (CONSTANT_OF_CENTER));
-        gd.drawString(first, (int)center.x-max, (int)center.y-7);
-        gd.drawString(last, (int)center.x-max, (int)center.y-1);
-        gd.drawString(age, (int)center.x-max, (int)center.y+5);
-        gd.drawString(state, (int)center.x-max, (int)center.y+11);
+        gd.drawString(first, (int) center.x - max, (int) center.y - 7);
+        gd.drawString(last, (int) center.x - max, (int) center.y - 1);
+        gd.drawString(age, (int) center.x - max, (int) center.y + 5);
+        gd.drawString(state, (int) center.x - max, (int) center.y + 11);
     }
 
     private int max(int... ints) {
@@ -156,12 +162,13 @@ public class NodeShape extends TreeNode {
         }
         return max;
     }
-    
+
     public void select() {
         timeSelected = System.currentTimeMillis();
         selected = true;
         black = false;
     }
+
     public void unselect() {
         timeSelected = System.currentTimeMillis();
         selected = false;
@@ -173,7 +180,7 @@ public class NodeShape extends TreeNode {
     }
 
     private Color getColor() {
-        if(black) {
+        if (black) {
             return Color.black;
         } else {
             return Color.red;
@@ -186,7 +193,7 @@ public class NodeShape extends TreeNode {
      * @param depth
      */
     private void prepare(Double initialPoint, boolean rightOfParent) {
-        double centerOfCircleYCoordinate = initialPoint.getY() + yShift;
+        double centerOfCircleYCoordinate = initialPoint.getY() + Y_SHIFT;
         double centerOfCircleXCoordinate = 1;
 
         if (rightOfParent) {
@@ -194,22 +201,21 @@ public class NodeShape extends TreeNode {
                 centerOfCircleXCoordinate += ((NodeShape) getLkid())
                         .totalNodesInTree();
             }
-        }
-        else {
+        } else {
             if (getRkid() != null) {
                 centerOfCircleXCoordinate += ((NodeShape) getRkid())
                         .totalNodesInTree();
             }
             centerOfCircleXCoordinate *= -1;
         }
-        
-        centerOfCircleXCoordinate = centerOfCircleXCoordinate * xShift
+
+        centerOfCircleXCoordinate = centerOfCircleXCoordinate * X_SHIFT
                 + initialPoint.getX();
 
         this.center = new Point2D.Double(centerOfCircleXCoordinate, centerOfCircleYCoordinate);
         this.shape = new RoundRectangle2D.Double(center.x - size, center.y
-                - size, size * 2, size * 2,30,18);
-        
+                - size, size * 2, size * 2, 30, 18);
+
         if (this.getRkid() != null) {
             ((NodeShape) getRkid()).prepare(center, true);
         }
@@ -217,7 +223,7 @@ public class NodeShape extends TreeNode {
             ((NodeShape) getLkid()).prepare(center, false);
         }
     }
-    
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -233,33 +239,42 @@ public class NodeShape extends TreeNode {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         NodeShape other = (NodeShape) obj;
-        if (black != other.black)
+        if (black != other.black) {
             return false;
+        }
         if (center == null) {
-            if (other.center != null)
+            if (other.center != null) {
                 return false;
+            }
+        } else if (!center.equals(other.center)) {
+            return false;
         }
-        else if (!center.equals(other.center))
+        if (selected != other.selected) {
             return false;
-        if (selected != other.selected)
-            return false;
+        }
         if (shape == null) {
-            if (other.shape != null)
+            if (other.shape != null) {
                 return false;
+            }
+        } else if (!shape.equals(other.shape)) {
+            return false;
         }
-        else if (!shape.equals(other.shape))
+        if (size != other.size) {
             return false;
-        if (size != other.size)
+        }
+        if (timeSelected != other.timeSelected) {
             return false;
-        if (timeSelected != other.timeSelected)
-            return false;
+        }
         return true;
     }
 }
