@@ -1,8 +1,6 @@
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 /* Clarifications:
  * This code is all the work of Daniel Ackerman. I used no other code but
@@ -34,13 +32,25 @@ public class TreeNodeFunctionButton extends JButton {
             @Override
             public void actionPerformed(ActionEvent e) {
                 bstObjPanel.pause();
-                //TODO make this repeat while person throws an error (due to the string not being parsable)
-                String response = JOptionPane.showInputDialog(topFrame,
-                        "Please enter the data of the person you would like to "
-                                + command
-                                + " as follows: firstName,lastName,age,state\n(Take your time - the visualization was paused)");
-                if (response != null) {
-                    bstObjPanel.addTaskToEnd(new Task(command, new Person(response), null, null));
+                while (true) {
+                    String response = JOptionPane.showInputDialog(topFrame,
+                            "Please enter the data of the person you would like to "
+                                    + command
+                                    + " as follows: firstName,lastName,age,state\n(Take your time - the visualization was paused)"
+                    );
+                    Person person;
+                    try {
+                        person = new Person(response);
+                    } catch (IllegalArgumentException e1) {
+                        continue;
+                    } catch (Exception e2) {
+                        e2.printStackTrace();
+                        continue;
+                    }
+                    if (response != null) {
+                        bstObjPanel.addTaskToEnd(new Task(command, person, null, null));
+                        break;
+                    }
                 }
                 // until here
                 bstObjPanel.unpause();
