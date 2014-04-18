@@ -32,6 +32,7 @@ public class NodeShape extends TreeNode {
     final private static int radius = 17;
     final private static int xShift = 50;
     final private static int yShift = 50;
+    final private static double CONSTANT_OF_CENTER = 1.177793508745657;
 
     /**
      * The center can EASILY be extracted from shape, but I want to finish the algorithms first
@@ -125,16 +126,26 @@ public class NodeShape extends TreeNode {
         String last = "Last: " + words[0];
         String age = "Age: " + words[2];
         String state = "State: " + words[3];
-        int firstCenter = (int) (7 + Math.round(words[1].length() / (3D/2)));
-        int lastCenter = (int) (6 + Math.round(words[0].length() / (3D/2)));
-        int ageCenter = (int) (5 + Math.round(words[2].length() / (3D/2)));
-        int stateCenter = (int) (7 + Math.round(words[3].length() / (3D/2)));
-        gd.drawString(first, (int)center.x-firstCenter, (int)center.y-7);
-        gd.drawString(last, (int)center.x-lastCenter, (int)center.y-1);
-        gd.drawString(age, (int)center.x-ageCenter, (int)center.y+5);
-        gd.drawString(state, (int)center.x-stateCenter, (int)center.y+11);
+        int max = (int) (max(first.length(), last.length(), age.length(), state.length()) / (CONSTANT_OF_CENTER));
+        gd.drawString(first, (int)center.x-max, (int)center.y-7);
+        gd.drawString(last, (int)center.x-max, (int)center.y-1);
+        gd.drawString(age, (int)center.x-max, (int)center.y+5);
+        gd.drawString(state, (int)center.x-max, (int)center.y+11);
     }
-    
+
+    private int max(int... ints) {
+        if (ints.length < 1) {
+            return Integer.MAX_VALUE;
+        }
+        int max = ints[0];
+        for (int i = 1; i < ints.length; i++) {
+            if (ints[i] > max) {
+                max = ints[i];
+            }
+        }
+        return max;
+    }
+
     public void toggleColor() {
         black = !black;
     }
