@@ -117,8 +117,8 @@ public class BstObjPanel extends JPanel implements Runnable {
 
     public static void main(String[] args) throws Exception {
         final BstObjPanel bstObjPanel = new BstObjPanel();
-        bstObjPanel.treeShape.buildRandomTree(bstObjPanel.personGenerator, 1.0,
-                0.25, true);
+//        bstObjPanel.treeShape.buildRandomTree(bstObjPanel.personGenerator, 1.0,
+//                0.25, true);
 
         final Thread thread = new Thread(bstObjPanel);
         EventQueue.invokeLater(new Runnable() {
@@ -263,7 +263,6 @@ public class BstObjPanel extends JPanel implements Runnable {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
                                         bstObjPanel.paused = true;
-                                        
                                         bstObjPanel.treeShape.buildRandomTree(
                                                 bstObjPanel.personGenerator,
                                                 1.0, 0.04, false);
@@ -282,7 +281,21 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 });
                             }
                         });
-                        add(new JButton("amet"));
+                        add(new JButton("Insert N random nodes"){
+                            {
+                                this.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        bstObjPanel.treeShape.root = null;
+                                        int i = Integer.parseInt(JOptionPane.showInputDialog("Please type the number of nodes you want to randomely insert", "50"));
+                                        while(i > 0) {
+                                            bstObjPanel.addTaskToFront(new Task("insert",bstObjPanel.personGenerator.generateRandomPerson(), bstObjPanel.treeShape.root));
+                                            i--;
+                                        }
+                                    }
+                                });
+                            }
+                        });
                         add(new JButton("consectetur"));
                         add(new JButton("Lorem"));
                         add(new JButton("ipsum"));
@@ -469,7 +482,7 @@ public class BstObjPanel extends JPanel implements Runnable {
         // Apply translation for data
         gd.translate(30, -getHeight() / 2 + 50);
         // Draw the Binary Search tree
-        treeShape.draw(gd, initialPoint);
+        treeShape.draw(gd);
 
         // Dispose of the graphics
         gd.dispose();
@@ -540,6 +553,6 @@ public class BstObjPanel extends JPanel implements Runnable {
     }
 
     public int getTaskArgumentsSize() {
-        return 0;
+        return taskArguments.size();
     }
 }

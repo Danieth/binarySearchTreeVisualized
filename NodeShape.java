@@ -31,7 +31,7 @@ public class NodeShape extends TreeNode {
     private int size = RADIUS;
     final private static int MAX_RADIUS = 30;
     final private static int X_SHIFT = 50;
-    final private static int Y_SHIFT = 50;
+    final private static int Y_SHIFT = 100;
     private static final int GROW_RATE = 200;
     private static final int SHRINK_RATE = 50;
     private static final String FONT_NAME = "Georgia";
@@ -112,13 +112,17 @@ public class NodeShape extends TreeNode {
     public void draw(Graphics2D gd) {
         if (this.getRkid() != null) {
             NodeShape rightKid = ((NodeShape) getRkid());
-            gd.draw(new Line2D.Double(this.center, rightKid.center));
-            rightKid.draw(gd);
+            if(rightKid.center != null) {
+                gd.draw(new Line2D.Double(this.center, rightKid.center));
+                rightKid.draw(gd);
+            }
         }
         if (this.getLkid() != null) {
             NodeShape leftKid = ((NodeShape) getLkid());
-            gd.draw(new Line2D.Double(this.center, leftKid.center));
-            leftKid.draw(gd);
+            if(leftKid.center != null) {
+                gd.draw(new Line2D.Double(this.center, leftKid.center));
+                leftKid.draw(gd);
+            }
         }
         gd.setColor(gd.getBackground());
         final long currentTime = System.currentTimeMillis() - timeSelected;

@@ -108,7 +108,6 @@ public class Task {
                             // extreme edge case, the node is the first node, and it is barren,
                             // therefore, we could simply go to bst and tell it to delete the
                             // reference to it, but that seems a bit shady
-                            
                             bst.treeShape.root = null;
 
                             // Either refactor code to include reference to the bst, or delete the shady way
@@ -151,36 +150,46 @@ public class Task {
                 }
                 break;
             case INSERT:
-                // TODO person, person to insert
-                // node, currentNode
                 if(node == null) {
+                    node = bst.treeShape.root;
+                }
+                if(bst.getTaskArgumentsSize() == 1) {
                     bst.treeShape.insert();
-                    bst.treeShape.root = new NodeShape(person, null, null);
-                } else {
-                    node.select(1000);
-                    if(node.getVal().compareTo(person) < 0) {
-                        NodeShape n = (NodeShape)node.getLkid();
-                        if(n == null) {
-                            bst.treeShape.insert();
-                            node.setLkid(new NodeShape(person,null,null));
-                        } else {
-                            bst.addTaskToFront(new Task(INSERT, person, n));
-                        }
-                    } else if(node.getVal().compareTo(person) > 0) {
-                        NodeShape n = (NodeShape)node.getRkid();
-                        if(n == null) {
-                            bst.treeShape.insert();
-                            node.setRkid(new NodeShape(person,null,null));
-                        } else {
-                            bst.addTaskToFront(new Task(INSERT, person, n));
-                        }
+                    if((boolean)bst.getNextTaskArgument()) {
+                        node.setRkid(new NodeShape(person,null,null));
                     } else {
-                        //Problem!
+                        node.setLkid(new NodeShape(person,null,null));
+                    }
+                    return;
+                } else {
+                    if(node == null) {
+                        bst.treeShape.insert();
+                        bst.treeShape.root = new NodeShape(person, null, null);
+                        return;
+                    } else {
+                        node.select(1000);
+                        if(node.getVal().compareTo(person) < 0) {
+                            NodeShape n = (NodeShape)node.getLkid();
+                            if(n == null) {
+                                bst.addTaskArgument(false);
+                                bst.addTaskToFront(new Task(INSERT, person, node));
+                            } else {
+                                bst.addTaskToFront(new Task(INSERT, person, n));
+                            }
+                        } else if(node.getVal().compareTo(person) > 0) {
+                            NodeShape n = (NodeShape)node.getRkid();
+                            if(n == null) {
+                                bst.addTaskArgument(true);
+                                bst.addTaskToFront(new Task(INSERT, person, node));
+                            } else {
+                                bst.addTaskToFront(new Task(INSERT, person, n));
+                            }
+                        } else {
+                            //Problem!
+                        }
                     }
                 }
-
                 break;
-
             case FIND:
 
                 break;

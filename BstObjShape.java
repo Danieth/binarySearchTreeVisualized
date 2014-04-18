@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /* Clarifications:
  * This code is all the work of Daniel Ackerman. I used no other code but
@@ -25,7 +26,7 @@ import java.awt.geom.Point2D;
 
 public class BstObjShape {
     public NodeShape root = null;
-    private boolean needsPreparation = true;
+    private AtomicBoolean needsPreparation = new AtomicBoolean(true);
     
     public BstObjShape() {
     }
@@ -35,21 +36,21 @@ public class BstObjShape {
     }
     
     public void insert() {
-        needsPreparation = true;
+        needsPreparation.compareAndSet(false, true);
     }
     public void delete() {
-        needsPreparation = true;
+        needsPreparation.compareAndSet(false, true);
     }
     
-    public void draw(Graphics2D gd, Point2D.Double initialPoint) {
+    public void draw(Graphics2D gd) {
         if(root == null) {
             return;
         } else {
-            if(needsPreparation) {
-                root.prepareDrawFromThisNode();   
+            if(needsPreparation.get()) {
+                root.prepareDrawFromThisNode();
+                needsPreparation.compareAndSet(true, false);
             }
             root.draw(gd);
-            needsPreparation = false;
         }
     }
     

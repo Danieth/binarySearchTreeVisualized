@@ -29,7 +29,7 @@ import java.util.Map;
  *
  * @author DanielAckerman
  * @version 1.0
- */
+ */ 
 public class Person {
 
     private static final int SHORT_LENGTH_CAP = 10;
