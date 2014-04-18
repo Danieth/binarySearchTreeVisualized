@@ -341,8 +341,7 @@ public class BstObjPanel extends JPanel implements Runnable {
             repaint();
             try {
                 do {
-                    int sleepFor = delay - (delay*speed)/10;
-                    for(int i = 0; i < sleepFor; i+=10) {
+                    for(int i = 0; i <= delay - (delay*speed)/10; i+=10) {
                         Thread.sleep(10);
                         updateMouse();
                     }
