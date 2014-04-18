@@ -20,7 +20,7 @@
  *
  */
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -32,8 +32,9 @@ import java.util.Map;
  */
 public class Person {
 
-    private static final int LENGTH_CAP = 10;
-    private static final Map<String, String> STATE_MAP = new HashMap<>();
+    private static final int SHORT_LENGTH_CAP = 10;
+    private static final int LONG_LENGTH_CAP = 14;
+    private static final LinkedHashMap<String, String> STATE_MAP = new LinkedHashMap<>();
 
     static {
         STATE_MAP.put("Alabama", "AL");
@@ -87,9 +88,15 @@ public class Person {
         STATE_MAP.put("Wisconsin", "WI");
     }
 
+    private String shortFirstName;
+    private String longFirstName;
     private String firstName;
+    private String shortLastName;
+    private String longLastName;
     private String lastName;
     private int age;
+    private String shortStateName;
+    private String longStateName;
     private int stateFrom;
 
     /**
@@ -102,9 +109,16 @@ public class Person {
      */
     public Person(String fName, String lName, int age, int state) {
         this.firstName = fName;
+        this.shortFirstName = (fName.length() > SHORT_LENGTH_CAP) ? fName.substring(0, SHORT_LENGTH_CAP) : fName;
+        this.longFirstName = (fName.length() > LONG_LENGTH_CAP) ? fName.substring(0, LONG_LENGTH_CAP) : fName;
         this.lastName = lName;
+        this.shortLastName = (lName.length() > SHORT_LENGTH_CAP) ? lName.substring(0, SHORT_LENGTH_CAP) : lName;
+        this.longLastName = (lName.length() > LONG_LENGTH_CAP) ? lName.substring(0, LONG_LENGTH_CAP) : lName;
         this.age = age;
         this.stateFrom = state;
+        String[] keyValuePair = getKeyValuePairAtIndex(stateFrom);
+        this.shortStateName = keyValuePair[1];
+        this.longStateName = keyValuePair[0];
     }
 
     public Person(String parse) throws IllegalArgumentException {
@@ -129,6 +143,17 @@ public class Person {
         lastName = s[1];
     }
 
+    private String[] getKeyValuePairAtIndex(int index) {
+        int i = 0;
+        for (Map.Entry<String, String> entry : STATE_MAP.entrySet()) {
+            if (i == index) {
+                return new String[]{entry.getKey(), entry.getValue()};
+            }
+            i++;
+        }
+        return new String[]{"", ""};
+    }
+
     /**
      * Get the key used for sorting Persons. The key is the lastname concatenated with the first name. For example if
      * the last name is Smith and the first name is John, then the key is SmithJohn.
@@ -140,61 +165,20 @@ public class Person {
     }
 
     /**
-     * Get all the fields of this Person as a String.
+     * Get all the fields of this Person as a String with a capped length.
      *
      * @return <code>fistName + lastName + age + stateFrom;</code>
      */
     public String allFields() {
-        return firstName() + "," + lastName() + "," + age() + "," + state();
+        return shortFirstName + "," + shortLastName + "," + age + "," + shortStateName;
     }
 
     /**
-     * Gets the last name of this Person as a String with a length cap of LENGTH_CAP.
-     *
-     * @return capped length last name
+     * Get all the fields of this Person as a String with a higher capped length.
+     * @return <code>fistName + lastName + age + stateFrom;</code>
      */
-    private String lastName() {
-        if (lastName.length() > LENGTH_CAP) {
-            return lastName.substring(0, LENGTH_CAP);
-        }
-        return lastName;
-    }
-
-    /**
-     * Gets the first name of this Person as a String with a length cap of LENGTH_CAP.
-     *
-     * @return capped length first name
-     */
-    private String firstName() {
-        if (firstName.length() > LENGTH_CAP) {
-            return firstName.substring(0, LENGTH_CAP);
-        }
-        return firstName;
-    }
-
-    /**
-     * Gets the age of this Person as a String with a length cap of LENGTH_CAP.
-     *
-     * @return capped length age
-     */
-    private String age() {
-        String s = String.valueOf(age);
-        if (s.length() > LENGTH_CAP) {
-            return s.substring(0, LENGTH_CAP);
-        }
-        return s;
-    }
-
-    /**
-     * Gets the state of this Person as a String with a length cap of LENGTH_CAP.
-     *
-     * @return capped length state
-     */
-    private String state() {
-        if (stateFrom.length() > LENGTH_CAP) {
-            return stateFrom.substring(0, LENGTH_CAP);
-        }
-        return stateFrom;
+    public String allLongFields() {
+        return longFirstName + "," + longLastName + "," + age + "," + longStateName;
     }
 
     /**
