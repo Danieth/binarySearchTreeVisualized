@@ -34,13 +34,15 @@ public class TreeNodeFunctionButton extends JButton {
             @Override
             public void actionPerformed(ActionEvent e) {
                 bstObjPanel.pause();
+                //TODO make this repeat while person throws an error (due to the string not being parsable)
                 String response = JOptionPane.showInputDialog(topFrame,
                         "Please enter the data of the person you would like to "
                                 + command
                                 + " as follows: firstName,lastName,age,state\n(Take your time - the visualization was paused)");
                 if (response != null) {
-                    bstObjPanel.addTask(new Task(command, new Person(response)));
+                    bstObjPanel.addTaskToEnd(new Task(command, new Person(response), null, null));
                 }
+                // until here
                 bstObjPanel.unpause();
             }
         });

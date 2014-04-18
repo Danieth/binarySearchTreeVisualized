@@ -9,7 +9,11 @@ import java.awt.geom.Point2D;
 import java.awt.geom.QuadCurve2D;
 import java.awt.geom.Point2D.Double;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EventListener;
+import java.util.LinkedList;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -62,21 +66,27 @@ public class BstObjPanel extends JPanel implements Runnable {
     private volatile boolean running = true;
     private volatile boolean paused = false;
 
-    private final ConcurrentLinkedQueue<Task> tasksToExecute = new ConcurrentLinkedQueue<Task>();
+    private final ConcurrentLinkedDeque<Task> tasksToExecute = new ConcurrentLinkedDeque<Task>();
+    private final LinkedList taskArguments = new LinkedList();
 
     public void run() {
         while (running) {
             int sleepForNMilleseconds = delay;
+
             System.out.println("Hi!");
 
+            repaint();
             try {
-                Thread.sleep(sleepForNMilleseconds);
-                if (paused) {
-                    while (paused) {
-                        Thread.sleep(100);
-                    }
+                do {
                     Thread.sleep(sleepForNMilleseconds);
-                }
+                    if (paused) {
+                        while (paused) {
+                            Thread.sleep(100);
+                        }
+                        continue;
+                    }
+                    break;
+                } while (true);
             } catch (InterruptedException e) {
             }
         }
@@ -85,6 +95,17 @@ public class BstObjPanel extends JPanel implements Runnable {
 
     public static void main(String[] args) throws Exception {
         final BstObjPanel bstObjPanel = new BstObjPanel();
+        NodeShape rightLeftLeftLeft = new NodeShape(new Person("rightLeftLeft","Node",1,"VA"),null,null);
+        NodeShape rightLeftLeft = new NodeShape(new Person("rightLeft","Node",1,"VA"),rightLeftLeftLeft,null);
+        NodeShape rightLeft = new NodeShape(new Person("rightLeft","Node",1,"VA"),rightLeftLeft,null);
+        NodeShape leftRightLeft = new NodeShape(new Person("leftRightLeft","Node",2,"VA"),null,null);
+        NodeShape leftRightRight = new NodeShape(new Person("leftRightRight","Node",2,"VA"),null,null);
+        NodeShape leftRight = new NodeShape(new Person("leftRight","Node",2,"VA"),leftRightLeft,leftRightRight);
+        NodeShape left = new NodeShape(new Person("Left","Node",1,"VA"),null,leftRight);
+        NodeShape right = new NodeShape(new Person("right","Node",1,"VA"),rightLeft,null);
+        bstObjPanel.treeShape.root = new NodeShape(new Person("root!","Node",0,"Hi"),left,right);
+        
+        
         final Thread thread = new Thread(bstObjPanel);
         EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -184,7 +205,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        bstObjPanel.paused = true;
+                                        //bstObjPanel.paused = true;
                                     }
                                 });
                             }
@@ -194,7 +215,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        bstObjPanel.paused = true;
+                                        //bstObjPanel.paused = true;
                                     }
                                 });
                             }
@@ -204,7 +225,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        bstObjPanel.paused = true;
+                                        //bstObjPanel.paused = true;
                                     }
                                 });
                             }
@@ -214,12 +235,11 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        bstObjPanel.paused = true;
+                                        //bstObjPanel.paused = true;
                                     }
                                 });
                             }
                         });
-                        add(new JButton("ipsum"));
                         add(new JButton("dolor"));
                         add(new JButton("sit"));
                         add(new JButton("amet"));
@@ -230,6 +250,16 @@ public class BstObjPanel extends JPanel implements Runnable {
                         add(new JButton("sit"));
                         add(new JButton("amet"));
                         add(new JButton("consectetur"));
+                        add(new JButton("Close") {
+                            {
+                                this.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        frame.dispose();
+                                    }
+                                });
+                            }
+                        });
                     }
                 };
                 JPanel sidePanel = new JPanel() {
@@ -240,8 +270,11 @@ public class BstObjPanel extends JPanel implements Runnable {
                     }
                 };
                 frame.add(sidePanel, c);
-
-                frame.setSize(700, 700);
+                frame.setUndecorated(true);
+                
+                Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                frame.setSize(screenSize.width, screenSize.height);
+                frame.setExtendedState(Frame.MAXIMIZED_BOTH);  
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -331,9 +364,10 @@ public class BstObjPanel extends JPanel implements Runnable {
         zoom = Math.min(zoomMax, Math.max(zoomMin, zoom));
         repaint();
     }
-
-    final NodeShape s = new NodeShape(0, 0, 50, 50);
-
+    
+    final public BstObjShape treeShape = new BstObjShape();
+    final public Point2D.Double initialPoint = new Point2D.Double();
+    
     public void paintComponent(Graphics g) {
         Graphics2D gd = (Graphics2D) g.create();
 
@@ -355,8 +389,10 @@ public class BstObjPanel extends JPanel implements Runnable {
         // Apply translation for data
         gd.translate(30, -getHeight() / 2 + 50);
         // Draw the Binary Search tree
-        gd.draw(s);
-
+        gd.setFont(new Font("Georgia", Font.PLAIN, 8));
+        gd.drawString("Hi!", 0, 0);
+        treeShape.draw(gd, initialPoint);
+        
         // Dispose of the graphics
         gd.dispose();
     }
@@ -369,10 +405,6 @@ public class BstObjPanel extends JPanel implements Runnable {
         tx.translate(mouseX, mouseY);
 
         return tx;
-    }
-
-    private Point2D normalize(double x, double y) {
-        return normalize(new Point2D.Double(x - .5, y - .5));
     }
 
     private Point2D normalize(Point2D point) {
@@ -405,7 +437,35 @@ public class BstObjPanel extends JPanel implements Runnable {
         this.paused = false;
     }
 
-    public synchronized void addTask(Task newTask) {
-        tasksToExecute.add(newTask);
+    public synchronized void addTaskToFront(Task newTask) {
+        tasksToExecute.addFirst(newTask);
+    }
+
+    public synchronized void addTaskToEnd(Task newTask) {
+        tasksToExecute.addLast(newTask);
+    }
+
+    public int taskArgumentSize() {
+        return taskArguments.size();
+    }
+
+    /**
+     * Get the next argument
+     * 
+     * @return
+     */
+    public Object getNextTaskArgument() {
+        return taskArguments.poll();
+    }
+
+    /**
+     * Added in order to the end of the queue
+     */
+    public void addTaskArgument(Object... c) {
+        Collections.addAll(taskArguments, c);
+    }
+
+    public int getTaskArgumentsSize() {
+        return 0;
     }
 }
