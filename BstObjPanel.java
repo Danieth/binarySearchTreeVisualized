@@ -29,11 +29,13 @@ public class BstObjPanel extends JPanel implements Runnable {
     private double mouseY;
     private NodeShape mouseIsOverNode = null;
     /**
-     * If true, the panel will not allow zooming. If false, use the scroll wheel to zoom in and out.
+     * If true, the panel will not allow zooming. If false, use the scroll wheel
+     * to zoom in and out.
      */
     private boolean zoomIsLocked = false;
     /**
-     * If true, the panel will not allow panning. If false, the panel will pan when the mouse clicks, and then drags.
+     * If true, the panel will not allow panning. If false, the panel will pan
+     * when the mouse clicks, and then drags.
      */
     private boolean screenIsLocked = false;
     /**
@@ -41,16 +43,18 @@ public class BstObjPanel extends JPanel implements Runnable {
      */
     private double zoom = 1;
     /**
-     * The last x value for the mouse before the affine transform was applied, and the frame was updated
+     * The last x value for the mouse before the affine transform was applied,
+     * and the frame was updated
      */
     private double lastX;
     /**
-     * The last y value for the mouse before the affine transform was applied, and the frame was updated
+     * The last y value for the mouse before the affine transform was applied,
+     * and the frame was updated
      */
     private double lastY;
-    
+
     private PersonGenerator personGenerator = new PersonGenerator();
-    
+
     private int speed = 0;
     private volatile boolean running = true;
     private volatile boolean paused = false;
@@ -110,12 +114,11 @@ public class BstObjPanel extends JPanel implements Runnable {
             }
         });
     }
-    
 
     public static void main(String[] args) throws Exception {
         final BstObjPanel bstObjPanel = new BstObjPanel();
-        bstObjPanel.treeShape.buildRandomTree(bstObjPanel.personGenerator,1.0,0.25,true);
-
+        bstObjPanel.treeShape.buildRandomTree(bstObjPanel.personGenerator, 1.0,
+                0.25, true);
 
         final Thread thread = new Thread(bstObjPanel);
         EventQueue.invokeLater(new Runnable() {
@@ -158,7 +161,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                 c.gridx = GridBagConstraints.RELATIVE;
                 c.anchor = GridBagConstraints.LINE_START;
 
-                //TODO make this print out data to the lower right corner
+                // TODO make this print out data to the lower right corner
                 final JLabel[] data = null;// = new JLabel[];
                 final JPanel dataPanel = new JPanel() {
                     {
@@ -174,8 +177,8 @@ public class BstObjPanel extends JPanel implements Runnable {
                             {
                                 this.addActionListener(new ActionListener() {
                                     private String base = " Zoom";
-                                    private String[] values = {"Lock",
-                                            "Unlock"};
+                                    private String[] values = { "Lock",
+                                            "Unlock" };
                                     private int v = 0;
 
                                     @Override
@@ -192,8 +195,8 @@ public class BstObjPanel extends JPanel implements Runnable {
                             {
                                 this.addActionListener(new ActionListener() {
                                     private String base = " Panning";
-                                    private String[] values = {"Lock",
-                                            "Unlock"};
+                                    private String[] values = { "Lock",
+                                            "Unlock" };
                                     private int v = 0;
 
                                     @Override
@@ -217,7 +220,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        //bstObjPanel.paused = true;
+                                        // bstObjPanel.paused = true;
                                     }
                                 });
                             }
@@ -227,7 +230,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        //bstObjPanel.paused = true;
+                                        // bstObjPanel.paused = true;
                                     }
                                 });
                             }
@@ -237,7 +240,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        //bstObjPanel.paused = true;
+                                        // bstObjPanel.paused = true;
                                     }
                                 });
                             }
@@ -247,18 +250,23 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        //bstObjPanel.paused = true;
+                                        // bstObjPanel.paused = true;
                                     }
                                 });
                             }
                         });
-                        // TODO delete this button or replace it with something that is not immediate. Useful for debug though.
+                        // TODO delete this button or replace it with something
+                        // that is not immediate. Useful for debug though.
                         add(new JButton("Randomize Tree") {
                             {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        bstObjPanel.treeShape.buildRandomTree(bstObjPanel.personGenerator,1.0,0.25,true);
+                                        bstObjPanel.paused = true;
+                                        bstObjPanel.treeShape.buildRandomTree(
+                                                bstObjPanel.personGenerator,
+                                                1.0, 0.25, true);
+                                        bstObjPanel.paused = false;
                                     }
                                 });
                             }
@@ -274,7 +282,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        if(bstObjPanel.speed < 10-1) {
+                                        if (bstObjPanel.speed < 10 - 1) {
                                             bstObjPanel.speed++;
                                         }
                                     }
@@ -286,9 +294,9 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                       if(bstObjPanel.speed > -10+1) { 
-                                           bstObjPanel.speed--;
-                                       }
+                                        if (bstObjPanel.speed > -10 + 1) {
+                                            bstObjPanel.speed--;
+                                        }
                                     }
                                 });
                             }
@@ -325,7 +333,8 @@ public class BstObjPanel extends JPanel implements Runnable {
                 frame.add(sidePanel, c);
                 frame.setUndecorated(true);
 
-                Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                Dimension screenSize = Toolkit.getDefaultToolkit()
+                        .getScreenSize();
                 frame.setSize(screenSize.width, screenSize.height);
                 frame.setExtendedState(Frame.MAXIMIZED_BOTH);
                 frame.setLocationRelativeTo(null);
@@ -339,18 +348,27 @@ public class BstObjPanel extends JPanel implements Runnable {
         final long startTime = System.currentTimeMillis();
         while (running) {
 
-            System.out.println((System.currentTimeMillis()-startTime) +"");
+            System.out.println((System.currentTimeMillis() - startTime) + "");
             repaint();
             try {
-                    for(int i = 0; i <= delay - (delay*speed)/10; i+=10) {
+                int i = 0;
+                while (true) {
+                    for (; i < delay - (delay * speed) / 10; i += 10) {
+                        if (paused) {
+                            break;
+                        }
                         Thread.sleep(10);
                         updateMouse();
                     }
                     if (paused) {
-                        while (paused) {
+                        do {
                             Thread.sleep(100);
-                        }
+                        } while (paused);
+                        continue;
                     }
+                    break;
+                }
+
             } catch (InterruptedException e) {
             }
         }
@@ -359,24 +377,26 @@ public class BstObjPanel extends JPanel implements Runnable {
 
     private void updateMouse() {
         boolean repaint = false;
-        if(treeShape.root != null) {
-            if(mouseIsOverNode != null) {
+        if (treeShape.root != null) {
+            if (mouseIsOverNode != null) {
                 mouseIsOverNode.toggleColor();
-                repaint=true;
+                repaint = true;
             }
-            mouseIsOverNode = treeShape.root.contains(normalize(new Point2D.Double(x,y)));
-            if(mouseIsOverNode != null) {
+            mouseIsOverNode = treeShape.root
+                    .contains(normalize(new Point2D.Double(x, y)));
+            if (mouseIsOverNode != null) {
                 mouseIsOverNode.toggleColor();
-                repaint=true;
+                repaint = true;
             }
-        } else {
-            if(mouseIsOverNode != null) {
+        }
+        else {
+            if (mouseIsOverNode != null) {
                 mouseIsOverNode.toggleColor();
-                repaint=true;
+                repaint = true;
             }
             mouseIsOverNode = null;
         }
-        if(repaint) {
+        if (repaint) {
             this.repaint();
         }
     }
@@ -393,13 +413,13 @@ public class BstObjPanel extends JPanel implements Runnable {
         if (amount < 0) {
             zoom -= Math.min(.5, (Math.pow(2,
                     (zoom + Math.abs(amount) - (zoomMax + zoomMin) / 2))) / 25);
-        } else {
+        }
+        else {
             zoom += Math
                     .min(.5,
                             (Math.pow(
                                     2,
-                                    -(zoom + Math.abs(amount) - (zoomMax + zoomMin) / 2))) / 25
-                    );
+                                    -(zoom + Math.abs(amount) - (zoomMax + zoomMin) / 2))) / 25);
         }
         zoom = Math.min(zoomMax, Math.max(zoomMin, zoom));
         repaint();
@@ -459,7 +479,7 @@ public class BstObjPanel extends JPanel implements Runnable {
             return null;
         }
     }
-    
+
     public void pause() {
         this.paused = true;
     }
@@ -482,7 +502,7 @@ public class BstObjPanel extends JPanel implements Runnable {
 
     /**
      * Get the next argument
-     *
+     * 
      * @return
      */
     public Object getNextTaskArgument() {
