@@ -271,7 +271,16 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 });
                             }
                         });
-                        add(new JButton("sit"));
+                        add(new JButton("Clear Tree") {
+                            {
+                                this.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        bstObjPanel.treeShape.root = null;
+                                    }
+                                });
+                            }
+                        });
                         add(new JButton("amet"));
                         add(new JButton("consectetur"));
                         add(new JButton("Lorem"));
@@ -349,6 +358,10 @@ public class BstObjPanel extends JPanel implements Runnable {
         while (running) {
 
             System.out.println((System.currentTimeMillis() - startTime) + "");
+            if(!tasksToExecute.isEmpty()) {
+                tasksToExecute.poll().exectute(this);
+            }
+            
             repaint();
             try {
                 int i = 0;

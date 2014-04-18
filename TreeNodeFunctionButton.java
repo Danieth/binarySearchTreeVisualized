@@ -48,7 +48,7 @@ public class TreeNodeFunctionButton extends JButton {
                         continue;
                     }
                     if (response != null) {
-                        bstObjPanel.addTaskToEnd(new Task(command, person, null, null));
+                        bstObjPanel.addTaskToEnd(new Task(command, person, bstObjPanel.treeShape.root, null));
                         break;
                     }
                 }

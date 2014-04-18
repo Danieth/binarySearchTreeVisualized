@@ -35,6 +35,7 @@ public class NodeShape extends TreeNode {
     private static final int GROW_RATE = 200;
     private static final int SHRINK_RATE = 50;
     private static final String FONT_NAME = "Georgia";
+    
     private static final int MIN_FONT_SIZE = 4;
     private int fontSize = MIN_FONT_SIZE;
     private static final int MAX_FONT_SIZE = 6;
@@ -44,11 +45,14 @@ public class NodeShape extends TreeNode {
     private static final int MIN_DELTA_Y = 5;
     private int deltaY = MIN_DELTA_Y;
     private static final int MAX_DELTA_Y = 10;
+    
     Point2D.Double center = null;
     Shape shape = null;
     private boolean black = true;
     private boolean selected = false;
     private long timeSelected;
+    
+    private long timeUntilUnselected = -1;
 
     public NodeShape(Person pVal, TreeNode pLkid, TreeNode pRkid) {
         super(pVal, pLkid, pRkid);
@@ -117,43 +121,48 @@ public class NodeShape extends TreeNode {
             leftKid.draw(gd);
         }
         gd.setColor(gd.getBackground());
+        final long currentTime = System.currentTimeMillis() - timeSelected;
         if (selected) {
             if (size != MAX_RADIUS) {
-                size += (int) ((System.currentTimeMillis() - timeSelected) / GROW_RATE);
+                size += (int) ((currentTime) / GROW_RATE);
                 size = Math.min(size, MAX_RADIUS);
                 shape = new RoundRectangle2D.Double(center.x - size, center.y
                         - size, size * 2, size * 2, 30, 18);
             }
             if (fontSize != MAX_FONT_SIZE) {
-                fontSize += (int) ((System.currentTimeMillis() - timeSelected) / GROW_RATE);
+                fontSize += (int) ((currentTime) / GROW_RATE);
                 fontSize = Math.min(fontSize, MAX_FONT_SIZE);
             }
             if (yScale != MAX_Y_SCALE) {
-                yScale += (int) ((System.currentTimeMillis() - timeSelected) / GROW_RATE);
+                yScale += (int) ((currentTime) / GROW_RATE);
                 yScale = Math.min(yScale, MAX_Y_SCALE);
             }
             if (deltaY != MAX_DELTA_Y) {
-                deltaY += (int) ((System.currentTimeMillis() - timeSelected) / GROW_RATE);
+                deltaY += (int) ((currentTime) / GROW_RATE);
                 deltaY = Math.min(deltaY, MAX_DELTA_Y);
             }
+            if(timeUntilUnselected > 0 && (timeUntilUnselected-currentTime) < 0) {
+                timeUntilUnselected = -1;
+                unselect();
+            }
         } else {
-            if (size != RADIUS) {
-                size -= (int) ((System.currentTimeMillis() - timeSelected) / SHRINK_RATE);
+            if (size > RADIUS) {
+                size -= (int) ((currentTime) / SHRINK_RATE);
                 size = Math.max(size, RADIUS);
                 shape = new RoundRectangle2D.Double(center.x - size, center.y
                         - size, size * 2, size * 2, 30, 18);
             }
-            if (fontSize != MIN_FONT_SIZE) {
-                fontSize -= (int) ((System.currentTimeMillis() - timeSelected) / SHRINK_RATE);
+            if (fontSize > MIN_FONT_SIZE) {
+                fontSize -= (int) ((currentTime) / SHRINK_RATE);
                 fontSize = Math.max(fontSize, MIN_FONT_SIZE);
             }
-            if (yScale != MIN_Y_SCALE) {
-                yScale -= (int) ((System.currentTimeMillis() - timeSelected) / SHRINK_RATE);
+            if (yScale > MIN_Y_SCALE) {
+                yScale -= (int) ((currentTime) / SHRINK_RATE);
                 yScale = Math.max(yScale, MIN_Y_SCALE);
             }
-            if (deltaY != MIN_DELTA_Y) {
-                deltaY -= (int) ((System.currentTimeMillis() - timeSelected) / SHRINK_RATE);
-                deltaY = Math.max(deltaY, MIN_Y_SCALE);
+            if (deltaY > MIN_DELTA_Y) {
+                deltaY -= (int) ((currentTime) / SHRINK_RATE);
+                deltaY = Math.max(deltaY, MIN_DELTA_Y);
             }
         }
         gd.fill(shape);
@@ -211,12 +220,20 @@ public class NodeShape extends TreeNode {
         timeSelected = System.currentTimeMillis();
         selected = true;
         black = false;
+        timeUntilUnselected=-1;
+    }
+    
+    public void select(long i) {
+        select();
+        timeUntilUnselected = i;
     }
 
     public void unselect() {
-        timeSelected = System.currentTimeMillis();
-        selected = false;
-        black = true;
+        if(timeUntilUnselected < 0) {
+            timeSelected = System.currentTimeMillis();
+            selected = false;
+            black = true;
+        }
     }
 
     public void toggleColor() {

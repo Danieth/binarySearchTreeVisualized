@@ -52,13 +52,13 @@ public class Task {
                 message = (String) args[0];
             }
         }
-        TreeNode node = null;
+        NodeShape node = null;
         if (args.length > 1) {
-            node = (TreeNode) args[1];
+            node = (NodeShape) args[1];
         }
-        TreeNode parentNode = null;
+        NodeShape parentNode = null;
         if (args.length > 2) {
-            parentNode = (TreeNode) args[2];
+            parentNode = (NodeShape) args[2];
         }
 
         switch (type) {
@@ -69,8 +69,8 @@ public class Task {
                     bst.addTaskToFront(new Task(DISPLAY, "Searching for "
                             + person + " to delete them"));
                 } else if (bst.getTaskArgumentsSize() == 2) { // We have the node with the person
-                    node = (TreeNode) bst.getNextTaskArgument();
-                    parentNode = (TreeNode) bst.getNextTaskArgument();
+                    node = (NodeShape) bst.getNextTaskArgument();
+                    parentNode = (NodeShape) bst.getNextTaskArgument();
                     if (node == null) {
                         // the node was not found
                         bst.addTaskToFront(new Task(DISPLAY,
@@ -88,8 +88,8 @@ public class Task {
                                 "Found the node containing " + person + " so now we will search for the in-order successor"));
                     }
                 } else if (bst.getTaskArgumentsSize() == 3) { // We found the in order successor
-                    node = (TreeNode) bst.getNextTaskArgument();
-                    parentNode = (TreeNode) bst.getNextTaskArgument();
+                    node = (NodeShape) bst.getNextTaskArgument();
+                    parentNode = (NodeShape) bst.getNextTaskArgument();
                     TreeNode inOrderSuccessorNode = (TreeNode) bst.getNextTaskArgument();
                     //bst.addTaskToFront(newTask);
 
@@ -108,6 +108,8 @@ public class Task {
                             // extreme edge case, the node is the first node, and it is barren,
                             // therefore, we could simply go to bst and tell it to delete the
                             // reference to it, but that seems a bit shady
+                            
+                            bst.treeShape.root = null;
 
                             // Either refactor code to include reference to the bst, or delete the shady way
                         }
@@ -122,7 +124,7 @@ public class Task {
                 break;
             case FIND_FOR_DELETE:
                 //TODO special case of find. Finds the value and adds it with bst.addTaskArgument(foundNode)
-
+                
                 break;
             case FIND_SUCCESSOR:
                 //TODO finds the in order successor from the node given, add it with bst.addTaskArgument(inOrderSuccessor)
@@ -151,6 +153,30 @@ public class Task {
             case INSERT:
                 // TODO person, person to insert
                 // node, currentNode
+                if(node == null) {
+                    node = new NodeShape(person, null, null);
+                } else {
+                    node.select(1000);
+                    if(node.getVal().compareTo(person) < 0) {
+                        NodeShape n = (NodeShape)node.getLkid();
+                        if(n == null) {
+                            bst.treeShape.insert();
+                            node.setLkid(new NodeShape(person,null,null));
+                        } else {
+                            bst.addTaskToFront(new Task(INSERT, person, n));
+                        }
+                    } else if(node.getVal().compareTo(person) > 0) {
+                        NodeShape n = (NodeShape)node.getRkid();
+                        if(n == null) {
+                            bst.treeShape.insert();
+                            node.setRkid(new NodeShape(person,null,null));
+                        } else {
+                            bst.addTaskToFront(new Task(INSERT, person, n));
+                        }
+                    } else {
+                        //Problem!
+                    }
+                }
 
                 break;
 
