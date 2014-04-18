@@ -47,6 +47,8 @@ public class BstObjPanel extends JPanel implements Runnable {
      * The last y value for the mouse before the affine transform was applied, and the frame was updated
      */
     private double lastY;
+    
+    private int speed = 0;
     private volatile boolean running = true;
     private volatile boolean paused = false;
 
@@ -260,9 +262,40 @@ public class BstObjPanel extends JPanel implements Runnable {
                         add(new JButton("Lorem"));
                         add(new JButton("ipsum"));
                         add(new JButton("dolor"));
-                        add(new JButton("sit"));
-                        add(new JButton("amet"));
-                        add(new JButton("consectetur"));
+                        add(new JButton("Speed Up") {
+                            {
+                                this.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        if(bstObjPanel.speed < 10-1) {
+                                            bstObjPanel.speed++;
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                        add(new JButton("Slow Down") {
+                            {
+                                this.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                       if(bstObjPanel.speed > -10+1) { 
+                                           bstObjPanel.speed--;
+                                       }
+                                    }
+                                });
+                            }
+                        });
+                        add(new JButton("Reset Speed") {
+                            {
+                                this.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        bstObjPanel.speed = 0;
+                                    }
+                                });
+                            }
+                        });
                         add(new JButton("Close") {
                             {
                                 this.addActionListener(new ActionListener() {
@@ -296,15 +329,16 @@ public class BstObjPanel extends JPanel implements Runnable {
     }
 
     public void run() {
+        final long startTime = System.currentTimeMillis();
         while (running) {
             int sleepForNMilleseconds = delay;
 
-            System.out.println("Hi!");
+            System.out.println((System.currentTimeMillis()-startTime) +"");
 
             repaint();
             try {
                 do {
-                    Thread.sleep(sleepForNMilleseconds);
+                    Thread.sleep(sleepForNMilleseconds - (sleepForNMilleseconds*speed)/10);
                     if (paused) {
                         while (paused) {
                             Thread.sleep(100);
