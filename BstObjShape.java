@@ -60,6 +60,7 @@ public class BstObjShape {
     }
     
     public void buildRandomTree(PersonGenerator ps, double percent, double decrement, boolean full) {
+        ps.reset();
         insert();
         if(full) {
             root = generateNodesFull(ps,percent,decrement);
