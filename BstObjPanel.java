@@ -128,7 +128,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                 c.fill = GridBagConstraints.BOTH;
                 c.weightx = 0; // 0.125
                 c.weighty = 1.0;
-                c.ipadx = -30;
+                c.ipadx = 0;
                 c.ipady = 50;
                 c.gridwidth = 1;
                 c.gridheight = 1;
