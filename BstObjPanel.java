@@ -27,6 +27,7 @@ public class BstObjPanel extends JPanel implements Runnable {
     private double y;
     private double mouseX;
     private double mouseY;
+    private NodeShape mouseIsOverNode = null;
     /**
      * If true, the panel will not allow zooming. If false, use the scroll wheel to zoom in and out.
      */
@@ -334,14 +335,16 @@ public class BstObjPanel extends JPanel implements Runnable {
     public void run() {
         final long startTime = System.currentTimeMillis();
         while (running) {
-            int sleepForNMilleseconds = delay;
 
             System.out.println((System.currentTimeMillis()-startTime) +"");
-
             repaint();
             try {
                 do {
-                    Thread.sleep(sleepForNMilleseconds - (sleepForNMilleseconds*speed)/10);
+                    int sleepFor = delay - (delay*speed)/10;
+                    for(int i = 0; i < sleepFor; i+=10) {
+                        Thread.sleep(10);
+                        updateMouse();
+                    }
                     if (paused) {
                         while (paused) {
                             Thread.sleep(100);
@@ -354,6 +357,30 @@ public class BstObjPanel extends JPanel implements Runnable {
             }
         }
 
+    }
+
+    private void updateMouse() {
+        boolean repaint = false;
+        if(treeShape.root != null) {
+            if(mouseIsOverNode != null) {
+                mouseIsOverNode.toggleColor();
+                repaint=true;
+            }
+            mouseIsOverNode = treeShape.root.contains(normalize(new Point2D.Double(x,y)));
+            if(mouseIsOverNode != null) {
+                mouseIsOverNode.toggleColor();
+                repaint=true;
+            }
+        } else {
+            if(mouseIsOverNode != null) {
+                mouseIsOverNode.toggleColor();
+                repaint=true;
+            }
+            mouseIsOverNode = null;
+        }
+        if(repaint) {
+            this.repaint();
+        }
     }
 
     public void toggleZoom() {

@@ -48,23 +48,23 @@ public class NodeShape extends TreeNode {
     /**
      * Gives you the node that is contained in the point
      * 
-     * @param arg0
+     * @param point2d
      * @return
      */
-    public NodeShape contains(Point2D.Double arg0) {
+    public NodeShape contains(Point2D point2d) {
         if (shape != null) {
-            if (shape.contains(arg0)) {
+            if (shape.contains(point2d)) {
                 return this;
             }
             else {
                 if (getRkid() != null) {
-                    NodeShape temp = ((NodeShape) getRkid()).contains(arg0);
+                    NodeShape temp = ((NodeShape) getRkid()).contains(point2d);
                     if (temp != null) {
                         return temp;
                     }
                 }
                 if (getLkid() != null) {
-                    NodeShape temp = ((NodeShape) getLkid()).contains(arg0);
+                    NodeShape temp = ((NodeShape) getLkid()).contains(point2d);
                     if (temp != null) {
                         return temp;
                     }
