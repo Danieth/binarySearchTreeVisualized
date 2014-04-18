@@ -30,6 +30,7 @@ import java.awt.geom.RoundRectangle2D;
 
 public class NodeShape extends TreeNode {
     final private static int radius = 17;
+    final private static int maxRadius = 30;
     final private static int xShift = 50;
     final private static int yShift = 50;
     final private static double CONSTANT_OF_CENTER = 1.177793508745657;
@@ -37,6 +38,9 @@ public class NodeShape extends TreeNode {
     Point2D.Double center = null;
     Shape shape = null;
     private boolean black = true;
+    private boolean selected = false;
+    private int size = radius;
+    private long timeSelected;
 
     public NodeShape(Person pVal, TreeNode pLkid, TreeNode pRkid) {
         super(pVal, pLkid, pRkid);
@@ -84,8 +88,8 @@ public class NodeShape extends TreeNode {
 
     public void prepareDrawFromThisNode() {
         this.center = new Point2D.Double();
-        this.shape = new RoundRectangle2D.Double(center.x - radius, center.y
-                - radius, radius * 2, radius * 2,30,14);
+        this.shape = new RoundRectangle2D.Double(center.x - size, center.y
+                - size, size * 2, size * 2,30,14);
         if (this.getRkid() != null) {
             ((NodeShape) getRkid()).prepare(center, true);
         }
@@ -106,6 +110,19 @@ public class NodeShape extends TreeNode {
             leftKid.draw(gd);
         }
         gd.setColor(gd.getBackground());
+        if (selected) {
+            if(size != maxRadius) {
+                size += (int)((System.currentTimeMillis()-timeSelected)/200);
+                size = Math.min(size, maxRadius);
+                shape = new RoundRectangle2D.Double(center.x - size, center.y
+                        - size, size * 2, size * 2,30,18);
+            }
+        } else if (size != radius) {
+            size -= (int)((System.currentTimeMillis()-timeSelected)/50);
+            size = Math.max(size, radius); 
+            shape = new RoundRectangle2D.Double(center.x - size, center.y
+                    - size, size * 2, size * 2,30,18);
+        }
         gd.fill(shape);
         gd.setColor(getColor());
         gd.draw(shape);
@@ -138,6 +155,17 @@ public class NodeShape extends TreeNode {
             }
         }
         return max;
+    }
+    
+    public void select() {
+        timeSelected = System.currentTimeMillis();
+        selected = true;
+        black = false;
+    }
+    public void unselect() {
+        timeSelected = System.currentTimeMillis();
+        selected = false;
+        black = true;
     }
 
     public void toggleColor() {
@@ -179,8 +207,8 @@ public class NodeShape extends TreeNode {
                 + initialPoint.getX();
 
         this.center = new Point2D.Double(centerOfCircleXCoordinate, centerOfCircleYCoordinate);
-        this.shape = new RoundRectangle2D.Double(center.x - radius, center.y
-                - radius, radius * 2, radius * 2,30,18);
+        this.shape = new RoundRectangle2D.Double(center.x - size, center.y
+                - size, size * 2, size * 2,30,18);
         
         if (this.getRkid() != null) {
             ((NodeShape) getRkid()).prepare(center, true);
@@ -189,5 +217,49 @@ public class NodeShape extends TreeNode {
             ((NodeShape) getLkid()).prepare(center, false);
         }
     }
+    
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (black ? 1231 : 1237);
+        result = prime * result + ((center == null) ? 0 : center.hashCode());
+        result = prime * result + (selected ? 1231 : 1237);
+        result = prime * result + ((shape == null) ? 0 : shape.hashCode());
+        result = prime * result + size;
+        result = prime * result + (int) (timeSelected ^ (timeSelected >>> 32));
+        return result;
+    }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        NodeShape other = (NodeShape) obj;
+        if (black != other.black)
+            return false;
+        if (center == null) {
+            if (other.center != null)
+                return false;
+        }
+        else if (!center.equals(other.center))
+            return false;
+        if (selected != other.selected)
+            return false;
+        if (shape == null) {
+            if (other.shape != null)
+                return false;
+        }
+        else if (!shape.equals(other.shape))
+            return false;
+        if (size != other.size)
+            return false;
+        if (timeSelected != other.timeSelected)
+            return false;
+        return true;
+    }
 }

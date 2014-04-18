@@ -376,22 +376,31 @@ public class BstObjPanel extends JPanel implements Runnable {
     }
 
     private void updateMouse() {
-        boolean repaint = false;
+        boolean repaint = true;
         if (treeShape.root != null) {
+            NodeShape current = null;
             if (mouseIsOverNode != null) {
-                mouseIsOverNode.toggleColor();
-                repaint = true;
+                current = mouseIsOverNode;
             }
             mouseIsOverNode = treeShape.root
                     .contains(normalize(new Point2D.Double(x, y)));
-            if (mouseIsOverNode != null) {
-                mouseIsOverNode.toggleColor();
+            
+            if(current != null && current.equals(mouseIsOverNode)) {
                 repaint = true;
+            } else {
+                if(current!= null) {
+                    current.unselect();
+                    repaint = true;
+                }
+                if(mouseIsOverNode != null) {
+                    mouseIsOverNode.select();
+                    repaint = true;
+                }
             }
         }
         else {
             if (mouseIsOverNode != null) {
-                mouseIsOverNode.toggleColor();
+                mouseIsOverNode.unselect();
                 repaint = true;
             }
             mouseIsOverNode = null;
