@@ -172,11 +172,7 @@ public class NodeShape extends TreeNode {
         gd.fill(shape);
         gd.setColor(getColor());
         gd.draw(shape);
-        String[] words = new String[4];
-        int i = 0;
-        for (String s : getVal().allFields().split(",")) {
-            words[i++] = s;
-        }
+        String[] words;
         // centers the text for each node
         gd.setColor(Color.black);
         String first;
@@ -185,15 +181,17 @@ public class NodeShape extends TreeNode {
         String state;
 
         if (!selected || size < MAX_RADIUS) {
+            words = getVal().allFields().split(",");
             first = "First: " + words[0];
             last = "Last: " + words[1];
             age = "Age: " + words[2];
             state = "State: " + words[3];
         } else {
+            words = getVal().allLongFields().split(",");
             first = "First Name: " + words[0];
             last = "Last Name: " + words[1];
-            age = "Current Age: " + words[2];
-            state = "Home State: " + words[3];
+            age = "Age: " + words[2];
+            state = "State: " + words[3];
         }
 
         gd.setFont(new Font(FONT_NAME, Font.PLAIN, fontSize));
