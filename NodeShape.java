@@ -237,11 +237,6 @@ public class NodeShape extends TreeNode {
         }
     }
 
-    /**
-     * @param gd
-     * @param initialPoint
-     * @param depth
-     */
     private void prepare(Double initialPoint, boolean rightOfParent) {
         double centerOfCircleYCoordinate = initialPoint.getY() + Y_SHIFT;
         double centerOfCircleXCoordinate = 1;
