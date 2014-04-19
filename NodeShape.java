@@ -44,7 +44,7 @@ public class NodeShape extends TreeNode {
     private static final int MAX_Y_SCALE = 6;
     private static final int MIN_DELTA_Y = 5;
     private int deltaY = MIN_DELTA_Y;
-    private static final int MAX_DELTA_Y = 10;
+    private static final int MAX_DELTA_Y = 9;
     
     Point2D.Double center = null;
     Shape shape = null;
