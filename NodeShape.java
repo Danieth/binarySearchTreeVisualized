@@ -38,7 +38,7 @@ public class NodeShape extends TreeNode {
     
     private static final int MIN_FONT_SIZE = 4;
     private int fontSize = MIN_FONT_SIZE;
-    private static final int MAX_FONT_SIZE = 6;
+    private static final int MAX_FONT_SIZE = 5;
     private static final int MIN_Y_SCALE = 2;
     private int yScale = MIN_Y_SCALE;
     private static final int MAX_Y_SCALE = 6;
