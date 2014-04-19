@@ -127,21 +127,21 @@ public class NodeShape extends TreeNode {
         gd.setColor(gd.getBackground());
         final long currentTime = System.currentTimeMillis() - timeSelected;
         if (selected) {
-            if (size != MAX_RADIUS) {
+            if (size < MAX_RADIUS) {
                 size += (int) ((currentTime) / GROW_RATE);
                 size = Math.min(size, MAX_RADIUS);
                 shape = new RoundRectangle2D.Double(center.x - size, center.y
                         - size, size * 2, size * 2, 30, 18);
             }
-            if (fontSize != MAX_FONT_SIZE) {
+            if (fontSize < MAX_FONT_SIZE) {
                 fontSize += (int) ((currentTime) / GROW_RATE);
                 fontSize = Math.min(fontSize, MAX_FONT_SIZE);
             }
-            if (yScale != MAX_Y_SCALE) {
+            if (yScale < MAX_Y_SCALE) {
                 yScale += (int) ((currentTime) / GROW_RATE);
                 yScale = Math.min(yScale, MAX_Y_SCALE);
             }
-            if (deltaY != MAX_DELTA_Y) {
+            if (deltaY < MAX_DELTA_Y) {
                 deltaY += (int) ((currentTime) / GROW_RATE);
                 deltaY = Math.min(deltaY, MAX_DELTA_Y);
             }
@@ -184,7 +184,7 @@ public class NodeShape extends TreeNode {
         String age;
         String state;
 
-        if (!selected || size != MAX_RADIUS) {
+        if (!selected || size < MAX_RADIUS) {
             first = "First: " + words[0];
             last = "Last: " + words[1];
             age = "Age: " + words[2];
