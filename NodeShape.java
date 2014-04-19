@@ -205,19 +205,6 @@ public class NodeShape extends TreeNode {
         gd.drawString(state, (int) (center.x - alignX), (int) center.y - alignY + (deltaY * 3));
     }
 
-    private int max(int... ints) {
-        if (ints.length < 1) {
-            return Integer.MAX_VALUE;
-        }
-        int max = ints[0];
-        for (int i = 1; i < ints.length; i++) {
-            if (ints[i] > max) {
-                max = ints[i];
-            }
-        }
-        return max;
-    }
-
     public void select() {
         timeSelected = System.currentTimeMillis();
         selected = true;
