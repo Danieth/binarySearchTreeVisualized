@@ -220,7 +220,8 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        // bstObjPanel.paused = true;
+                                        System.out.println("Hi!311424124141242");
+                                        bstObjPanel.addTaskToEnd(new Task("preOrder", null,bstObjPanel.treeShape.root));
                                     }
                                 });
                             }
@@ -265,7 +266,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                                         bstObjPanel.paused = true;
                                         bstObjPanel.treeShape.buildRandomTree(
                                                 bstObjPanel.personGenerator,
-                                                1.0, 0.04, false);
+                                                1.0, 0.25, false);
                                         bstObjPanel.paused = false;
                                     }
                                 });
@@ -289,7 +290,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                                         bstObjPanel.treeShape.root = null;
                                         int i = Integer.parseInt(JOptionPane.showInputDialog("Please type the number of nodes you want to randomely insert", "50"));
                                         while(i > 0) {
-                                            bstObjPanel.addTaskToFront(new Task("insert",bstObjPanel.personGenerator.generateRandomPerson(), bstObjPanel.treeShape.root));
+                                            bstObjPanel.addTaskToEnd(new Task("insert",bstObjPanel.personGenerator.generateRandomPerson(), bstObjPanel.treeShape.root));
                                             i--;
                                         }
                                     }
@@ -305,7 +306,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        if (bstObjPanel.speed < 10 - 1) {
+                                        if (bstObjPanel.speed < 20) {
                                             bstObjPanel.speed++;
                                         }
                                     }
@@ -317,7 +318,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        if (bstObjPanel.speed > -10 + 1) {
+                                        if (bstObjPanel.speed > -10) {
                                             bstObjPanel.speed--;
                                         }
                                     }
@@ -379,10 +380,10 @@ public class BstObjPanel extends JPanel implements Runnable {
     }
 
     public void run() {
-        final long startTime = System.currentTimeMillis();
+        //final long startTime = System.currentTimeMillis();
         while (running) {
 
-            System.out.println((System.currentTimeMillis() - startTime) + "");
+            //System.out.println((System.currentTimeMillis() - startTime) + "");
             if(!tasksToExecute.isEmpty()) {
                 tasksToExecute.poll().exectute(this);
             }

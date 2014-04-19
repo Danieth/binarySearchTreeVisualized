@@ -22,19 +22,20 @@
 
 public class Task {
 
-    private final static String DELETE = "delete";
-    private final static String INSERT = "insert";
-    private final static String FIND = "find";
-    private final static String FIND_FOR_DELETE = "findForDelete";
-    private final static String FIND_SUCCESSOR = "findSuccessor";
-    private final static String MIN = "min";
-    private final static String MAX = "max";
-    private final static String DISPLAY = "display";
+    public final static String DELETE = "delete";
+    public final static String INSERT = "insert";
+    public final static String FIND = "find";
+    public final static String FIND_FOR_DELETE = "findForDelete";
+    public final static String FIND_SUCCESSOR = "findSuccessor";
+    public final static String MIN = "min";
+    public final static String MAX = "max";
+    public final static String DISPLAY = "display";
+    public final static String PREORDER = "preOrder";
     private final String type;
     private final Object[] args;
 
     public Task(String type, Object... args) {
-        this.type = type.toLowerCase();
+        this.type = type;
         if (args == null) {
             this.args = new Object[0];
         } else {
@@ -43,6 +44,7 @@ public class Task {
     }
 
     public void exectute(BstObjPanel bst) {
+        System.out.println(type);
         String message = null;
         Person person = null;
         if (args.length > 0) {
@@ -62,6 +64,15 @@ public class Task {
         }
 
         switch (type) {
+            case PREORDER:
+                node.select(1000);
+                if(node.getLkid() != null) {
+                   bst.addTaskToFront(new Task(PREORDER, null, node.getLkid()));
+                }
+                if(node.getRkid() != null) {
+                    bst.addTaskToFront(new Task(PREORDER, null, node.getRkid()));
+                }
+                break;
             case DELETE:
                 if (bst.getTaskArgumentsSize() == 0) {
                     bst.addTaskToFront(this);

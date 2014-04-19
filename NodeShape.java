@@ -30,8 +30,8 @@ public class NodeShape extends TreeNode {
     final private static int RADIUS = 17;
     private int size = RADIUS;
     final private static int MAX_RADIUS = 30;
-    final private static int X_SHIFT = 50;
-    final private static int Y_SHIFT = 100;
+    final private static int X_SHIFT = 30;
+    final private static int Y_SHIFT = 50;
     private static final int GROW_RATE = 200;
     private static final int SHRINK_RATE = 50;
     private static final String FONT_NAME = "Georgia";
@@ -266,12 +266,12 @@ public class NodeShape extends TreeNode {
                 centerOfCircleXCoordinate += ((NodeShape) getLkid())
                         .totalNodesInTree();
             }
+            centerOfCircleXCoordinate *= -1;
         } else {
             if (getRkid() != null) {
                 centerOfCircleXCoordinate += ((NodeShape) getRkid())
                         .totalNodesInTree();
             }
-            centerOfCircleXCoordinate *= -1;
         }
 
         centerOfCircleXCoordinate = centerOfCircleXCoordinate * X_SHIFT
