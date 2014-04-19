@@ -324,6 +324,17 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 });
                             }
                         });
+                        add(new JButton("Toggle Pause") {
+                            {
+                                this.addActionListener(new ActionListener() {
+
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        bstObjPanel.paused = !bstObjPanel.paused;
+                                    }
+                                });
+                            }
+                        });
                         add(new JButton("Reset Speed") {
                             {
                                 this.addActionListener(new ActionListener() {
