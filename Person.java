@@ -193,5 +193,9 @@ public class Person {
         return Math.max(-1,
                 Math.min(1, sortKey().compareTo(otherPerson.sortKey())));
     }
+    
+    public String toString() {
+        return shortFirstName + ", " + shortLastName;
+    }
 
 }

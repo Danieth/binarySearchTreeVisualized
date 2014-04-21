@@ -1,4 +1,5 @@
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,6 +11,7 @@ import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -59,6 +61,7 @@ public class BstObjPanel extends JPanel implements Runnable {
     private volatile boolean running = true;
     private volatile boolean paused = false;
     
+    public ArrayList<String> buffer = new ArrayList<String>(32);
 
     public BstObjPanel() {
         setOpaque(false);
@@ -263,14 +266,29 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        bstObjPanel.paused = true;
+                                        //bstObjPanel.paused = true;
                                         if(bstObjPanel.treeShape.root == null) {
                                             bstObjPanel.personGenerator.reset();
                                         }
-                                        bstObjPanel.treeShape.buildRandomTree(
-                                                bstObjPanel.personGenerator,
-                                                1.0, 0.25, false);
-                                        bstObjPanel.paused = false;
+//                                        bstObjPanel.treeShape.buildRandomTree(
+//                                                bstObjPanel.personGenerator,
+//                                                1.0, 0.25, false);
+                                        int s = bstObjPanel.speed;
+                                        bstObjPanel.speed=100;
+                                        int i = 25;
+                                        while(i > 0) {
+                                            bstObjPanel.addTaskToEnd(new Task("insert",bstObjPanel.personGenerator.generateRandomPerson(), bstObjPanel.treeShape.root));
+                                            i--;
+                                        }
+                                        synchronized (this) {
+                                            try {
+                                                this.wait(500);
+                                            } catch (InterruptedException e1) {
+                                                e1.printStackTrace();
+                                            }
+                                        }
+                                        bstObjPanel.speed=s;
+                                        //bstObjPanel.paused = false;
                                     }
                                 });
                             }
@@ -289,8 +307,6 @@ public class BstObjPanel extends JPanel implements Runnable {
                             {
                                 this.addActionListener(new ActionListener() {
                                     @Override
-
-                                    public StringBuffer buffer = new StringBuffer(256);
                                     public void actionPerformed(ActionEvent e) {
                                         bstObjPanel.paused = true;
                                         if(bstObjPanel.treeShape.root == null) {
@@ -301,7 +317,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                                             bstObjPanel.addTaskToEnd(new Task("insert",bstObjPanel.personGenerator.generateRandomPerson(), bstObjPanel.treeShape.root));
                                             i--;
                                         }
-                                        bstObjPanel.paused = true;
+                                        bstObjPanel.paused = false;
                                     }
                                 });
                             }
@@ -489,7 +505,9 @@ public class BstObjPanel extends JPanel implements Runnable {
         // Draw anything you do not want to be affected by transformations, aka,
         // anything you would like to be drawn over the Binary Search Tree.
         // Useful for debugging
-
+        for(int i = 0; i < buffer.size(); i++) {
+            gd.drawString(buffer.get(i), 30, 30+i*12);
+        }
         // Apply transform for data
         gd.setTransform(getAffineTransform());
 

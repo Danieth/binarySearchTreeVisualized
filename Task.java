@@ -76,16 +76,21 @@ public class Task {
                 }
                 break;
             case INORDER:
+                if(node == bst.treeShape.root) {
+                    bst.buffer.clear();
+                    bst.buffer.add("Beginning InOrder scan of list,\n");
+                }
                 if(parentNode == null) {
-                    if(node.getRkid() != null) {
-                        bst.addTaskToFront(new Task(INORDER, null, node.getRkid()));
+                    if(node.getLkid() != null) {
+                        bst.addTaskToFront(new Task(INORDER, null, node.getLkid()));
                     }
                     node.select(100);
                     bst.addTaskToFront(new Task(INORDER, null, null, node));
-                    if(node.getLkid() != null) {
-                        bst.addTaskToFront(new Task(INORDER, null, node.getLkid()));
-                     }
+                    if(node.getRkid() != null) {
+                        bst.addTaskToFront(new Task(INORDER, null, node.getRkid()));
+                    }
                 } else {
+                    bst.buffer.add(parentNode.getVal() + "\n");
                     parentNode.select(1000);
                 }
                 break;
