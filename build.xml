@@ -1,4 +1,4 @@
-<project name="BSTvisualized" default="dist" basedir=".">
+<project name="BSTvisualized" default="run" basedir=".">
     <description>
         A visualized example of a binary search tree.
     </description>
@@ -29,6 +29,10 @@
                 <attribute name="Main-Class" value="BstObjPanel"/>
             </manifest>
         </jar>
+    </target>
+
+    <target name="run" depends="dist" description="run the distribution">
+        <java jar="${dist}/${ant.project.name}.jar" fork="true" />
     </target>
 
     <target name="clean" description="clean up">
