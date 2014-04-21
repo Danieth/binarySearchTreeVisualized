@@ -241,9 +241,15 @@ public class Task {
                     if((boolean)bst.getNextTaskArgument()) {
                         bst.addToBuffer("The left tree was empty, so this node will point to the new node containing " + person);
                         node.setRkid(new NodeShape(person,null,null));
+                        if (node.getRkid() instanceof NodeShape) {
+                            ((NodeShape) node.getRkid()).select(1000);
+                        }
                     } else {
                         bst.addToBuffer("The right tree was empty, so this node will point to the new node containing " + person);
                         node.setLkid(new NodeShape(person,null,null));
+                        if (node.getLkid() instanceof NodeShape) {
+                            ((NodeShape) node.getLkid()).select(1000);
+                        }
                     }
                     break;
                 } else {
