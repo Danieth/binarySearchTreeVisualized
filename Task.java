@@ -352,7 +352,7 @@ public class Task {
                         NodeShape n = (NodeShape) node.getRkid();
                         if (n == null) {
                             bst.addTaskArgument(false);
-                            bst.addToBuffer("Left tree is empty. The person we are looking for is not in this tree.");
+                            bst.addToBuffer("Right tree is empty. The person we are looking for is not in this tree.");
                         } else {
                             bst.addTaskToFront(new Task(FIND, person, n));
                         }
