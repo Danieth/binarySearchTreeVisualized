@@ -425,7 +425,7 @@ public class BstObjPanel extends JPanel implements Runnable {
             //System.out.println((System.currentTimeMillis() - startTime) + "");
             final int delay;
             if(!tasksToExecute.isEmpty()) {
-                delay = tasksToExecute.poll().exectute(this);
+                delay = tasksToExecute.poll().execute(this);
             } else {
                 delay = 10;
             }

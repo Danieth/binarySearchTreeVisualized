@@ -50,7 +50,7 @@ public class Task {
      * @return The amount of time a thread should wait before the next task is executed
      */
 
-    public int exectute(BstObjPanel bst) {
+    public int execute(BstObjPanel bst) {
         String message = null;
         Person person = null;
         if (args.length > 0) {
