@@ -61,6 +61,7 @@ public class BstObjPanel extends JPanel implements Runnable {
     private volatile boolean paused = false;
     
     public ArrayList<String> buffer = new ArrayList<String>(64);
+    private boolean selectOn = true;
 
     public BstObjPanel() {
         setOpaque(false);
@@ -195,8 +196,10 @@ public class BstObjPanel extends JPanel implements Runnable {
                                     public void actionPerformed(ActionEvent e) {
                                         if(bstObjPanel.treeShape.root == null) {
                                             bstObjPanel.personGenerator.reset();
+                                            bstObjPanel.paused = true;
+                                            bstObjPanel.addTaskToEnd(new Task("insert",bstObjPanel.personGenerator.generateMedianPerson(), bstObjPanel.treeShape.root));
+                                            bstObjPanel.paused = false;
                                         }
-                                        bstObjPanel.addTaskToEnd(new Task("insert",bstObjPanel.personGenerator.generateMedianPerson(), bstObjPanel.treeShape.root));
                                     }
                                 });
                             }
@@ -212,6 +215,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                                         int s = bstObjPanel.speed;
                                         bstObjPanel.speed=100;
                                         int i = 24;
+                                        bstObjPanel.selectOn = false; 
                                         bstObjPanel.addTaskToEnd(new Task("insert",bstObjPanel.personGenerator.generateMedianPerson(), bstObjPanel.treeShape.root));
                                         while(i > 0) {
                                             bstObjPanel.addTaskToEnd(new Task("insert",bstObjPanel.personGenerator.generateRandomPerson(), bstObjPanel.treeShape.root));
@@ -224,8 +228,9 @@ public class BstObjPanel extends JPanel implements Runnable {
                                                 e1.printStackTrace();
                                             }
                                         }
-                                        bstObjPanel.speed=s;
+                                        bstObjPanel.selectOn = true;
                                         bstObjPanel.buffer.clear();
+                                        bstObjPanel.speed=s;
                                     }
                                 });
                             }
@@ -633,5 +638,9 @@ public class BstObjPanel extends JPanel implements Runnable {
             buffer.add(firstValue);
         }
         buffer.add(s);
+    }
+    
+    public boolean isSelectingOn() {
+        return selectOn;
     }
 }

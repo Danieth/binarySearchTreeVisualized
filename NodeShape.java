@@ -56,8 +56,6 @@ public class NodeShape extends TreeNode {
 
     public NodeShape(Person pVal, TreeNode pLkid, TreeNode pRkid) {
         super(pVal, pLkid, pRkid);
-        timeSelected = System.currentTimeMillis();
-        select(1000);
     }
 
     /**

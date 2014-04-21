@@ -143,126 +143,163 @@ public class Task {
                 }
                 break;
             case DELETE:
-                if (bst.getTaskArgumentsSize() == 0) {
+                if(bst.treeShape.root == null) {
+                    bst.addToBuffer("(Find For Delete) Root tree is empty and so we cannot find " + person);
+                    bst.addTaskArgument(new Object[]{null});
+                    break;
+                }
+                else if(parentNode == null && node == null && bst.treeShape.root != null && bst.treeShape.root.getVal().compareTo(person) == 0) {
+                    bst.addToBuffer("(Find For Delete) Finding " + person);
+                    bst.addToBuffer("(Find For Delete) " + person + " is the root node, so we will find the in order successor, and delete it");
+                    bst.addTaskToFront(new Task(DELETE, person));
+                    bst.addTaskToFront(new Task(FIND_SUCCESSOR, null, bst.treeShape.root));
+                    break;
+                }
+                else if (bst.getTaskArgumentsSize() == 0) {
                     bst.addTaskToFront(this);
-                    bst.addTaskToFront(new Task(FIND_FOR_DELETE, person));
-                    bst.addTaskToFront(new Task(DISPLAY, "Searching for "
-                            + person + " to delete them"));
-                } else if (bst.getTaskArgumentsSize() == 2) { // We have the node with the person
+                    if(node == null || parentNode == null) {
+                        bst.addTaskToFront(new Task(FIND_FOR_DELETE, person));
+                        bst.addToBuffer("(Find For Delete) Finding " + person);
+                    } else {
+                        bst.addTaskToFront(new Task(FIND_FOR_DELETE, person,node,parentNode));
+                        bst.addToBuffer("(Find For Delete) Finding " + person + " from " + parentNode.getVal());
+                    }
+                } else if (bst.getTaskArgumentsSize() == 2) { // We have the result of Find for delete
                     node = (NodeShape) bst.getNextTaskArgument();
                     parentNode = (NodeShape) bst.getNextTaskArgument();
-                    if (node == null) {
-                        // the node was not found
-                        bst.addTaskToFront(new Task(DISPLAY,
-                                "Could not find the person " + person));
-                    } else {
+                    if(node == null && parentNode == null) {
+                        bst.addToBuffer("(Delete) Cannot delete " + person + " because the person cannot be found");
+                    } else if (node != null && parentNode != null) {
                         // node was found, so delete it
-
-                        // re-add the arguments to the queue
+                        bst.addToBuffer("(Delete) Found the node containing " + person + " so now we will search for the in-order successor");
+                        node.select();
+                        
+                        // add the arguments to the queue
                         bst.addTaskArgument(node, parentNode);
-
+                        
                         // find the successor
                         bst.addTaskToFront(new Task(DELETE, person));
                         bst.addTaskToFront(new Task(FIND_SUCCESSOR, null, node));
-                        bst.addTaskToFront(new Task(DISPLAY,
-                                "Found the node containing " + person + " so now we will search for the in-order successor"));
+                    } else {
+                        // the node couldn't be found, so no deletion
                     }
                 } else if (bst.getTaskArgumentsSize() == 3) { // We found the in order successor
                     node = (NodeShape) bst.getNextTaskArgument();
                     parentNode = (NodeShape) bst.getNextTaskArgument();
-                    TreeNode inOrderSuccessorNode = (TreeNode) bst.getNextTaskArgument();
+                    NodeShape inOrderSuccessorNode = (NodeShape) bst.getNextTaskArgument();
                     //bst.addTaskToFront(newTask);
 
                     if (inOrderSuccessorNode == null) {
-                        bst.addTaskToFront(new Task(DISPLAY,
-                                "The value has no in order successor, so we delete the reference to it from the parent"));
                         if (parentNode != null) {
+                            bst.addToBuffer("(Deleting) " + person + " has no in order successor, so we delete it from the parent node, " + parentNode.getVal());
                             if (parentNode.getLkid() != null && parentNode.getLkid().getVal()
                                     .compareTo(node.getVal()) == 0) {
                                 parentNode.setLkid(null);
+                                bst.treeShape.delete();
+                                break;
                             } else if (parentNode.getRkid() != null && parentNode.getRkid().getVal()
                                     .compareTo(node.getVal()) == 0) {
                                 parentNode.setRkid(null);
+                                bst.treeShape.delete();
+                                break;
                             }
                         } else {
-                            // extreme edge case, the node is the first node, and it is barren,
-                            // therefore, we could simply go to bst and tell it to delete the
-                            // reference to it, but that seems a bit shady
+                            bst.addToBuffer("(Deleting) The BST root is the parent node to this node.");
+                            bst.treeShape.delete();
                             bst.treeShape.root = null;
-
-                            // Either refactor code to include reference to the bst, or delete the shady way
                         }
                     } else if (inOrderSuccessorNode != null) {
-                        bst.addTaskToFront(new Task(DISPLAY,
-                                "Found the in-order successor, so now we will swap the values, and delete the in order successor node"));
+                        // TODO reword
+                        bst.addToBuffer("(Delete) Found the in-order successor, so now we will swap the values, and delete " + person);
+                        node.select(1000);
+                        inOrderSuccessorNode.select(1000);
                         node.setVal(inOrderSuccessorNode.getVal());
-                        inOrderSuccessorNode.setVal(node.getVal());
-                        bst.addTaskArgument(DELETE, person, node, parentNode);
+                        inOrderSuccessorNode.setVal(person);
+                        int compare = node.getVal().compareTo(person);
+                        NodeShape newChild;
+                        if(compare > 0) {
+                            newChild = (NodeShape) node.getLkid();
+                        } else {
+                            newChild = (NodeShape) node.getRkid();
+                        }
+                        bst.addTaskToFront(new Task(DELETE, person, newChild, node));
                     }
                 }
                 break;
             case FIND_FOR_DELETE:
-                //TODO prevent an infinite loop if the person we're looking for cannot be found
-                if(bst.treeShape.root == null) {
-                    bst.buffer.clear();
-                    bst.addToBuffer("Finding " + person);
-                    bst.addToBuffer("Root tree is empty and so we cannot find the person you are looking for.");
-                    break;
-                }
-                if(node == bst.treeShape.root || node == null) {
+                // In the case of infinite loop, we descend until child is null, and then we return null for both parent and node
+                // If the node is found, we return the node and it's parent.
+                // If the tree is initially empty, we return a single null;
+                
+                if(node == null) {
                     node = bst.treeShape.root;
-                    bst.buffer.clear();
-                    bst.addToBuffer("Finding " + person);
                 }
                 if (person != null) {
                     node.select(1000);
                     int compare = node.getVal().compareTo(person);
                     if (compare == 0) {
-                        bst.addToBuffer("Found " + person + " for delete");
+                        bst.addToBuffer("(Find For Delete) Found " + person + " for delete");
                         bst.addTaskArgument(node);
+                        bst.addTaskArgument(parentNode);
+                        break;
                     } else if (compare < 0) {
-                        bst.addToBuffer(node.getVal().toString() + " < " + person + " so we will continue down the right tree");
+                        bst.addToBuffer("(Find For Delete) " + node.getVal().toString() + " < " + person + " so we will continue down the left tree.");
                         NodeShape n = (NodeShape) node.getLkid();
                         if (n == null) {
-                            bst.addTaskArgument(false);
-                            bst.addToBuffer("Right tree is empty. The person we are looking for is not in this tree.");
+                            bst.addTaskArgument(new Object[]{null});
+                            bst.addTaskArgument(new Object[]{null});
+                            bst.addToBuffer("(Find For Delete) Right tree is empty. The person we are looking for is not in this tree.");
                         } else {
-                            bst.addTaskToFront(new Task(FIND_FOR_DELETE, person, n));
+                            bst.addTaskToFront(new Task(FIND_FOR_DELETE, person, n, node));
                         }
                     } else {
-                        bst.addToBuffer(node.getVal().toString() + " > " + person + " so we will continue down the left tree");
+                        bst.addToBuffer("(Find For Delete) " + node.getVal().toString() + " > " + person + " so we will continue down the right tree.");
                         NodeShape n = (NodeShape) node.getRkid();
                         if (n == null) {
-                            bst.addTaskArgument(false);
-                            bst.addToBuffer("Left tree is empty. The person we are looking for is not in this tree.");
+                            bst.addTaskArgument(new Object[]{null});
+                            bst.addTaskArgument(new Object[]{null});
+                            bst.addToBuffer("(Find For Delete) Left tree is empty. The person we are looking for is not in this tree.");
                         } else {
-                            bst.addTaskToFront(new Task(FIND_FOR_DELETE, person, n));
+                            bst.addTaskToFront(new Task(FIND_FOR_DELETE, person, n, node));
                         }
                     }
                 }
                 break;
             case FIND_SUCCESSOR:
                 //TODO finds the in order successor from the node given, add it with bst.addTaskArgument(inOrderSuccessor)
-                if (node != null && node.getRkid() != null) {
+                if(node == null) {
+                    
+                } else if (node.getRkid() != null) {
                     bst.addTaskToFront(new Task(MIN, null, node.getRkid()));
-                    bst.addTaskToFront(new Task(DISPLAY, "This node has a right child, so we will go to the right tree and find the minimum value"));
-                } else if (node != null && node.getLkid() != null) {
+                    bst.addToBuffer("(Find InOrder Successor) This node has a left child, so we will go to the left tree and find the maximum value");
+                } else if (node.getLkid() != null) {
                     bst.addTaskToFront(new Task(MAX, null, node.getLkid()));
-                    bst.addTaskToFront(new Task(DISPLAY, "This node has a left child, so we will go to the left tree and find the maximum value"));
+                    bst.addToBuffer("(Find InOrder Successor) This node has a right child, so we will go to the right tree and find the maximum value");
+                } else {
+                    bst.addTaskArgument(new Object[]{null});
+                    bst.addToBuffer("(Find InOrder Successor) This node has no children, so there is no InOrder successor");
                 }
                 break;
             case MIN:
                 if (node != null && node.getLkid() == null) { // Found
+                    bst.addToBuffer("(Found Min) Because " + node.getVal() + " has no right child, it is the maximum value of this tree");
                     bst.addTaskArgument(node);
                 } else if (node != null) {
+                    bst.addToBuffer("(Searching For Min) Because " + node.getVal() + " has a left child, we will go to the right child and continue searching for the minumum value");
+                    node.select(100);
                     bst.addTaskToFront(new Task(MIN, null, node.getLkid()));
+                    return 100;
                 }
                 break;
             case MAX:
                 if (node != null && node.getRkid() == null) { // Found
+                    bst.addToBuffer("(Found Max) Because " + node.getVal() + " has no right child, it is the maximum value of this tree");
                     bst.addTaskArgument(node);
                 } else if (node != null) {
+                    bst.addToBuffer("(Searching For Max) Because " + node.getVal() + " has a left child, we will go to the left child and continue searching for the maximum value");
+                    node.select(100);
                     bst.addTaskToFront(new Task(MAX, null, node.getRkid()));
+                    return 100;
                 }
                 break;
             case INSERT:
@@ -277,15 +314,14 @@ public class Task {
                     if((boolean)bst.getNextTaskArgument()) {
                         bst.addToBuffer("(Insertion) The left tree was empty, so this node will point to the new node containing " + person);
                         node.setRkid(new NodeShape(person,null,null));
-                        if (node.getRkid() instanceof NodeShape) {
-                            ((NodeShape) node.getRkid()).select(1000);
+                        if (bst.isSelectingOn()) {
+                            ((NodeShape) node.getRkid()).select(600);
                         }
                     } else {
-                        bst.addToBuffer("The right tree was empty, so this node will point to the new node containing " + person);
                         bst.addToBuffer("(Insertion) The right tree was empty, so this node will point to the new node containing " + person);
                         node.setLkid(new NodeShape(person,null,null));
-                        if (node.getLkid() instanceof NodeShape) {
-                            ((NodeShape) node.getLkid()).select(1000);
+                        if (bst.isSelectingOn()) {
+                            ((NodeShape) node.getLkid()).select(600);
                         }
                     }
                     break;
@@ -294,10 +330,14 @@ public class Task {
                         bst.treeShape.insert();
                         bst.addToBuffer("(Insertion) Because the root of the BST was not pointing to anything, it will now point to " + person);
                         bst.treeShape.root = new NodeShape(person, null, null);
-                        bst.treeShape.root.select(1000);
+                        if(bst.isSelectingOn()) {
+                            bst.treeShape.root.select(1000);
+                        }
                         break;
                     } else {
-                        node.select(1000);
+                        if(bst.isSelectingOn()) {
+                            node.select(1000);
+                        }
                         if(node.getVal().compareTo(person) < 0) {
                             bst.addToBuffer("(Comparison) " + node.getVal().toString() + " < " + person + " so we will continue down the right tree");
                             NodeShape n = (NodeShape)node.getLkid();
@@ -317,7 +357,9 @@ public class Task {
                                 bst.addTaskToFront(new Task(INSERT, person, n));
                             }
                         } else {
-                            //Problem!
+                            //The node is equal. In the real world, the node is considered greater.
+                            bst.addToBuffer("(Comparison) " + node.getVal().toString() + " == " + person + " so the list will not be modified");
+                            break;
                         }
                     }
                 }

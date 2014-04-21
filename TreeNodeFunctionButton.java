@@ -47,7 +47,7 @@ public class TreeNodeFunctionButton extends JButton {
                     try {
                         person = new Person(response.split(","));
                     } catch (IllegalArgumentException e1) {
-                        extraWords = "You must enter a number for the age parameter";
+                        extraWords = "(" + e1.getMessage() + ")";
                         defaultText = "first name, last name, age, state";
                         continue;
                     } catch (Exception e2) {

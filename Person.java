@@ -125,12 +125,12 @@ public class Person {
                 longStateName = state;
             }
         } else {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("State not found");
         }
     }
 
     public Person(String[] parse) throws IllegalArgumentException {
-        this(parse[0],parse[1],Integer.parseInt(parse[2]),parse[3]);
+        this(parse[0].trim(),parse[1].trim(),Integer.parseInt(parse[2].trim()),parse[3].trim());
     }
 
     private String getKeyByValue(Map<String,String> c, String value) {
