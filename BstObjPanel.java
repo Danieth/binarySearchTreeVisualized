@@ -322,7 +322,18 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 });
                             }
                         });
-                        add(new JButton("consectetur"));
+                        add(new JButton("Clear buffer") {
+                            {
+                                this.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        bstObjPanel.paused = true;
+                                        bstObjPanel.buffer.clear();
+                                        bstObjPanel.paused = false;
+                                    }
+                                });
+                            }
+                        });
                         add(new JButton("Lorem"));
                         add(new JButton("ipsum"));
                         add(new JButton("dolor"));
