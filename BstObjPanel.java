@@ -261,7 +261,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                         });
                         // TODO delete this button or replace it with something
                         // that is not immediate. Useful for debug though.
-                        add(new JButton("Randomize Tree") {
+                        add(new JButton("Insert 25 Nodes Now") {
                             {
                                 this.addActionListener(new ActionListener() {
                                     @Override
@@ -516,9 +516,11 @@ public class BstObjPanel extends JPanel implements Runnable {
         // Draw anything you do not want to be affected by transformations, aka,
         // anything you would like to be drawn over the Binary Search Tree.
         // Useful for debugging
+        
         for(int i = 0; i < buffer.size(); i++) {
             gd.drawString(buffer.get(i), 30, 30+i*12);
         }
+
         // Apply transform for data
         gd.setTransform(getAffineTransform());
 
@@ -528,6 +530,7 @@ public class BstObjPanel extends JPanel implements Runnable {
         treeShape.draw(gd);
 
         // Dispose of the graphics
+        
         gd.dispose();
     }
 

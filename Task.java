@@ -90,7 +90,7 @@ public class Task {
                         bst.addTaskToFront(new Task(INORDER, null, node.getRkid()));
                     }
                 } else {
-                    bst.buffer.add(parentNode.getVal() + "\n");
+                    bst.buffer.add(parentNode.getVal()+"");
                     parentNode.select(1000);
                 }
                 break;

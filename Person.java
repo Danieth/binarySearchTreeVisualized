@@ -195,7 +195,7 @@ public class Person {
     }
     
     public String toString() {
-        return shortFirstName + ", " + shortLastName;
+        return shortFirstName + ",\t" + shortLastName;
     }
 
 }
