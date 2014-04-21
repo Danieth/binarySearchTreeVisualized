@@ -322,6 +322,42 @@ public class Task {
                 }
                 break;
             case FIND:
+                if(bst.treeShape.root == null) {
+                    bst.buffer.clear();
+                    bst.addToBuffer("Finding " + person);
+                    bst.addToBuffer("Root tree is empty and so we cannot find the person you are looking for.");
+                    break;
+                }
+                if(node == bst.treeShape.root || node == null) {
+                    node = bst.treeShape.root;
+                    bst.buffer.clear();
+                    bst.addToBuffer("Finding " + person);
+                }
+                if (person != null) {
+                    node.select(1000);
+                    int compare = node.getVal().compareTo(person);
+                    if (compare == 0) {
+                        bst.addToBuffer("Found " + person);
+                    } else if (compare < 0) {
+                        bst.addToBuffer(node.getVal().toString() + " < " + person + " so we will continue down the right tree");
+                        NodeShape n = (NodeShape) node.getLkid();
+                        if (n == null) {
+                            bst.addTaskArgument(false);
+                            bst.addTaskToFront(new Task(FIND, person, node));
+                        } else {
+                            bst.addTaskToFront(new Task(FIND, person, n));
+                        }
+                    } else {
+                        bst.addToBuffer(node.getVal().toString() + " > " + person + " so we will continue down the left tree");
+                        NodeShape n = (NodeShape) node.getRkid();
+                        if (n == null) {
+                            bst.addTaskArgument(false);
+                            bst.addTaskToFront(new Task(FIND, person, node));
+                        } else {
+                            bst.addTaskToFront(new Task(FIND, person, n));
+                        }
+                    }
+                }
                 break;
         }
         return 1000;
