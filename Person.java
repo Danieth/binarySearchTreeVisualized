@@ -107,7 +107,7 @@ public class Person {
      * @param age   age of this person
      * @param state state where this person was born
      */
-    public Person(String fName, String lName, int age, String state) {
+    public Person(String fName, String lName, int age, String state) throws IllegalArgumentException {
         this.firstName = fName;
         this.shortFirstName = (fName.length() > SHORT_LENGTH_CAP) ? fName.substring(0, SHORT_LENGTH_CAP) : fName;
         this.longFirstName = (fName.length() > LONG_LENGTH_CAP) ? fName.substring(0, LONG_LENGTH_CAP) : fName;
@@ -125,7 +125,7 @@ public class Person {
                 longStateName = state;
             }
         } else {
-            // throw exception();
+            throw new IllegalArgumentException();
         }
     }
 
