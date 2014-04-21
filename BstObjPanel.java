@@ -58,6 +58,7 @@ public class BstObjPanel extends JPanel implements Runnable {
     private int speed = 0;
     private volatile boolean running = true;
     private volatile boolean paused = false;
+    
 
     public BstObjPanel() {
         setOpaque(false);
@@ -263,6 +264,9 @@ public class BstObjPanel extends JPanel implements Runnable {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
                                         bstObjPanel.paused = true;
+                                        if(bstObjPanel.treeShape.root == null) {
+                                            bstObjPanel.personGenerator.reset();
+                                        }
                                         bstObjPanel.treeShape.buildRandomTree(
                                                 bstObjPanel.personGenerator,
                                                 1.0, 0.25, false);
@@ -285,12 +289,19 @@ public class BstObjPanel extends JPanel implements Runnable {
                             {
                                 this.addActionListener(new ActionListener() {
                                     @Override
+
+                                    public StringBuffer buffer = new StringBuffer(256);
                                     public void actionPerformed(ActionEvent e) {
+                                        bstObjPanel.paused = true;
+                                        if(bstObjPanel.treeShape.root == null) {
+                                            bstObjPanel.personGenerator.reset();
+                                        }
                                         int i = Integer.parseInt(JOptionPane.showInputDialog("Please type the number of nodes you want to randomely insert", "50"));
                                         while(i > 0) {
                                             bstObjPanel.addTaskToEnd(new Task("insert",bstObjPanel.personGenerator.generateRandomPerson(), bstObjPanel.treeShape.root));
                                             i--;
                                         }
+                                        bstObjPanel.paused = true;
                                     }
                                 });
                             }
