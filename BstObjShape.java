@@ -43,13 +43,18 @@ public class BstObjShape {
     }
     
     public void draw(Graphics2D gd) {
+        gd.setFont(new Font("Georgia",0,6));
+        gd.drawString("BST Root", -12, -62);
+        gd.drawRect(-10, -60, 20, 20);
         if(root == null) {
+            gd.drawLine(-10, -60, 10, -40);
             return;
         } else {
             if(needsPreparation.get()) {
                 root.prepareDrawFromThisNode();
                 needsPreparation.compareAndSet(true, false);
             }
+            gd.drawLine(0, -50, 0, 0);
             root.draw(gd);
         }
     }

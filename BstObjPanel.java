@@ -22,7 +22,6 @@ public class BstObjPanel extends JPanel implements Runnable {
     private final static double zoomMin = 0.5;
     final public BstObjShape treeShape = new BstObjShape();
     final public Point2D.Double initialPoint = new Point2D.Double();
-    private final int delay = 1000;
     private final ConcurrentLinkedDeque<Task> tasksToExecute = new ConcurrentLinkedDeque<Task>();
     private final LinkedList<Object> taskArguments = new LinkedList<Object>();
     private double x;
@@ -177,6 +176,165 @@ public class BstObjPanel extends JPanel implements Runnable {
                 final JPanel buttonPanel = new JPanel() {
                     {
                         setLayout(new GridLayout(0, 1));
+                        add(new JButton("Exit") {
+                            {
+                                this.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        frame.dispose();
+                                    }
+                                });
+                            }
+                        });
+                        add(new TreeNodeFunctionButton(bstObjPanel, frame,
+                                "Insert"));
+                        add(new JButton("Insert 25 Nodes Now") {
+                            {
+                                this.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        if(bstObjPanel.treeShape.root == null) {
+                                            bstObjPanel.personGenerator.reset();
+                                        }
+                                        int s = bstObjPanel.speed;
+                                        bstObjPanel.speed=100;
+                                        int i = 25;
+                                        while(i > 0) {
+                                            bstObjPanel.addTaskToEnd(new Task("insert",bstObjPanel.personGenerator.generateRandomPerson(), bstObjPanel.treeShape.root));
+                                            i--;
+                                        }
+                                        synchronized (this) {
+                                            try {
+                                                this.wait(500);
+                                            } catch (InterruptedException e1) {
+                                                e1.printStackTrace();
+                                            }
+                                        }
+                                        bstObjPanel.speed=s;
+                                        bstObjPanel.buffer.clear();
+                                    }
+                                });
+                            }
+                        });
+                        add(new JButton("Insert N Random Nodes"){
+                            {
+                                this.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        bstObjPanel.paused = true;
+                                        if(bstObjPanel.treeShape.root == null) {
+                                            bstObjPanel.personGenerator.reset();
+                                        }
+                                        int i = Integer.parseInt(JOptionPane.showInputDialog("Please type the number of nodes you want to randomely insert", "50"));
+                                        while(i > 0) {
+                                            bstObjPanel.addTaskToEnd(new Task("insert",bstObjPanel.personGenerator.generateRandomPerson(), bstObjPanel.treeShape.root));
+                                            i--;
+                                        }
+                                        bstObjPanel.paused = false;
+                                    }
+                                });
+                            }
+                        });
+                        add(new JButton("Pre-Order") {
+                            {
+                                this.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        bstObjPanel.addTaskToEnd(new Task("preOrder", null,bstObjPanel.treeShape.root));
+                                    }
+                                });
+                            }
+                        });
+                        add(new JButton("In-Order") {
+                            {
+                                this.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        bstObjPanel.addTaskToEnd(new Task("inOrder", null,bstObjPanel.treeShape.root));
+                                    }
+                                });
+                            }
+                        });
+                        add(new JButton("Post-Order") {
+                            {
+                                this.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        bstObjPanel.addTaskToEnd(new Task("postOrder", null,bstObjPanel.treeShape.root));
+                                    }
+                                });
+                            }
+                        });
+                        add(new JButton("Is Empty") {
+                            {
+                                this.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        bstObjPanel.addTaskToEnd(new Task("isEmpty", null, bstObjPanel.treeShape.root));
+                                    }
+                                });
+                            }
+                        });
+                        add(new TreeNodeFunctionButton(bstObjPanel, frame,
+                                "Find"));
+                        add(new TreeNodeFunctionButton(bstObjPanel, frame,
+                                "Delete"));
+                        add(new JButton("Clear Tree") {
+                            {
+                                this.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        bstObjPanel.treeShape.root = null;
+                                    }
+                                });
+                            }
+                        });
+                        add(new JButton("Clear Buffer") {
+                            {
+                                this.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        bstObjPanel.paused = true;
+                                        bstObjPanel.buffer.clear();
+                                        bstObjPanel.paused = false;
+                                    }
+                                });
+                            }
+                        });
+                        add(new JButton("Speed Up") {
+                            {
+                                this.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        if (bstObjPanel.speed < 20) {
+                                            bstObjPanel.speed++;
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                        add(new JButton("Slow Down") {
+                            {
+                                this.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        if (bstObjPanel.speed > -10) {
+                                            bstObjPanel.speed--;
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                        add(new JButton("Reset Speed") {
+                            {
+                                this.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        bstObjPanel.speed = 0;
+                                    }
+                                });
+                            }
+                        });
                         add(new JButton("Lock Zoom") {
                             {
                                 this.addActionListener(new ActionListener() {
@@ -213,181 +371,13 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 });
                             }
                         });
-                        add(new TreeNodeFunctionButton(bstObjPanel, frame,
-                                "Delete"));
-                        add(new TreeNodeFunctionButton(bstObjPanel, frame,
-                                "Find"));
-                        add(new TreeNodeFunctionButton(bstObjPanel, frame,
-                                "Insert"));
-                        add(new JButton("Pre-Order") {
-                            {
-                                this.addActionListener(new ActionListener() {
-                                    @Override
-                                    public void actionPerformed(ActionEvent e) {
-                                        bstObjPanel.addTaskToEnd(new Task("preOrder", null,bstObjPanel.treeShape.root));
-                                    }
-                                });
-                            }
-                        });
-                        add(new JButton("In-Order") {
-                            {
-                                this.addActionListener(new ActionListener() {
-                                    @Override
-                                    public void actionPerformed(ActionEvent e) {
-                                        bstObjPanel.addTaskToEnd(new Task("inOrder", null,bstObjPanel.treeShape.root));
-                                    }
-                                });
-                            }
-                        });
-                        add(new JButton("Post-Order") {
-                            {
-                                this.addActionListener(new ActionListener() {
-                                    @Override
-                                    public void actionPerformed(ActionEvent e) {
-                                        bstObjPanel.addTaskToEnd(new Task("postOrder", null,bstObjPanel.treeShape.root));
-                                    }
-                                });
-                            }
-                        });
-                        add(new JButton("Is Empty") {
-                            {
-                                this.addActionListener(new ActionListener() {
-                                    @Override
-                                    public void actionPerformed(ActionEvent e) {
-                                        // bstObjPanel.paused = true;
-                                    }
-                                });
-                            }
-                        });
-                        // TODO delete this button or replace it with something
-                        // that is not immediate. Useful for debug though.
-                        add(new JButton("Insert 25 Nodes Now") {
-                            {
-                                this.addActionListener(new ActionListener() {
-                                    @Override
-                                    public void actionPerformed(ActionEvent e) {
-                                        //bstObjPanel.paused = true;
-                                        if(bstObjPanel.treeShape.root == null) {
-                                            bstObjPanel.personGenerator.reset();
-                                        }
-//                                        bstObjPanel.treeShape.buildRandomTree(
-//                                                bstObjPanel.personGenerator,
-//                                                1.0, 0.25, false);
-                                        int s = bstObjPanel.speed;
-                                        bstObjPanel.speed=100;
-                                        int i = 25;
-                                        while(i > 0) {
-                                            bstObjPanel.addTaskToEnd(new Task("insert",bstObjPanel.personGenerator.generateRandomPerson(), bstObjPanel.treeShape.root));
-                                            i--;
-                                        }
-                                        synchronized (this) {
-                                            try {
-                                                this.wait(500);
-                                            } catch (InterruptedException e1) {
-                                                e1.printStackTrace();
-                                            }
-                                        }
-                                        bstObjPanel.speed=s;
-                                        //bstObjPanel.paused = false;
-                                    }
-                                });
-                            }
-                        });
-                        add(new JButton("Clear Tree") {
-                            {
-                                this.addActionListener(new ActionListener() {
-                                    @Override
-                                    public void actionPerformed(ActionEvent e) {
-                                        bstObjPanel.treeShape.root = null;
-                                    }
-                                });
-                            }
-                        });
-                        add(new JButton("Insert N random nodes"){
-                            {
-                                this.addActionListener(new ActionListener() {
-                                    @Override
-                                    public void actionPerformed(ActionEvent e) {
-                                        bstObjPanel.paused = true;
-                                        if(bstObjPanel.treeShape.root == null) {
-                                            bstObjPanel.personGenerator.reset();
-                                        }
-                                        int i = Integer.parseInt(JOptionPane.showInputDialog("Please type the number of nodes you want to randomely insert", "50"));
-                                        while(i > 0) {
-                                            bstObjPanel.addTaskToEnd(new Task("insert",bstObjPanel.personGenerator.generateRandomPerson(), bstObjPanel.treeShape.root));
-                                            i--;
-                                        }
-                                        bstObjPanel.paused = false;
-                                    }
-                                });
-                            }
-                        });
-                        add(new JButton("Clear buffer") {
-                            {
-                                this.addActionListener(new ActionListener() {
-                                    @Override
-                                    public void actionPerformed(ActionEvent e) {
-                                        bstObjPanel.paused = true;
-                                        bstObjPanel.buffer.clear();
-                                        bstObjPanel.paused = false;
-                                    }
-                                });
-                            }
-                        });
-                        add(new JButton("Lorem"));
-                        add(new JButton("ipsum"));
-                        add(new JButton("dolor"));
-                        add(new JButton("Speed Up") {
-                            {
-                                this.addActionListener(new ActionListener() {
-                                    @Override
-                                    public void actionPerformed(ActionEvent e) {
-                                        if (bstObjPanel.speed < 20) {
-                                            bstObjPanel.speed++;
-                                        }
-                                    }
-                                });
-                            }
-                        });
-                        add(new JButton("Slow Down") {
-                            {
-                                this.addActionListener(new ActionListener() {
-                                    @Override
-                                    public void actionPerformed(ActionEvent e) {
-                                        if (bstObjPanel.speed > -10) {
-                                            bstObjPanel.speed--;
-                                        }
-                                    }
-                                });
-                            }
-                        });
-                        add(new JButton("Toggle Pause") {
+                        add(new JButton("Pause") {
                             {
                                 this.addActionListener(new ActionListener() {
 
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
                                         bstObjPanel.paused = !bstObjPanel.paused;
-                                    }
-                                });
-                            }
-                        });
-                        add(new JButton("Reset Speed") {
-                            {
-                                this.addActionListener(new ActionListener() {
-                                    @Override
-                                    public void actionPerformed(ActionEvent e) {
-                                        bstObjPanel.speed = 0;
-                                    }
-                                });
-                            }
-                        });
-                        add(new JButton("Close") {
-                            {
-                                this.addActionListener(new ActionListener() {
-                                    @Override
-                                    public void actionPerformed(ActionEvent e) {
-                                        frame.dispose();
                                     }
                                 });
                             }
@@ -420,8 +410,11 @@ public class BstObjPanel extends JPanel implements Runnable {
         while (running) {
 
             //System.out.println((System.currentTimeMillis() - startTime) + "");
+            final int delay;
             if(!tasksToExecute.isEmpty()) {
-                tasksToExecute.poll().exectute(this);
+                delay = tasksToExecute.poll().exectute(this);
+            } else {
+                delay = 10;
             }
             
             repaint();
@@ -517,8 +510,13 @@ public class BstObjPanel extends JPanel implements Runnable {
         // anything you would like to be drawn over the Binary Search Tree.
         // Useful for debugging
         
-        for(int i = 0; i < buffer.size(); i++) {
-            gd.drawString(buffer.get(i), 30, 30+i*12);
+        if(buffer.size() > 0) {
+            gd.setFont(new Font("Georgia",Font.BOLD,10));
+            gd.drawString(buffer.get(0), 30, 30);
+            gd.setFont(new Font("Georgia",0,10));
+            for(int i = 1; i < buffer.size(); i++) {
+                gd.drawString(buffer.get(i), 30, 30+i*12);
+            }
         }
 
         // Apply transform for data
@@ -600,5 +598,14 @@ public class BstObjPanel extends JPanel implements Runnable {
 
     public int getTaskArgumentsSize() {
         return taskArguments.size();
+    }
+    
+    public void addToBuffer(String s) {
+        if(buffer.size() == 32) {
+            String firstValue = buffer.get(0);
+            buffer.clear();
+            buffer.add(firstValue);
+        }
+        buffer.add(s);
     }
 }

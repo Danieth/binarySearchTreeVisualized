@@ -195,7 +195,7 @@ public class Person {
     }
     
     public String toString() {
-        return shortFirstName + ",\t" + shortLastName;
+        return sortKey();
     }
 
 }

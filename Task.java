@@ -44,8 +44,13 @@ public class Task {
             this.args = args;
         }
     }
+    /**
+     * 
+     * @param bst
+     * @return The amount of time a thread should wait before the next task is executed
+     */
 
-    public void exectute(BstObjPanel bst) {
+    public int exectute(BstObjPanel bst) {
         System.out.println(type);
         String message = null;
         Person person = null;
@@ -67,7 +72,18 @@ public class Task {
 
         switch (type) {
             case PREORDER:
+                if(node == bst.treeShape.root || (node != null && node.equals(bst.treeShape.root))) {
+                    if(node == null) {
+                        bst.buffer.clear();
+                        bst.addToBuffer("The tree is empty, so you cannot do a pre-order scan");
+                        break;
+                    } else {
+                        bst.buffer.clear();
+                        bst.addToBuffer("Beginning pre-order scan of list,");
+                    }
+                }
                 node.select(1000);
+                bst.addToBuffer(node.getVal().toString());
                 if(node.getLkid() != null) {
                    bst.addTaskToFront(new Task(PREORDER, null, node.getLkid()));
                 }
@@ -76,9 +92,15 @@ public class Task {
                 }
                 break;
             case INORDER:
-                if(node == bst.treeShape.root) {
-                    bst.buffer.clear();
-                    bst.buffer.add("Beginning InOrder scan of list,\n");
+                if(node == bst.treeShape.root || (node != null && node.equals(bst.treeShape.root))) {
+                    if(node == null) {
+                        bst.buffer.clear();
+                        bst.addToBuffer("The tree is empty, so you cannot do an in-order scan");
+                        break;
+                    } else {
+                        bst.buffer.clear();
+                        bst.addToBuffer("Beginning in-order scan of list,");
+                    }
                 }
                 if(parentNode == null) {
                     if(node.getLkid() != null) {
@@ -89,12 +111,23 @@ public class Task {
                     if(node.getRkid() != null) {
                         bst.addTaskToFront(new Task(INORDER, null, node.getRkid()));
                     }
+                    return 100;
                 } else {
-                    bst.buffer.add(parentNode.getVal()+"");
+                    bst.addToBuffer(parentNode.getVal()+"");
                     parentNode.select(1000);
                 }
                 break;
             case POSTORDER:
+                if(node == bst.treeShape.root || (node != null && node.equals(bst.treeShape.root))) {
+                    if(node == null) {
+                        bst.buffer.clear();
+                        bst.addToBuffer("The tree is empty, so you cannot do a post-order scan");
+                        break;
+                    } else {
+                        bst.buffer.clear();
+                        bst.addToBuffer("Beginning post-order scan of list,");
+                    }
+                }
                 if(parentNode == null) {
                     node.select(100);
                     bst.addTaskToFront(new Task(POSTORDER, null, null, node));
@@ -104,7 +137,9 @@ public class Task {
                     if(node.getRkid() != null) {
                         bst.addTaskToFront(new Task(POSTORDER, null, node.getRkid()));
                     }
+                    return 100;
                 } else {
+                    bst.addToBuffer(parentNode.getVal()+"");
                     parentNode.select(1000);
                 }
                 break;
@@ -198,23 +233,28 @@ public class Task {
             case INSERT:
                 if(node == null) {
                     node = bst.treeShape.root;
+                    bst.buffer.clear();
+                    bst.addToBuffer("Inserting Into the list " + person);
                 }
-                if(bst.getTaskArgumentsSize() == 1) {
+                if(bst.getTaskArgumentsSize() == 1) { // actual insertion
                     bst.treeShape.insert();
                     if((boolean)bst.getNextTaskArgument()) {
                         node.setRkid(new NodeShape(person,null,null));
                     } else {
                         node.setLkid(new NodeShape(person,null,null));
                     }
-                    return;
+                    break;
                 } else {
                     if(node == null) {
                         bst.treeShape.insert();
+                        bst.addToBuffer("Because the root of the BST was not pointing to anything, it will now point to " + person);
                         bst.treeShape.root = new NodeShape(person, null, null);
-                        return;
+                        break;
                     } else {
                         node.select(1000);
+                        bst.addToBuffer("Comparing " + person + " to " + node.getVal());
                         if(node.getVal().compareTo(person) < 0) {
+                            bst.addToBuffer(node.getVal().toString() + " < " + person + " so we will continue down the left tree");
                             NodeShape n = (NodeShape)node.getLkid();
                             if(n == null) {
                                 bst.addTaskArgument(false);
@@ -223,6 +263,7 @@ public class Task {
                                 bst.addTaskToFront(new Task(INSERT, person, n));
                             }
                         } else if(node.getVal().compareTo(person) > 0) {
+                            bst.addToBuffer(node.getVal().toString() + " > " + person + " so we will continue down the left tree");
                             NodeShape n = (NodeShape)node.getRkid();
                             if(n == null) {
                                 bst.addTaskArgument(true);
@@ -237,9 +278,9 @@ public class Task {
                 }
                 break;
             case FIND:
-
                 break;
         }
+        return 1000;
     }
     // Tasks
     /*
