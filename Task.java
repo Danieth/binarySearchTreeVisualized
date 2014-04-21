@@ -202,7 +202,7 @@ public class Task {
                 }
                 break;
             case FIND_FOR_DELETE:
-                //TODO special case of find. Finds the value and adds it with bst.addTaskArgument(foundNode)
+                //TODO prevent an infinite loop if the person we're looking for cannot be found
                 if(bst.treeShape.root == null) {
                     bst.buffer.clear();
                     bst.addToBuffer("Finding " + person);
@@ -322,6 +322,7 @@ public class Task {
                 }
                 break;
             case FIND:
+                //TODO prevent an infinite loop if the person we're looking for cannot be found
                 if(bst.treeShape.root == null) {
                     bst.buffer.clear();
                     bst.addToBuffer("Finding " + person);
