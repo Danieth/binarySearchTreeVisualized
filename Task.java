@@ -31,6 +31,8 @@ public class Task {
     public final static String MAX = "max";
     public final static String DISPLAY = "display";
     public final static String PREORDER = "preOrder";
+    public final static String INORDER = "inOrder";
+    public final static String POSTORDER = "postOrder";
     private final String type;
     private final Object[] args;
 
@@ -71,6 +73,34 @@ public class Task {
                 }
                 if(node.getRkid() != null) {
                     bst.addTaskToFront(new Task(PREORDER, null, node.getRkid()));
+                }
+                break;
+            case INORDER:
+                if(parentNode == null) {
+                    if(node.getRkid() != null) {
+                        bst.addTaskToFront(new Task(INORDER, null, node.getRkid()));
+                    }
+                    node.select(100);
+                    bst.addTaskToFront(new Task(INORDER, null, null, node));
+                    if(node.getLkid() != null) {
+                        bst.addTaskToFront(new Task(INORDER, null, node.getLkid()));
+                     }
+                } else {
+                    parentNode.select(1000);
+                }
+                break;
+            case POSTORDER:
+                if(parentNode == null) {
+                    node.select(100);
+                    bst.addTaskToFront(new Task(POSTORDER, null, null, node));
+                    if(node.getLkid() != null) {
+                       bst.addTaskToFront(new Task(POSTORDER, null, node.getLkid()));
+                    }
+                    if(node.getRkid() != null) {
+                        bst.addTaskToFront(new Task(POSTORDER, null, node.getRkid()));
+                    }
+                } else {
+                    parentNode.select(1000);
                 }
                 break;
             case DELETE:

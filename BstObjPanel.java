@@ -220,7 +220,6 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        System.out.println("Hi!311424124141242");
                                         bstObjPanel.addTaskToEnd(new Task("preOrder", null,bstObjPanel.treeShape.root));
                                     }
                                 });
@@ -231,7 +230,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        // bstObjPanel.paused = true;
+                                        bstObjPanel.addTaskToEnd(new Task("inOrder", null,bstObjPanel.treeShape.root));
                                     }
                                 });
                             }
@@ -241,7 +240,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        // bstObjPanel.paused = true;
+                                        bstObjPanel.addTaskToEnd(new Task("postOrder", null,bstObjPanel.treeShape.root));
                                     }
                                 });
                             }
