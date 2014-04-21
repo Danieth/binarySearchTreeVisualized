@@ -322,7 +322,6 @@ public class Task {
                 }
                 break;
             case FIND:
-                //TODO prevent an infinite loop if the person we're looking for cannot be found
                 if(bst.treeShape.root == null) {
                     bst.buffer.clear();
                     bst.addToBuffer("Finding " + person);
@@ -344,7 +343,7 @@ public class Task {
                         NodeShape n = (NodeShape) node.getLkid();
                         if (n == null) {
                             bst.addTaskArgument(false);
-                            bst.addTaskToFront(new Task(FIND, person, node));
+                            bst.addToBuffer("Left tree is empty. The person we are looking for is not in this tree.");
                         } else {
                             bst.addTaskToFront(new Task(FIND, person, n));
                         }
@@ -353,7 +352,7 @@ public class Task {
                         NodeShape n = (NodeShape) node.getRkid();
                         if (n == null) {
                             bst.addTaskArgument(false);
-                            bst.addTaskToFront(new Task(FIND, person, node));
+                            bst.addToBuffer("Left tree is empty. The person we are looking for is not in this tree.");
                         } else {
                             bst.addTaskToFront(new Task(FIND, person, n));
                         }
