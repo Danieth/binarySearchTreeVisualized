@@ -1,4 +1,16 @@
-binary-search-tree-visualized
+binarySearchTreeVisualized
 =============================
+# Why We Built This
 
-A gui that shows a binary search tree. This gui also allows the user to perform operations on the tree. It also visually performs each step of the operation.
+In our 270 computer science course at CNU, we were given the task of designing a program that allowed for students to modify and examine a binary tree. Tired of explaining binary trees, we built this to allow for anyone, with minimal to no knowledge of a binary tree, to learn and examine how a binary tree is constructed and modified.
+
+# Build
+
+To use this program you will need Java 7 and an installation of git. Open terminal or cmd and type:
+
+```bash
+$ git clone git@github.com:Danieth/binarySearchTreeVisualized.git
+$ cd busyconf/binarySearchTreeVisualized
+$ javac BstObjPanel.java
+$ java BstObjPanel.class
+```
