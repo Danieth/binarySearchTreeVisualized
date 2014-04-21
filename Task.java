@@ -269,7 +269,7 @@ public class Task {
                 if(node == bst.treeShape.root || node == null) {
                     node = bst.treeShape.root;
                     bst.buffer.clear();
-                    bst.addToBuffer("Inserting Into the list " + person);
+                    bst.addToBuffer("Inserting " + person + " into the list");
                 }
 
                 if(bst.getTaskArgumentsSize() == 1) { // actual insertion
