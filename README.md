@@ -8,7 +8,7 @@ To use this program you will need at least Java 7 and an installation of git. Op
 
 ```bash
 $ git clone git@github.com:Danieth/binarySearchTreeVisualized.git
-$ cd Danieth/binarySearchTreeVisualized
+$ cd binarySearchTreeVisualized
 $ javac BstObjPanel.java
 $ java BstObjPanel.class
 ```
