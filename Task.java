@@ -239,10 +239,10 @@ public class Task {
                 if(bst.getTaskArgumentsSize() == 1) { // actual insertion
                     bst.treeShape.insert();
                     if((boolean)bst.getNextTaskArgument()) {
-                        bst.addToBuffer("The right tree was empty, so this node will point to the new node containing " + person);
+                        bst.addToBuffer("The left tree was empty, so this node will point to the new node containing " + person);
                         node.setRkid(new NodeShape(person,null,null));
                     } else {
-                        bst.addToBuffer("The left tree was empty, so this node will point to the new node containing " + person);
+                        bst.addToBuffer("The right tree was empty, so this node will point to the new node containing " + person);
                         node.setLkid(new NodeShape(person,null,null));
                     }
                     break;
