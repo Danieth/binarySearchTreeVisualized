@@ -233,6 +233,14 @@ public class PersonGenerator {
         Collections.sort(lastNames);
         String firstName = firstNames.get(firstNames.size()/2);
         String lastName = lastNames.get(lastNames.size()/2);
+        if(used.contains(firstName + lastName)) {
+            int i = 1;
+            while(used.contains(firstName + lastName)) {
+                firstName = firstNames.get((int) (firstNames.size()/2+i*Math.rint(2*(Math.random()-.5))));
+                lastName = lastNames.get((int) (lastNames.size()/2+i*Math.rint(2*(Math.random()-.5))));
+                i++;
+            }
+        }
         used.add(firstName + lastName);
         String state = Person.STATE_MAP.keySet().toArray()[(int) (Math.random()*Person.STATE_MAP.size())].toString();
         int age = (int) Math.rint(((Math.log(Math.random() * 100 + 1) * 2250 / 101 + 20) % 97) + 3);

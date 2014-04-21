@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class BstObjPanel extends JPanel implements Runnable {
 
-    private final static double zoomMax = 20;
+    private final static double zoomMax = 10000;
     private final static double zoomMin = 0.5;
     final public BstObjShape treeShape = new BstObjShape();
     final public Point2D.Double initialPoint = new Point2D.Double();
@@ -188,6 +188,19 @@ public class BstObjPanel extends JPanel implements Runnable {
                         });
                         add(new TreeNodeFunctionButton(bstObjPanel, frame,
                                 "Insert"));
+                        add(new JButton("Insert Median Node") {
+                            {
+                                this.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        if(bstObjPanel.treeShape.root == null) {
+                                            bstObjPanel.personGenerator.reset();
+                                        }
+                                        bstObjPanel.addTaskToEnd(new Task("insert",bstObjPanel.personGenerator.generateMedianPerson(), bstObjPanel.treeShape.root));
+                                    }
+                                });
+                            }
+                        });
                         add(new JButton("Insert 25 Nodes Now") {
                             {
                                 this.addActionListener(new ActionListener() {
@@ -531,7 +544,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                 gd.drawString(buffer.get(i), 30, 30+i*12);
             }
         }
-
+        
         // Apply transform for data
         gd.setTransform(getAffineTransform());
 

@@ -275,13 +275,14 @@ public class Task {
                 if(bst.getTaskArgumentsSize() == 1) { // actual insertion
                     bst.treeShape.insert();
                     if((boolean)bst.getNextTaskArgument()) {
-                        bst.addToBuffer("The left tree was empty, so this node will point to the new node containing " + person);
+                        bst.addToBuffer("(Insertion) The left tree was empty, so this node will point to the new node containing " + person);
                         node.setRkid(new NodeShape(person,null,null));
                         if (node.getRkid() instanceof NodeShape) {
                             ((NodeShape) node.getRkid()).select(1000);
                         }
                     } else {
                         bst.addToBuffer("The right tree was empty, so this node will point to the new node containing " + person);
+                        bst.addToBuffer("(Insertion) The right tree was empty, so this node will point to the new node containing " + person);
                         node.setLkid(new NodeShape(person,null,null));
                         if (node.getLkid() instanceof NodeShape) {
                             ((NodeShape) node.getLkid()).select(1000);
@@ -291,15 +292,14 @@ public class Task {
                 } else {
                     if(node == null) {
                         bst.treeShape.insert();
-                        bst.addToBuffer("Because the root of the BST was not pointing to anything, it will now point to " + person);
+                        bst.addToBuffer("(Insertion) Because the root of the BST was not pointing to anything, it will now point to " + person);
                         bst.treeShape.root = new NodeShape(person, null, null);
                         bst.treeShape.root.select(1000);
                         break;
                     } else {
                         node.select(1000);
-//                        bst.addToBuffer("Comparing " + person + " to " + node.getVal());
                         if(node.getVal().compareTo(person) < 0) {
-                            bst.addToBuffer(node.getVal().toString() + " < " + person + " so we will continue down the right tree");
+                            bst.addToBuffer("(Comparison) " + node.getVal().toString() + " < " + person + " so we will continue down the right tree");
                             NodeShape n = (NodeShape)node.getLkid();
                             if(n == null) {
                                 bst.addTaskArgument(false);
@@ -308,7 +308,7 @@ public class Task {
                                 bst.addTaskToFront(new Task(INSERT, person, n));
                             }
                         } else if(node.getVal().compareTo(person) > 0) {
-                            bst.addToBuffer(node.getVal().toString() + " > " + person + " so we will continue down the left tree");
+                            bst.addToBuffer("(Comparison) " + node.getVal().toString() + " > " + person + " so we will continue down the left tree");
                             NodeShape n = (NodeShape)node.getRkid();
                             if(n == null) {
                                 bst.addTaskArgument(true);

@@ -56,6 +56,8 @@ public class NodeShape extends TreeNode {
 
     public NodeShape(Person pVal, TreeNode pLkid, TreeNode pRkid) {
         super(pVal, pLkid, pRkid);
+        timeSelected = System.currentTimeMillis();
+        select(1000);
     }
 
     /**
@@ -153,6 +155,11 @@ public class NodeShape extends TreeNode {
             if (size > RADIUS) {
                 size -= (int) ((currentTime) / SHRINK_RATE);
                 size = Math.max(size, RADIUS);
+                shape = new RoundRectangle2D.Double(center.x - size, center.y
+                        - size, size * 2, size * 2, 30, 18);
+            } else if (size < RADIUS) {
+                size += (int) ((currentTime) / GROW_RATE);
+                size = Math.min(size, RADIUS);
                 shape = new RoundRectangle2D.Double(center.x - size, center.y
                         - size, size * 2, size * 2, 30, 18);
             }
