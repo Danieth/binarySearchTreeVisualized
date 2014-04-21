@@ -293,6 +293,7 @@ public class Task {
                         bst.treeShape.insert();
                         bst.addToBuffer("Because the root of the BST was not pointing to anything, it will now point to " + person);
                         bst.treeShape.root = new NodeShape(person, null, null);
+                        bst.treeShape.root.select(1000);
                         break;
                     } else {
                         node.select(1000);
