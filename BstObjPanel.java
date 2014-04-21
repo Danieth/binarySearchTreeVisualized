@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class BstObjPanel extends JPanel implements Runnable {
 
-    private final static double zoomMax = 10;
+    private final static double zoomMax = 20;
     private final static double zoomMin = 0.5;
     final public BstObjShape treeShape = new BstObjShape();
     final public Point2D.Double initialPoint = new Point2D.Double();
@@ -60,7 +60,7 @@ public class BstObjPanel extends JPanel implements Runnable {
     private volatile boolean running = true;
     private volatile boolean paused = false;
     
-    public ArrayList<String> buffer = new ArrayList<String>(32);
+    public ArrayList<String> buffer = new ArrayList<String>(64);
 
     public BstObjPanel() {
         setOpaque(false);
@@ -198,7 +198,8 @@ public class BstObjPanel extends JPanel implements Runnable {
                                         }
                                         int s = bstObjPanel.speed;
                                         bstObjPanel.speed=100;
-                                        int i = 25;
+                                        int i = 24;
+                                        bstObjPanel.addTaskToEnd(new Task("insert",bstObjPanel.personGenerator.generateMedianPerson(), bstObjPanel.treeShape.root));
                                         while(i > 0) {
                                             bstObjPanel.addTaskToEnd(new Task("insert",bstObjPanel.personGenerator.generateRandomPerson(), bstObjPanel.treeShape.root));
                                             i--;
@@ -296,6 +297,18 @@ public class BstObjPanel extends JPanel implements Runnable {
                                     public void actionPerformed(ActionEvent e) {
                                         bstObjPanel.paused = true;
                                         bstObjPanel.buffer.clear();
+                                        bstObjPanel.paused = false;
+                                    }
+                                });
+                            }
+                        });
+                        add(new JButton("Clear Tasks") {
+                            {
+                                this.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        bstObjPanel.paused = true;
+                                        bstObjPanel.tasksToExecute.clear();
                                         bstObjPanel.paused = false;
                                     }
                                 });
@@ -601,7 +614,7 @@ public class BstObjPanel extends JPanel implements Runnable {
     }
     
     public void addToBuffer(String s) {
-        if(buffer.size() == 32) {
+        if(buffer.size() == 60) {
             String firstValue = buffer.get(0);
             buffer.clear();
             buffer.add(firstValue);

@@ -51,7 +51,6 @@ public class Task {
      */
 
     public int exectute(BstObjPanel bst) {
-        System.out.println(type);
         String message = null;
         Person person = null;
         if (args.length > 0) {
@@ -231,16 +230,19 @@ public class Task {
                 }
                 break;
             case INSERT:
-                if(node == null) {
+                if(node == bst.treeShape.root || node == null) {
                     node = bst.treeShape.root;
                     bst.buffer.clear();
                     bst.addToBuffer("Inserting Into the list " + person);
                 }
+
                 if(bst.getTaskArgumentsSize() == 1) { // actual insertion
                     bst.treeShape.insert();
                     if((boolean)bst.getNextTaskArgument()) {
+                        bst.addToBuffer("The right tree was empty, so this node will point to the new node containing " + person);
                         node.setRkid(new NodeShape(person,null,null));
                     } else {
+                        bst.addToBuffer("The left tree was empty, so this node will point to the new node containing " + person);
                         node.setLkid(new NodeShape(person,null,null));
                     }
                     break;
@@ -252,9 +254,9 @@ public class Task {
                         break;
                     } else {
                         node.select(1000);
-                        bst.addToBuffer("Comparing " + person + " to " + node.getVal());
+//                        bst.addToBuffer("Comparing " + person + " to " + node.getVal());
                         if(node.getVal().compareTo(person) < 0) {
-                            bst.addToBuffer(node.getVal().toString() + " < " + person + " so we will continue down the left tree");
+                            bst.addToBuffer(node.getVal().toString() + " > " + person + " so we will continue down the right tree");
                             NodeShape n = (NodeShape)node.getLkid();
                             if(n == null) {
                                 bst.addTaskArgument(false);
@@ -263,7 +265,7 @@ public class Task {
                                 bst.addTaskToFront(new Task(INSERT, person, n));
                             }
                         } else if(node.getVal().compareTo(person) > 0) {
-                            bst.addToBuffer(node.getVal().toString() + " > " + person + " so we will continue down the left tree");
+                            bst.addToBuffer(node.getVal().toString() + " < " + person + " so we will continue down the left tree");
                             NodeShape n = (NodeShape)node.getRkid();
                             if(n == null) {
                                 bst.addTaskArgument(true);

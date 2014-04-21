@@ -97,7 +97,7 @@ public class Person {
     private int age;
     private String shortStateName;
     private String longStateName;
-    private int stateFrom;
+    private String stateFrom;
 
     /**
      * Initialize this Person to the given parameters.
@@ -107,7 +107,7 @@ public class Person {
      * @param age   age of this person
      * @param state state where this person was born
      */
-    public Person(String fName, String lName, int age, int state) {
+    public Person(String fName, String lName, int age, String state) {
         this.firstName = fName;
         this.shortFirstName = (fName.length() > SHORT_LENGTH_CAP) ? fName.substring(0, SHORT_LENGTH_CAP) : fName;
         this.longFirstName = (fName.length() > LONG_LENGTH_CAP) ? fName.substring(0, LONG_LENGTH_CAP) : fName;
@@ -115,43 +115,31 @@ public class Person {
         this.shortLastName = (lName.length() > SHORT_LENGTH_CAP) ? lName.substring(0, SHORT_LENGTH_CAP) : lName;
         this.longLastName = (lName.length() > LONG_LENGTH_CAP) ? lName.substring(0, LONG_LENGTH_CAP) : lName;
         this.age = age;
-        this.stateFrom = state;
-        String[] keyValuePair = getKeyValuePairAtIndex(stateFrom);
-        this.shortStateName = keyValuePair[1];
-        this.longStateName = keyValuePair[0];
-    }
-
-    public Person(String parse) throws IllegalArgumentException {
-        String[] s = parse.split(",");
-        if (s.length != 4) {
-            throw new IllegalArgumentException();
-        }
-        try {
-            age = Integer.parseInt(s[2]);
-        } catch (Exception e) {
-            throw new IllegalArgumentException();
-        }
-        try {
-            stateFrom = Integer.parseInt(s[3]);
-        } catch (Exception e) {
-            throw new IllegalArgumentException();
-        }
-        if (stateFrom < 0 || stateFrom > STATE_MAP.size()) {
-            throw new IllegalArgumentException();
-        }
-        firstName = s[0];
-        lastName = s[1];
-    }
-
-    private String[] getKeyValuePairAtIndex(int index) {
-        int i = 0;
-        for (Map.Entry<String, String> entry : STATE_MAP.entrySet()) {
-            if (i == index) {
-                return new String[]{entry.getKey(), entry.getValue()};
+        if(STATE_MAP.containsKey(state) || STATE_MAP.containsValue(state)) {
+            this.stateFrom = state;
+            if(state.length() == 2) {
+                shortStateName = state;
+                longStateName = getKeyByValue(STATE_MAP, state);
+            } else {
+                shortStateName = STATE_MAP.get(state);
+                longStateName = state;
             }
-            i++;
+        } else {
+            // throw exception();
         }
-        return new String[]{"", ""};
+    }
+
+    public Person(String[] parse) throws IllegalArgumentException {
+        this(parse[0],parse[1],Integer.parseInt(parse[2]),parse[3]);
+    }
+
+    private String getKeyByValue(Map<String,String> c, String value) {
+        for (Map.Entry<String, String> entry : c.entrySet()) {
+            if(entry.getValue().equals(value)) {
+                return entry.getKey();
+            }
+        }
+        return "";
     }
 
     /**

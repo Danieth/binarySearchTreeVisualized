@@ -40,11 +40,12 @@ public class TreeNodeFunctionButton extends JButton {
                                     + command
                                     + "! " + extraWords + "\n(take your time - the visualization was paused)", defaultText);
                     if (response == null) {
+                        System.out.println("Broke out");
                         break;
                     }
                     Person person;
                     try {
-                        person = new Person(response);
+                        person = new Person(response.split(","));
                     } catch (IllegalArgumentException e1) {
                         extraWords = "You must enter a number for the age parameter";
                         defaultText = "first name, last name, age, state";
@@ -53,7 +54,7 @@ public class TreeNodeFunctionButton extends JButton {
                         e2.printStackTrace();
                         continue;
                     }
-                    bstObjPanel.addTaskToEnd(new Task(command, person, bstObjPanel.treeShape.root, null));
+                    bstObjPanel.addTaskToFront(new Task(command.toLowerCase(), person, bstObjPanel.treeShape.root, null));
                     break;
                 }
                 bstObjPanel.unpause();

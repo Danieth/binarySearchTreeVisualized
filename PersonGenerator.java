@@ -223,7 +223,18 @@ public class PersonGenerator {
             lastName = lastNames.get(0);
         }
         used.add(firstName + lastName);
-        int state = (int) (Math.random() * Person.STATE_MAP.size());
+        String state = Person.STATE_MAP.keySet().toArray()[(int) (Math.random()*Person.STATE_MAP.size())].toString();
+        int age = (int) Math.rint(((Math.log(Math.random() * 100 + 1) * 2250 / 101 + 20) % 97) + 3);
+        return new Person(firstName, lastName, age, state);
+    }
+    
+    public Person generateMedianPerson() {
+        Collections.sort(firstNames);
+        Collections.sort(lastNames);
+        String firstName = firstNames.get(firstNames.size()/2);
+        String lastName = lastNames.get(lastNames.size()/2);
+        used.add(firstName + lastName);
+        String state = Person.STATE_MAP.keySet().toArray()[(int) (Math.random()*Person.STATE_MAP.size())].toString();
         int age = (int) Math.rint(((Math.log(Math.random() * 100 + 1) * 2250 / 101 + 20) % 97) + 3);
         return new Person(firstName, lastName, age, state);
     }
