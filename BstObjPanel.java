@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class BstObjPanel extends JPanel implements Runnable {
 
-    private final static double zoomMax = 5;
+    private final static double zoomMax = 10;
     private final static double zoomMin = 0.5;
     final public BstObjShape treeShape = new BstObjShape();
     final public Point2D.Double initialPoint = new Point2D.Double();
@@ -287,7 +287,6 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        bstObjPanel.treeShape.root = null;
                                         int i = Integer.parseInt(JOptionPane.showInputDialog("Please type the number of nodes you want to randomely insert", "50"));
                                         while(i > 0) {
                                             bstObjPanel.addTaskToEnd(new Task("insert",bstObjPanel.personGenerator.generateRandomPerson(), bstObjPanel.treeShape.root));
@@ -398,6 +397,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                         }
                         Thread.sleep(10);
                         updateMouse();
+                        repaint(15);
                     }
                     if (paused) {
                         do {
@@ -415,7 +415,6 @@ public class BstObjPanel extends JPanel implements Runnable {
     }
 
     private void updateMouse() {
-        boolean repaint = true;
         if (treeShape.root != null) {
             NodeShape current = null;
             if (mouseIsOverNode != null) {
@@ -425,27 +424,20 @@ public class BstObjPanel extends JPanel implements Runnable {
                     .contains(normalize(new Point2D.Double(x, y)));
             
             if(current != null && current.equals(mouseIsOverNode)) {
-                repaint = true;
             } else {
                 if(current!= null) {
                     current.unselect();
-                    repaint = true;
                 }
                 if(mouseIsOverNode != null) {
                     mouseIsOverNode.select();
-                    repaint = true;
                 }
             }
         }
         else {
             if (mouseIsOverNode != null) {
                 mouseIsOverNode.unselect();
-                repaint = true;
             }
             mouseIsOverNode = null;
-        }
-        if (repaint) {
-            this.repaint();
         }
     }
 
@@ -458,18 +450,18 @@ public class BstObjPanel extends JPanel implements Runnable {
     }
 
     public void incrementZoom(double amount) {
-        if (amount < 0) {
-            zoom -= Math.min(.5, (Math.pow(2,
-                    (zoom + Math.abs(amount) - (zoomMax + zoomMin) / 2))) / 25);
-        }
-        else {
-            zoom += Math
-                    .min(.5,
-                            (Math.pow(
-                                    2,
-                                    -(zoom + Math.abs(amount) - (zoomMax + zoomMin) / 2))) / 25);
-        }
-        zoom = Math.min(zoomMax, Math.max(zoomMin, zoom));
+//        if (amount < 0) {
+//            zoom -= Math.min(.5, (Math.pow(2,
+//                    (zoom + Math.abs(amount) - 5))) / 25);
+//        }
+//        else {
+//            zoom += Math
+//                    .min(.5,
+//                            (Math.pow(
+//                                    2,
+//                                    -(zoom + Math.abs(amount) - 5))) / 25);
+//        }
+        zoom = Math.min(zoomMax, Math.max(zoomMin, zoom+amount));
         repaint();
     }
 
@@ -482,7 +474,7 @@ public class BstObjPanel extends JPanel implements Runnable {
         gd.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         gd.setRenderingHint(RenderingHints.KEY_RENDERING,
-                RenderingHints.VALUE_RENDER_SPEED);
+                RenderingHints.VALUE_RENDER_QUALITY);
 
         // Draw anything you do not want to be affected by transformations, aka,
         // anything you would like to be drawn over the Binary Search Tree.
