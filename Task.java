@@ -256,7 +256,7 @@ public class Task {
                         node.select(1000);
 //                        bst.addToBuffer("Comparing " + person + " to " + node.getVal());
                         if(node.getVal().compareTo(person) < 0) {
-                            bst.addToBuffer(node.getVal().toString() + " > " + person + " so we will continue down the right tree");
+                            bst.addToBuffer(node.getVal().toString() + " < " + person + " so we will continue down the right tree");
                             NodeShape n = (NodeShape)node.getLkid();
                             if(n == null) {
                                 bst.addTaskArgument(false);
@@ -265,7 +265,7 @@ public class Task {
                                 bst.addTaskToFront(new Task(INSERT, person, n));
                             }
                         } else if(node.getVal().compareTo(person) > 0) {
-                            bst.addToBuffer(node.getVal().toString() + " < " + person + " so we will continue down the left tree");
+                            bst.addToBuffer(node.getVal().toString() + " > " + person + " so we will continue down the left tree");
                             NodeShape n = (NodeShape)node.getRkid();
                             if(n == null) {
                                 bst.addTaskArgument(true);
