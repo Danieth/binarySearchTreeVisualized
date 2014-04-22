@@ -506,8 +506,7 @@ public class BstObjPanel extends JPanel implements Runnable {
             }
             mouseIsOverNode = treeShape.root
                     .contains(normalize(new Point2D.Double(x, y)));
-            if(current != null && current.equals(mouseIsOverNode)) {
-            } else {
+            if (current == null || !current.equals(mouseIsOverNode)) {
                 if(current!= null) {
                     current.unselect();
                 }
