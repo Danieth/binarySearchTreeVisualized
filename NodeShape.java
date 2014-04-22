@@ -198,10 +198,12 @@ public class NodeShape extends TreeNode {
         int alignX = size - 2;
         int alignY = fontSize + yScale;
 
-        gd.drawString(first, (int) (center.x - alignX), (int) center.y - alignY);
-        gd.drawString(last, (int) (center.x - alignX), (int) (center.y - alignY + deltaY));
-        gd.drawString(age, (int) (center.x - alignX), (int) (center.y - alignY + (deltaY * 2)));
-        gd.drawString(state, (int) (center.x - alignX), (int) center.y - alignY + (deltaY * 3));
+        if (size >= RADIUS && size <= MAX_RADIUS) {
+            gd.drawString(first, (int) (center.x - alignX), (int) center.y - alignY);
+            gd.drawString(last, (int) (center.x - alignX), (int) (center.y - alignY + deltaY));
+            gd.drawString(age, (int) (center.x - alignX), (int) (center.y - alignY + (deltaY * 2)));
+            gd.drawString(state, (int) (center.x - alignX), (int) center.y - alignY + (deltaY * 3));
+        }
     }
 
     public void select() {
