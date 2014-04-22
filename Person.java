@@ -127,6 +127,18 @@ public class Person {
         }
     }
 
+    public Person(String fName, String lName) {
+        this.firstName = fName;
+        this.shortFirstName = (fName.length() > SHORT_LENGTH_CAP) ? fName.substring(0, SHORT_LENGTH_CAP) : fName;
+        this.longFirstName = (fName.length() > LONG_LENGTH_CAP) ? fName.substring(0, LONG_LENGTH_CAP) : fName;
+        this.lastName = lName;
+        this.shortLastName = (lName.length() > SHORT_LENGTH_CAP) ? lName.substring(0, SHORT_LENGTH_CAP) : lName;
+        this.longLastName = (lName.length() > LONG_LENGTH_CAP) ? lName.substring(0, LONG_LENGTH_CAP) : lName;
+        this.age = 18;
+        this.shortStateName = "VA";
+        this.longStateName = "Virginia";
+    }
+
     public Person(String[] parse) throws IllegalArgumentException {
         this(parse[0].trim(),parse[1].trim(),Integer.parseInt(parse[2].trim()),parse[3].trim());
     }
