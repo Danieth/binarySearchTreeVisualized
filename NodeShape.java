@@ -314,12 +314,6 @@ public class NodeShape extends TreeNode {
         } else if (!shape.equals(other.shape)) {
             return false;
         }
-        if (size != other.size) {
-            return false;
-        }
-        if (timeSelected != other.timeSelected) {
-            return false;
-        }
-        return true;
+        return size == other.size && timeSelected == other.timeSelected;
     }
 }
