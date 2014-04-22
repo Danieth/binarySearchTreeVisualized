@@ -29,7 +29,6 @@ public class Task {
     public final static String FIND_SUCCESSOR = "findSuccessor";
     public final static String MIN = "min";
     public final static String MAX = "max";
-    public final static String DISPLAY = "display";
     public final static String PREORDER = "preOrder";
     public final static String INORDER = "inOrder";
     public final static String POSTORDER = "postOrder";

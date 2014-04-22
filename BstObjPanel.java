@@ -21,7 +21,6 @@ public class BstObjPanel extends JPanel implements Runnable {
     private final static double zoomMax = 10000;
     private final static double zoomMin = 0.5;
     final public BstObjShape treeShape = new BstObjShape();
-    final public Point2D.Double initialPoint = new Point2D.Double();
     private final ConcurrentLinkedDeque<Task> tasksToExecute = new ConcurrentLinkedDeque<>();
     private final LinkedList<Object> taskArguments = new LinkedList<>();
     private double x;
@@ -633,10 +632,6 @@ public class BstObjPanel extends JPanel implements Runnable {
     public void addTaskToEnd(Task newTask) {
         tasksInQueue++;
         tasksToExecute.addLast(newTask);
-    }
-
-    public int taskArgumentSize() {
-        return taskArguments.size();
     }
 
     public Object getNextTaskArgument() {
