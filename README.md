@@ -10,5 +10,7 @@ To use this program you will need at least Java 7 and an installation of git. Op
 $ git clone git@github.com:Danieth/binarySearchTreeVisualized.git
 $ cd binarySearchTreeVisualized
 $ javac BstObjPanel.java
-$ java BstObjPanel.class
+$ java BstObjPanel
 ```
+
+Alternatively, you can download one of our releases and use the executable JARs we have listed there.
