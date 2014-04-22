@@ -473,7 +473,8 @@ public class BstObjPanel extends JPanel implements Runnable {
                     repaint();
                     try {
                         Thread.sleep(10);
-                    } catch(Exception e) {   
+                    } catch(Exception e) {
+                        e.printStackTrace();
                     }
                 }
                 continue;
@@ -490,7 +491,8 @@ public class BstObjPanel extends JPanel implements Runnable {
                     System.gc();
                 }
                 } while(paused);
-                } catch (InterruptedException e) {                    
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         }
