@@ -17,8 +17,8 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class BstObjPanel extends JPanel implements Runnable {
 
-    private final static double zoomMax = 10000;
-    private final static double zoomMin = 1;
+    private final static double ZOOM_MIN = 10000;
+    private final static double ZOOM_MAX = 1;
     final public BstObjShape treeShape = new BstObjShape();
     private final ConcurrentLinkedDeque<Task> tasksToExecute = new ConcurrentLinkedDeque<>();
     private final LinkedList<Object> taskArguments = new LinkedList<>();
@@ -571,7 +571,7 @@ public class BstObjPanel extends JPanel implements Runnable {
 //                                    2,
 //                                    -(zoom + Math.abs(amount) - 5))) / 25);
 //        }
-        zoom = Math.min(zoomMax, Math.max(zoomMin, zoom+amount));
+        zoom = Math.min(ZOOM_MIN, Math.max(ZOOM_MAX, zoom+amount));
     }
 
     public void paintComponent(Graphics g) {
