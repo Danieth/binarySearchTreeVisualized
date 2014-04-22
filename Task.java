@@ -148,7 +148,10 @@ public class Task {
                         bst.addTaskToFront(new Task(DELETE, person));
                         bst.addTaskToFront(new Task(FIND_SUCCESSOR, null, node));
                     } else if (node != null && parentNode == null) {
-                        bst.addToBuffer("(Delete) Found the root node containing " + person);
+                        bst.addToBuffer("(Find For Delete) Found the root node containing " + person);
+                        bst.treeShape.root = null;
+                        bst.treeShape.delete();
+                        bst.addToBuffer("(Delete) Deleted " + person);
                     } else {
                         bst.addToBuffer("(Delete) We could not find the person");
                     }
