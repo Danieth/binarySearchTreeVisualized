@@ -70,6 +70,7 @@ public class BstObjPanel extends JPanel implements Runnable {
     private int tasksInQueue = 0;
 
     public BstObjPanel() {
+        setOpaque(false);
         setDoubleBuffered(true);
         setVisible(true);
         setFocusable(true);
@@ -239,6 +240,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                                         bstObjPanel.selectOn = true;
                                         bstObjPanel.buffer.clear();
                                         bstObjPanel.speed=s;
+                                        bstObjPanel.updateData();
                                     }
                                 });
                             }
@@ -437,7 +439,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                 };
                 frame.add(sidePanel, c);
                 frame.setUndecorated(true);
-
+                
                 Dimension screenSize = Toolkit.getDefaultToolkit()
                         .getScreenSize();
                 frame.setSize(screenSize.width, screenSize.height);
@@ -502,7 +504,6 @@ public class BstObjPanel extends JPanel implements Runnable {
             }
             mouseIsOverNode = treeShape.root
                     .contains(normalize(new Point2D.Double(x, y)));
-            
             if(current != null && current.equals(mouseIsOverNode)) {
             } else {
                 if(current!= null) {
@@ -623,12 +624,12 @@ public class BstObjPanel extends JPanel implements Runnable {
         this.paused = false;
     }
 
-    public synchronized void addTaskToFront(Task newTask) {
+    public void addTaskToFront(Task newTask) {
         tasksInQueue++;
         tasksToExecute.addFirst(newTask);
     }
 
-    public synchronized void addTaskToEnd(Task newTask) {
+    public void addTaskToEnd(Task newTask) {
         tasksInQueue++;
         tasksToExecute.addLast(newTask);
     }
