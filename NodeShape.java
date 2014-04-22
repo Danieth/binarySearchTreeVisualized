@@ -30,7 +30,7 @@ public class NodeShape extends TreeNode {
     final private static int RADIUS = 17;
     private int size = 0;
     final private static int MAX_RADIUS = 30;
-    final private static int X_SHIFT = 20;
+    final private static int X_SHIFT = 25;
     final private static int Y_SHIFT = 50;
     private static final int GROW_RATE = 150;
     private static final int SHRINK_RATE = 50;
