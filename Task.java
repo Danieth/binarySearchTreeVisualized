@@ -171,7 +171,7 @@ public class Task {
                         bst.addTaskToFront(new Task(DELETE, person));
                         bst.addTaskToFront(new Task(FIND_SUCCESSOR, null, node));
                     } else {
-                        // the node couldn't be found, so no deletion
+                        bst.addToBuffer("(Delete) We could not find the person");
                     }
                 } else if (bst.getTaskArgumentsSize() == 3) { // We found the in order successor
                     node = (NodeShape) bst.getNextTaskArgument();
