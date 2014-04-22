@@ -28,13 +28,11 @@ public class BstObjPanel extends JPanel implements Runnable {
     private double mouseY;
     private NodeShape mouseIsOverNode = null;
     /**
-     * If true, the panel will not allow zooming. If false, use the scroll wheel
-     * to zoom in and out.
+     * If true, the panel will not allow zooming. If false, use the scroll wheel to zoom in and out.
      */
     private boolean zoomIsLocked = false;
     /**
-     * If true, the panel will not allow panning. If false, the panel will pan
-     * when the mouse clicks, and then drags.
+     * If true, the panel will not allow panning. If false, the panel will pan when the mouse clicks, and then drags.
      */
     private boolean screenIsLocked = false;
     /**
@@ -42,16 +40,14 @@ public class BstObjPanel extends JPanel implements Runnable {
      */
     private double zoom = 1;
     /**
-     * The last x value for the mouse before the affine transform was applied,
-     * and the frame was updated
+     * The last x value for the mouse before the affine transform was applied, and the frame was updated
      */
     private double lastX;
     /**
-     * The last y value for the mouse before the affine transform was applied,
-     * and the frame was updated
+     * The last y value for the mouse before the affine transform was applied, and the frame was updated
      */
     private double lastY;
-    
+
     private int tasksCompleted = 0;
 
     private PersonGenerator personGenerator = new PersonGenerator();
@@ -59,12 +55,13 @@ public class BstObjPanel extends JPanel implements Runnable {
     private int speed = 0;
     private volatile boolean running = true;
     private volatile boolean paused = false;
-    
+
     public ArrayList<String> buffer = new ArrayList<>(64);
     private boolean selectOn = true;
-    
+
     final JLabel[] data = new JLabel[20];
-    final String[] defaultDataText = {"Number of nodes: ", "Tasks completed: ", "Tasks in queue: ", "Speed: ", "Paused: "};
+    final String[] defaultDataText =
+            {"Number of nodes: ", "Tasks completed: ", "Tasks in queue: ", "Speed: ", "Paused: "};
     private int tasksInQueue = 0;
 
     public BstObjPanel() {
@@ -73,13 +70,13 @@ public class BstObjPanel extends JPanel implements Runnable {
         setVisible(true);
         setFocusable(true);
         int i = 0;
-        for(; i < defaultDataText.length; i++) {
+        for (; i < defaultDataText.length; i++) {
             data[i] = new JLabel(defaultDataText[i] + '0');
         }
-        for(; i < data.length; i++) {
+        for (; i < data.length; i++) {
             data[i] = new JLabel("");
         }
-        
+
         addMouseWheelListener(new MouseWheelListener() {
             public void mouseWheelMoved(MouseWheelEvent e) {
                 if (e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL
@@ -133,7 +130,7 @@ public class BstObjPanel extends JPanel implements Runnable {
 
     public static void main(String[] args) throws Exception {
         final BstObjPanel bstObjPanel = new BstObjPanel();
-        
+
         final Thread thread = new Thread(bstObjPanel);
         EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -147,7 +144,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                 JFrame.setDefaultLookAndFeelDecorated(true);
                 frame.setLayout(new GridBagLayout());
                 frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                
+
                 // Create the weights for the main graphical panel
                 GridBagConstraints c = new GridBagConstraints();
                 c.fill = GridBagConstraints.BOTH;
@@ -177,9 +174,9 @@ public class BstObjPanel extends JPanel implements Runnable {
 
                 final JPanel dataPanel = new JPanel() {
                     {
-                        setLayout(new GridLayout(bstObjPanel.data.length,1));
-                        for(int i = 0; i < bstObjPanel.data.length; i++) {
-                            if(bstObjPanel.data[i] != null) {
+                        setLayout(new GridLayout(bstObjPanel.data.length, 1));
+                        for (int i = 0; i < bstObjPanel.data.length; i++) {
+                            if (bstObjPanel.data[i] != null) {
                                 add(bstObjPanel.data[i]);
                             }
                         }
@@ -205,10 +202,11 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        if(bstObjPanel.treeShape.root == null) {
+                                        if (bstObjPanel.treeShape.root == null) {
                                             bstObjPanel.personGenerator.reset();
                                             bstObjPanel.paused = true;
-                                            bstObjPanel.addTaskToEnd(new Task("insert",bstObjPanel.personGenerator.generateMedianPerson(), bstObjPanel.treeShape.root));
+                                            bstObjPanel.addTaskToEnd(new Task("insert", bstObjPanel.personGenerator
+                                                    .generateMedianPerson(), bstObjPanel.treeShape.root));
                                             bstObjPanel.paused = false;
                                         }
                                     }
@@ -220,16 +218,18 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        if(bstObjPanel.treeShape.root == null) {
+                                        if (bstObjPanel.treeShape.root == null) {
                                             bstObjPanel.personGenerator.reset();
                                         }
                                         int s = bstObjPanel.speed;
-                                        bstObjPanel.speed=100;
+                                        bstObjPanel.speed = 100;
                                         int i = 24;
-                                        bstObjPanel.selectOn = false; 
-                                        bstObjPanel.addTaskToEnd(new Task("insert",bstObjPanel.personGenerator.generateMedianPerson(), bstObjPanel.treeShape.root));
-                                        while(i > 0) {
-                                            bstObjPanel.addTaskToEnd(new Task("insert",bstObjPanel.personGenerator.generateRandomPerson(), bstObjPanel.treeShape.root));
+                                        bstObjPanel.selectOn = false;
+                                        bstObjPanel.addTaskToEnd(new Task("insert", bstObjPanel.personGenerator
+                                                .generateMedianPerson(), bstObjPanel.treeShape.root));
+                                        while (i > 0) {
+                                            bstObjPanel.addTaskToEnd(new Task("insert", bstObjPanel.personGenerator
+                                                    .generateRandomPerson(), bstObjPanel.treeShape.root));
                                             i--;
                                         }
                                         synchronized (this) {
@@ -241,36 +241,40 @@ public class BstObjPanel extends JPanel implements Runnable {
                                         }
                                         bstObjPanel.selectOn = true;
                                         bstObjPanel.buffer.clear();
-                                        bstObjPanel.speed=s;
+                                        bstObjPanel.speed = s;
                                         bstObjPanel.updateData();
                                     }
                                 });
                             }
                         });
-                        add(new JButton("Insert N Random Nodes"){
+                        add(new JButton("Insert N Random Nodes") {
                             {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
                                         bstObjPanel.paused = true;
-                                        if(bstObjPanel.treeShape.root == null) {
+                                        if (bstObjPanel.treeShape.root == null) {
                                             bstObjPanel.personGenerator.reset();
                                             bstObjPanel.paused = false;
                                         }
                                         String extra = "";
-                                        while(true) {
-                                            String res = JOptionPane.showInputDialog("Please type the number of nodes you want to randomely insert" + ((extra.length() == 0)? "" : "\n(" + extra + ")"), "50");
-                                            if(res == null) {
+                                        while (true) {
+                                            String res = JOptionPane
+                                                    .showInputDialog("Please type the number of nodes you want to randomely insert" + ((extra
+                                                            .length() == 0) ? "" : "\n(" + extra + ")"), "50");
+                                            if (res == null) {
                                                 bstObjPanel.paused = false;
                                                 return;
                                             }
                                             try {
-                                            int i = Integer.parseInt(res);
-                                            while(i > 0) {
-                                                bstObjPanel.addTaskToEnd(new Task("insert",bstObjPanel.personGenerator.generateRandomPerson(), bstObjPanel.treeShape.root));
-                                                i--;
-                                            }
-                                            } catch(Exception e1) {
+                                                int i = Integer.parseInt(res);
+                                                while (i > 0) {
+                                                    bstObjPanel
+                                                            .addTaskToEnd(new Task("insert", bstObjPanel.personGenerator
+                                                                    .generateRandomPerson(), bstObjPanel.treeShape.root));
+                                                    i--;
+                                                }
+                                            } catch (Exception e1) {
                                                 extra = "Error: Must input a number";
                                                 continue;
                                             }
@@ -286,7 +290,8 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        bstObjPanel.addTaskToEnd(new Task("preOrder", null,bstObjPanel.treeShape.root));
+                                        bstObjPanel
+                                                .addTaskToEnd(new Task("preOrder", null, bstObjPanel.treeShape.root));
                                     }
                                 });
                             }
@@ -296,7 +301,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        bstObjPanel.addTaskToEnd(new Task("inOrder", null,bstObjPanel.treeShape.root));
+                                        bstObjPanel.addTaskToEnd(new Task("inOrder", null, bstObjPanel.treeShape.root));
                                     }
                                 });
                             }
@@ -306,7 +311,8 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        bstObjPanel.addTaskToEnd(new Task("postOrder", null,bstObjPanel.treeShape.root));
+                                        bstObjPanel
+                                                .addTaskToEnd(new Task("postOrder", null, bstObjPanel.treeShape.root));
                                     }
                                 });
                             }
@@ -357,7 +363,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        if (bstObjPanel.speed < 10-1) {
+                                        if (bstObjPanel.speed < 10 - 1) {
                                             bstObjPanel.speed++;
                                             bstObjPanel.updateData();
                                         }
@@ -370,7 +376,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        if (bstObjPanel.speed > -10+1) {
+                                        if (bstObjPanel.speed > -10 + 1) {
                                             bstObjPanel.speed--;
                                             bstObjPanel.updateData();
                                         }
@@ -392,8 +398,8 @@ public class BstObjPanel extends JPanel implements Runnable {
                             {
                                 this.addActionListener(new ActionListener() {
                                     private String base = " Zoom";
-                                    private String[] values = { "Lock",
-                                            "Unlock" };
+                                    private String[] values = {"Lock",
+                                            "Unlock"};
                                     private int v = 0;
 
                                     @Override
@@ -410,10 +416,10 @@ public class BstObjPanel extends JPanel implements Runnable {
                             {
                                 this.addActionListener(new ActionListener() {
                                     private String base = " Panning";
-                                    private String[] values = { "Lock",
-                                            "Unlock" };
+                                    private String[] values = {"Lock",
+                                            "Unlock"};
                                     private int v = 0;
-                                    
+
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
                                         ((JButton) e.getSource())
@@ -447,7 +453,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                 };
                 frame.add(sidePanel, c);
                 frame.setUndecorated(true);
-                
+
                 Dimension screenSize = Toolkit.getDefaultToolkit()
                         .getScreenSize();
                 frame.setSize(screenSize.width, screenSize.height);
@@ -460,11 +466,13 @@ public class BstObjPanel extends JPanel implements Runnable {
         thread.run();
         System.gc();
     }
+
     boolean pauseBetweenTasks = false;
+
     public void run() {
         while (running) {
             final int delay;
-            if(!tasksToExecute.isEmpty()) {
+            if (!tasksToExecute.isEmpty()) {
                 delay = tasksToExecute.poll().execute(this);
                 tasksInQueue--;
                 tasksCompleted++;
@@ -473,35 +481,35 @@ public class BstObjPanel extends JPanel implements Runnable {
                 System.gc();
                 delay = 15;
             }
-            if(pauseBetweenTasks) {
+            if (pauseBetweenTasks) {
                 System.gc();
                 paused = true;
                 updateData();
-                while(paused) {
+                while (paused) {
                     updateMouse();
                     repaint();
                     try {
                         Thread.sleep(10);
-                    } catch(Exception e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
                 continue;
             }
-            
+
             int i = 0;
             for (; i < delay - (delay * speed) / 10 || paused; i += 10) {
                 updateMouse();
                 repaint();
                 try {
-                do {
-                Thread.sleep(10);
-                if(paused) {
-                    System.gc();
-                    updateMouse();
-                    repaint();
-                }
-                } while(paused);
+                    do {
+                        Thread.sleep(10);
+                        if (paused) {
+                            System.gc();
+                            updateMouse();
+                            repaint();
+                        }
+                    } while (paused);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -518,27 +526,27 @@ public class BstObjPanel extends JPanel implements Runnable {
             mouseIsOverNode = treeShape.root
                     .contains(normalize(new Point2D.Double(x, y)));
             if (current == null || !current.equals(mouseIsOverNode)) {
-                if(current!= null) {
+                if (current != null) {
                     current.unselect();
                 }
-                if(mouseIsOverNode != null) {
+                if (mouseIsOverNode != null) {
                     mouseIsOverNode.select();
                 }
             }
-        }
-        else {
+        } else {
             if (mouseIsOverNode != null) {
                 mouseIsOverNode.unselect();
             }
             mouseIsOverNode = null;
         }
     }
+
     private void updateData() {
         data[0].setText(defaultDataText[0] + treeShape.numberOfNodes());
         data[1].setText(defaultDataText[1] + tasksCompleted);
         data[2].setText(defaultDataText[2] + tasksInQueue);
-        data[3].setText(defaultDataText[3] + (speed+10));
-        data[4].setText(defaultDataText[4] + ((paused)?"Yes" : "No"));
+        data[3].setText(defaultDataText[3] + (speed + 10));
+        data[4].setText(defaultDataText[4] + ((paused) ? "Yes" : "No"));
     }
 
     public void toggleZoom() {
@@ -561,7 +569,7 @@ public class BstObjPanel extends JPanel implements Runnable {
 //                                    2,
 //                                    -(zoom + Math.abs(amount) - 5))) / 25);
 //        }
-        zoom = Math.min(ZOOM_MIN, Math.max(ZOOM_MAX, zoom+amount));
+        zoom = Math.min(ZOOM_MIN, Math.max(ZOOM_MAX, zoom + amount));
     }
 
     public void paintComponent(Graphics g) {
@@ -578,16 +586,16 @@ public class BstObjPanel extends JPanel implements Runnable {
         // Draw anything you do not want to be affected by transformations, aka,
         // anything you would like to be drawn over the Binary Search Tree.
         // Useful for debugging
-        
-        if(buffer.size() > 0) {
-            gd.setFont(new Font("Georgia",Font.BOLD,10));
+
+        if (buffer.size() > 0) {
+            gd.setFont(new Font("Georgia", Font.BOLD, 10));
             gd.drawString(buffer.get(0), 30, 30);
-            gd.setFont(new Font("Georgia",0,10));
-            for(int i = 1; i < buffer.size(); i++) {
-                gd.drawString(buffer.get(i), 30, 30+i*12);
+            gd.setFont(new Font("Georgia", 0, 10));
+            for (int i = 1; i < buffer.size(); i++) {
+                gd.drawString(buffer.get(i), 30, 30 + i * 12);
             }
         }
-        
+
         // Apply transform for data
         gd.setTransform(getAffineTransform());
 
@@ -597,7 +605,7 @@ public class BstObjPanel extends JPanel implements Runnable {
         treeShape.draw(gd);
 
         // Dispose of the graphics
-        
+
         gd.dispose();
     }
 
@@ -607,7 +615,7 @@ public class BstObjPanel extends JPanel implements Runnable {
         tx.translate(getWidth() / 2, getHeight() / 2);
         tx.scale(zoom, zoom);
         tx.translate(mouseX, mouseY);
-        
+
         return tx;
     }
 
@@ -663,16 +671,16 @@ public class BstObjPanel extends JPanel implements Runnable {
     public int getTaskArgumentsSize() {
         return taskArguments.size();
     }
-    
+
     public void addToBuffer(String s) {
-        if(buffer.size() == 60) {
+        if (buffer.size() == 60) {
             String firstValue = buffer.get(0);
             buffer.clear();
             buffer.add(firstValue);
         }
         buffer.add(s);
     }
-    
+
     public boolean isSelectingOn() {
         return selectOn;
     }
