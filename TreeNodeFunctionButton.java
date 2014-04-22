@@ -40,7 +40,6 @@ public class TreeNodeFunctionButton extends JButton {
                                     + command
                                     + "! " + extraWords + "\n(take your time - the visualization was paused)", defaultText);
                     if (response == null) {
-                        System.out.println("Broke out");
                         break;
                     }
                     Person person;
