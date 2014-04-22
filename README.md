@@ -12,3 +12,5 @@ $ cd binarySearchTreeVisualized
 $ javac BstObjPanel.java
 $ java BstObjPanel
 ```
+
+Alternatively, you can download one of our releases and use the executable JARs we have listed there.
