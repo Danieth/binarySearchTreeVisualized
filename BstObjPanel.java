@@ -22,8 +22,8 @@ public class BstObjPanel extends JPanel implements Runnable {
     private final static double zoomMin = 0.5;
     final public BstObjShape treeShape = new BstObjShape();
     final public Point2D.Double initialPoint = new Point2D.Double();
-    private final ConcurrentLinkedDeque<Task> tasksToExecute = new ConcurrentLinkedDeque<Task>();
-    private final LinkedList<Object> taskArguments = new LinkedList<Object>();
+    private final ConcurrentLinkedDeque<Task> tasksToExecute = new ConcurrentLinkedDeque<>();
+    private final LinkedList<Object> taskArguments = new LinkedList<>();
     private double x;
     private double y;
     private double mouseX;
@@ -62,7 +62,7 @@ public class BstObjPanel extends JPanel implements Runnable {
     private volatile boolean running = true;
     private volatile boolean paused = false;
     
-    public ArrayList<String> buffer = new ArrayList<String>(64);
+    public ArrayList<String> buffer = new ArrayList<>(64);
     private boolean selectOn = true;
     
     final JLabel[] data = new JLabel[5];
