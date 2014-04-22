@@ -58,12 +58,6 @@ public class NodeShape extends TreeNode {
         super(pVal, pLkid, pRkid);
     }
 
-    /**
-     * Gives you the node that is contained in the point
-     *
-     * @param point2d
-     * @return
-     */
     public NodeShape contains(Point2D point2d) {
         if (shape != null) {
             if (shape.contains(point2d)) {

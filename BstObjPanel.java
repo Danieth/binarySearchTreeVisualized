@@ -640,10 +640,6 @@ public class BstObjPanel extends JPanel implements Runnable {
         return taskArguments.size();
     }
 
-    /**
-     * Get the next argument
-     * @return
-     */
     public Object getNextTaskArgument() {
         return taskArguments.poll();
     }

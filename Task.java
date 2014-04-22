@@ -44,12 +44,7 @@ public class Task {
             this.args = args;
         }
     }
-    
-    /**
-     * 
-     * @param bst
-     * @return The amount of time a thread should wait before the next task is executed
-     */
+
     public int execute(BstObjPanel bst) {
         Person person = null;
         if (args.length > 0) {
