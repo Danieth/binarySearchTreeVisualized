@@ -392,6 +392,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
                                         bstObjPanel.speed = 0;
+                                        bstObjPanel.updateData();
                                     }
                                 });
                             }
