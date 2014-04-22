@@ -19,8 +19,8 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class BstObjPanel extends JPanel implements Runnable {
 
-    private final static double ZOOM_MIN = 1500;
-    private final static double ZOOM_MAX = 1;
+    private final static double ZOOM_MIN = 5;
+    private final static double ZOOM_MAX = 0.2;
     final public BstObjShape treeShape = new BstObjShape();
     private final ConcurrentLinkedDeque<Task> tasksToExecute = new ConcurrentLinkedDeque<>();
     private final LinkedList<Object> taskArguments = new LinkedList<>();
