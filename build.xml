@@ -27,7 +27,7 @@
         <!-- Put everything in ${build} into the ${ant.project.name}.jar file -->
         <jar jarfile="${dist}/${ant.project.name}.jar" basedir="${build}">
             <manifest>
-                <attribute name="Main-Class" value="BstObjPanel"/>
+                <attribute name="Main-Class" value="me.danieth.bstvisualized.BstObjPanel"/>
             </manifest>
         </jar>
     </target>

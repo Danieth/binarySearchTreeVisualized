@@ -1,3 +1,5 @@
+package me.danieth.bstvisualized;
+
 public class Task {
 
     public final static String DELETE = "delete";

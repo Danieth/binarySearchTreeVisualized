@@ -1,3 +1,5 @@
+package me.danieth.bstvisualized;
+
 import java.awt.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
