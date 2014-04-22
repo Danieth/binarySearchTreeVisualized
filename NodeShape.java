@@ -125,6 +125,7 @@ public class NodeShape extends TreeNode {
             }
         }
         gd.setColor(gd.getBackground());
+        boolean setImageAndUseImage = true;
         final long currentTime = System.currentTimeMillis() - timeSelected;
         if (selected) {
             if (size < MAX_RADIUS) {
@@ -184,7 +185,7 @@ public class NodeShape extends TreeNode {
         String last;
         String age;
         String state;
-
+        
         if (!selected || size < MAX_RADIUS) {
             words = getVal().allFields().split(",");
             first = "First: " + words[0];

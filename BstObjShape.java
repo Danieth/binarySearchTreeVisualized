@@ -27,6 +27,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class BstObjShape {
     public NodeShape root = null;
     private AtomicBoolean needsPreparation = new AtomicBoolean(true);
+    private int nodeCount = 0;
     
     public BstObjShape() {
     }
@@ -36,10 +37,15 @@ public class BstObjShape {
     }
     
     public void insert() {
+        nodeCount++;
         needsPreparation.compareAndSet(false, true);
     }
     public void delete() {
+        nodeCount--;
         needsPreparation.compareAndSet(false, true);
+    }
+    public void resetNodeCount() {
+        nodeCount = 0;
     }
     
     public void draw(Graphics2D gd) {
@@ -90,5 +96,9 @@ public class BstObjShape {
         two = generateNodesFull(ps,percent,decrement);
         }
         return new NodeShape(ps.generateRandomPerson(),one,two);
+    }
+
+    public int numberOfNodes() {
+        return nodeCount;
     }
 }

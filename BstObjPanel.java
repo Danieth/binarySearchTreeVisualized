@@ -53,6 +53,8 @@ public class BstObjPanel extends JPanel implements Runnable {
      * and the frame was updated
      */
     private double lastY;
+    
+    private int tasksCompleted = 0;
 
     private PersonGenerator personGenerator = new PersonGenerator();
 
@@ -64,16 +66,17 @@ public class BstObjPanel extends JPanel implements Runnable {
     private boolean selectOn = true;
     
     final JLabel[] data = new JLabel[5];
-    final String[] defaultDataText = {"Number of nodes = ", "Tasks completed = "};
+    final String[] defaultDataText = {"Number of nodes: ", "Tasks completed: ", "Tasks in queue: ", "Speed: "};
+    private int tasksInQueue = 0;
 
     public BstObjPanel() {
-        setOpaque(false);
+        setDoubleBuffered(true);
         setVisible(true);
         setFocusable(true);
         for(int i = 0; i < defaultDataText.length; i++) {
             data[i] = new JLabel(defaultDataText[i] + '0');
         }
-
+        
         addMouseWheelListener(new MouseWheelListener() {
             public void mouseWheelMoved(MouseWheelEvent e) {
                 if (e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL
@@ -118,8 +121,8 @@ public class BstObjPanel extends JPanel implements Runnable {
 
                     mouseX += newX;
                     mouseY += newY;
-
-                    repaint();
+                    
+//                    repaint()
                 }
             }
         });
@@ -127,9 +130,7 @@ public class BstObjPanel extends JPanel implements Runnable {
 
     public static void main(String[] args) throws Exception {
         final BstObjPanel bstObjPanel = new BstObjPanel();
-//        bstObjPanel.treeShape.buildRandomTree(bstObjPanel.personGenerator, 1.0,
-//                0.25, true);
-
+        
         final Thread thread = new Thread(bstObjPanel);
         EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -143,7 +144,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                 frame.setLayout(new GridBagLayout());
                 frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 JFrame.setDefaultLookAndFeelDecorated(true);
-
+                
                 // Create the weights for the main graphical panel
                 GridBagConstraints c = new GridBagConstraints();
                 c.fill = GridBagConstraints.BOTH;
@@ -171,10 +172,9 @@ public class BstObjPanel extends JPanel implements Runnable {
                 c.gridx = GridBagConstraints.RELATIVE;
                 c.anchor = GridBagConstraints.LINE_START;
 
-                // TODO make this print out data to the lower right corner
                 final JPanel dataPanel = new JPanel() {
                     {
-                        setLayout(new GridLayout(2, 2));
+                        setLayout(new GridLayout(bstObjPanel.data.length,1));
                         //bstObjPanel.data[0] = new JLabel("Total number of nodes = 0");
                         
                         for(int i = 0; i < bstObjPanel.data.length; i++) {
@@ -184,7 +184,6 @@ public class BstObjPanel extends JPanel implements Runnable {
                         }
                     }
                 };
-
                 final JPanel buttonPanel = new JPanel() {
                     {
                         setLayout(new GridLayout(0, 1));
@@ -315,6 +314,8 @@ public class BstObjPanel extends JPanel implements Runnable {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
                                         bstObjPanel.treeShape.root = null;
+                                        bstObjPanel.treeShape.resetNodeCount();
+                                        bstObjPanel.updateData();
                                     }
                                 });
                             }
@@ -338,6 +339,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                                     public void actionPerformed(ActionEvent e) {
                                         bstObjPanel.paused = true;
                                         bstObjPanel.tasksToExecute.clear();
+                                        bstObjPanel.updateData();
                                         bstObjPanel.paused = false;
                                     }
                                 });
@@ -348,8 +350,9 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        if (bstObjPanel.speed < 20) {
+                                        if (bstObjPanel.speed < 10-1) {
                                             bstObjPanel.speed++;
+                                            bstObjPanel.updateData();
                                         }
                                     }
                                 });
@@ -360,8 +363,9 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        if (bstObjPanel.speed > -10) {
+                                        if (bstObjPanel.speed > -10+1) {
                                             bstObjPanel.speed--;
+                                            bstObjPanel.updateData();
                                         }
                                     }
                                 });
@@ -402,7 +406,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                                     private String[] values = { "Lock",
                                             "Unlock" };
                                     private int v = 0;
-
+                                    
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
                                         ((JButton) e.getSource())
@@ -444,29 +448,52 @@ public class BstObjPanel extends JPanel implements Runnable {
                 frame.setVisible(true);
             }
         });
+        System.gc();
         thread.run();
+        System.gc();
     }
-
+    boolean pauseBetweenTasks = false;
     public void run() {
-        try {
-            while (running) {
-                final int delay;
-                if(!tasksToExecute.isEmpty()) {
-                    delay = tasksToExecute.poll().execute(this);
-                } else {
-                    delay = 10;
-                }
-                int i = 0;
-                for (; i < delay - (delay * speed) / 10; i += 10) {
+        while (running) {
+            final int delay;
+            if(!tasksToExecute.isEmpty()) {
+                delay = tasksToExecute.poll().execute(this);
+                tasksInQueue--;
+                tasksCompleted++;
+                updateData();
+            } else {
+                System.gc();
+                delay = 15;
+            }
+            if(pauseBetweenTasks) {
+                System.gc();
+                paused = true;
+                while(paused) {
                     updateMouse();
-                    do {
-                    Thread.sleep(10);
                     repaint();
-                    } while(paused);
+                    try {
+                        Thread.sleep(10);
+                    } catch(Exception e) {
+                        
+                    }
+                }
+                continue;
+            }
+            
+            int i = 0;
+            for (; i < delay - (delay * speed) / 10 || paused; i += 10) {
+                updateMouse();
+                repaint();
+                try {
+                do {
+                Thread.sleep(10);
+                if(paused) {
+                    System.gc();
+                }
+                } while(paused);
+                } catch (InterruptedException e) {                    
                 }
             }
-        } catch (InterruptedException e) {
-            
         }
     }
 
@@ -497,7 +524,10 @@ public class BstObjPanel extends JPanel implements Runnable {
         }
     }
     private void updateData() {
-        
+        data[0].setText(defaultDataText[0] + treeShape.numberOfNodes());
+        data[1].setText(defaultDataText[1] + tasksCompleted);
+        data[2].setText(defaultDataText[2] + tasksInQueue);
+        data[3].setText(defaultDataText[3] + (speed+10));
     }
 
     public void toggleZoom() {
@@ -567,7 +597,7 @@ public class BstObjPanel extends JPanel implements Runnable {
         tx.translate(getWidth() / 2, getHeight() / 2);
         tx.scale(zoom, zoom);
         tx.translate(mouseX, mouseY);
-
+        
         return tx;
     }
 
@@ -598,10 +628,12 @@ public class BstObjPanel extends JPanel implements Runnable {
     }
 
     public synchronized void addTaskToFront(Task newTask) {
+        tasksInQueue++;
         tasksToExecute.addFirst(newTask);
     }
 
     public synchronized void addTaskToEnd(Task newTask) {
+        tasksInQueue++;
         tasksToExecute.addLast(newTask);
     }
 
@@ -611,7 +643,6 @@ public class BstObjPanel extends JPanel implements Runnable {
 
     /**
      * Get the next argument
-     * 
      * @return
      */
     public Object getNextTaskArgument() {
