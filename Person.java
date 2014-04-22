@@ -140,7 +140,36 @@ public class Person {
     }
 
     public Person(String[] parse) throws IllegalArgumentException {
-        this(parse[0].trim(),parse[1].trim(),Integer.parseInt(parse[2].trim()),parse[3].trim());
+        if (parse.length == 2) {
+            this.firstName = parse[0];
+            this.shortFirstName = (parse[0].length() > SHORT_LENGTH_CAP) ? parse[0].substring(0, SHORT_LENGTH_CAP) : parse[0];
+            this.longFirstName = (parse[0].length() > LONG_LENGTH_CAP) ? parse[0].substring(0, LONG_LENGTH_CAP) : parse[0];
+            this.lastName = parse[1];
+            this.shortLastName = (parse[1].length() > SHORT_LENGTH_CAP) ? parse[1].substring(0, SHORT_LENGTH_CAP) : parse[1];
+            this.longLastName = (parse[1].length() > LONG_LENGTH_CAP) ? parse[1].substring(0, LONG_LENGTH_CAP) : parse[1];
+            this.age = 18;
+            this.shortStateName = "VA";
+            this.longStateName = "Virginia";
+        } else {
+            this.firstName = parse[0];
+            this.shortFirstName = (parse[0].length() > SHORT_LENGTH_CAP) ? parse[0].substring(0, SHORT_LENGTH_CAP) : parse[0];
+            this.longFirstName = (parse[0].length() > LONG_LENGTH_CAP) ? parse[0].substring(0, LONG_LENGTH_CAP) : parse[0];
+            this.lastName = parse[1];
+            this.shortLastName = (parse[1].length() > SHORT_LENGTH_CAP) ? parse[1].substring(0, SHORT_LENGTH_CAP) : parse[1];
+            this.longLastName = (parse[1].length() > LONG_LENGTH_CAP) ? parse[1].substring(0, LONG_LENGTH_CAP) : parse[1];
+            this.age = Integer.parseInt(parse[2]);
+            if(STATE_MAP.containsKey(parse[3]) || STATE_MAP.containsValue(parse[3])) {
+                if(parse[3].length() == 2) {
+                    shortStateName = parse[3];
+                    longStateName = getKeyByValue(STATE_MAP, parse[3]);
+                } else {
+                    shortStateName = STATE_MAP.get(parse[3]);
+                    longStateName = parse[3];
+                }
+            } else {
+                throw new IllegalArgumentException("State not found");
+            }
+        }
     }
 
     private String getKeyByValue(Map<String,String> c, String value) {
