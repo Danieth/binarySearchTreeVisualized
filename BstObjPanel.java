@@ -311,16 +311,6 @@ public class BstObjPanel extends JPanel implements Runnable {
                                 });
                             }
                         });
-                        add(new JButton("Is Empty") {
-                            {
-                                this.addActionListener(new ActionListener() {
-                                    @Override
-                                    public void actionPerformed(ActionEvent e) {
-                                        bstObjPanel.addTaskToEnd(new Task("isEmpty", null, bstObjPanel.treeShape.root));
-                                    }
-                                });
-                            }
-                        });
                         add(new TreeNodeFunctionButton(bstObjPanel, frame,
                                 "Find"));
                         add(new TreeNodeFunctionButton(bstObjPanel, frame,
