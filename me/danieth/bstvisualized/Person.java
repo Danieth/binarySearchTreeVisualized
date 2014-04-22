@@ -4,7 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * me.danieth.bstvisualized.Person is a class that defines a person's demographic information. me.danieth.bstvisualized.Person objects are sorted based upon the last name
+ * Person is a class that defines a person's demographic information. Person objects are sorted based upon the last name
  * data field concatenated with the first name field. http://www.pcs.cnu.edu/~siochi/classes/sp14/270sp14Bst/
  *
  * @author DanielAckerman
@@ -79,7 +79,7 @@ public class Person {
     private String longStateName;
 
     /**
-     * Initialize this me.danieth.bstvisualized.Person to the given parameters.
+     * Initialize this Person to the given parameters.
      *
      * @param fName first name
      * @param lName last name
@@ -150,7 +150,7 @@ public class Person {
                 throw new IllegalArgumentException("State not found");
             }
         } else {
-            throw new IllegalArgumentException("Incorrect format of me.danieth.bstvisualized.Person");
+            throw new IllegalArgumentException("Incorrect format of Person");
         }
     }
 
@@ -174,7 +174,7 @@ public class Person {
     }
 
     /**
-     * Get all the fields of this me.danieth.bstvisualized.Person as a String with a capped length.
+     * Get all the fields of this Person as a String with a capped length.
      *
      * @return <code>fistName + lastName + age + stateFrom;</code>
      */
@@ -183,7 +183,7 @@ public class Person {
     }
 
     /**
-     * Get all the fields of this me.danieth.bstvisualized.Person as a String with a higher capped length.
+     * Get all the fields of this Person as a String with a higher capped length.
      * @return <code>fistName + lastName + age + stateFrom;</code>
      */
     public String allLongFields() {
@@ -191,8 +191,8 @@ public class Person {
     }
 
     /**
-     * Compare the sort key of this me.danieth.bstvisualized.Person to the sort key of the me.danieth.bstvisualized.Person given as parameter. Return -1, 0, 1 according
-     * as this me.danieth.bstvisualized.Person's sort key is less than, equal to, or greater than the sort key of the me.danieth.bstvisualized.Person given as parameter.
+     * Compare the sort key of this Person to the sort key of the Person given as parameter. Return -1, 0, 1 according
+     * as this Person's sort key is less than, equal to, or greater than the sort key of the Person given as parameter.
      * The table below illustrates how this works. Note that the comparison is CASE-SENSITIVE.
      *
      * @param otherPerson whose key is to be compared
