@@ -558,17 +558,6 @@ public class BstObjPanel extends JPanel implements Runnable {
     }
 
     public void incrementZoom(double amount) {
-//        if (amount < 0) {
-//            zoom -= Math.min(.5, (Math.pow(2,
-//                    (zoom + Math.abs(amount) - 5))) / 25);
-//        }
-//        else {
-//            zoom += Math
-//                    .min(.5,
-//                            (Math.pow(
-//                                    2,
-//                                    -(zoom + Math.abs(amount) - 5))) / 25);
-//        }
         zoom = Math.min(ZOOM_MIN, Math.max(ZOOM_MAX, zoom + amount));
     }
 
