@@ -121,8 +121,6 @@ public class BstObjPanel extends JPanel implements Runnable {
 
                     mouseX += newX;
                     mouseY += newY;
-                    
-//                    repaint()
                 }
             }
         });
@@ -473,8 +471,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                     repaint();
                     try {
                         Thread.sleep(10);
-                    } catch(Exception e) {
-                        
+                    } catch(Exception e) {   
                     }
                 }
                 continue;
@@ -551,7 +548,6 @@ public class BstObjPanel extends JPanel implements Runnable {
 //                                    -(zoom + Math.abs(amount) - 5))) / 25);
 //        }
         zoom = Math.min(zoomMax, Math.max(zoomMin, zoom+amount));
-        repaint();
     }
 
     public void paintComponent(Graphics g) {
