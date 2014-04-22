@@ -62,11 +62,17 @@ public class BstObjPanel extends JPanel implements Runnable {
     
     public ArrayList<String> buffer = new ArrayList<String>(64);
     private boolean selectOn = true;
+    
+    final JLabel[] data = new JLabel[5];
+    final String[] defaultDataText = {"Number of nodes = ", "Tasks completed = "};
 
     public BstObjPanel() {
         setOpaque(false);
         setVisible(true);
         setFocusable(true);
+        for(int i = 0; i < defaultDataText.length; i++) {
+            data[i] = new JLabel(defaultDataText[i] + '0');
+        }
 
         addMouseWheelListener(new MouseWheelListener() {
             public void mouseWheelMoved(MouseWheelEvent e) {
@@ -166,11 +172,16 @@ public class BstObjPanel extends JPanel implements Runnable {
                 c.anchor = GridBagConstraints.LINE_START;
 
                 // TODO make this print out data to the lower right corner
-                final JLabel[] data = null;// = new JLabel[];
                 final JPanel dataPanel = new JPanel() {
                     {
                         setLayout(new GridLayout(2, 2));
-                        // add(data[0]); //Total number of nodes
+                        //bstObjPanel.data[0] = new JLabel("Total number of nodes = 0");
+                        
+                        for(int i = 0; i < bstObjPanel.data.length; i++) {
+                            if(bstObjPanel.data[i] != null) {
+                                add(bstObjPanel.data[i]);
+                            }
+                        }
                     }
                 };
 
@@ -223,7 +234,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                                         }
                                         synchronized (this) {
                                             try {
-                                                this.wait(500);
+                                                this.wait(150);
                                             } catch (InterruptedException e1) {
                                                 e1.printStackTrace();
                                             }
@@ -437,42 +448,26 @@ public class BstObjPanel extends JPanel implements Runnable {
     }
 
     public void run() {
-        //final long startTime = System.currentTimeMillis();
-        while (running) {
-
-            //System.out.println((System.currentTimeMillis() - startTime) + "");
-            final int delay;
-            if(!tasksToExecute.isEmpty()) {
-                delay = tasksToExecute.poll().execute(this);
-            } else {
-                delay = 10;
-            }
-            
-            repaint();
-            try {
-                int i = 0;
-                while (true) {
-                    for (; i < delay - (delay * speed) / 10; i += 10) {
-                        if (paused) {
-                            break;
-                        }
-                        Thread.sleep(10);
-                        updateMouse();
-                        repaint(15);
-                    }
-                    if (paused) {
-                        do {
-                            Thread.sleep(100);
-                        } while (paused);
-                        continue;
-                    }
-                    break;
+        try {
+            while (running) {
+                final int delay;
+                if(!tasksToExecute.isEmpty()) {
+                    delay = tasksToExecute.poll().execute(this);
+                } else {
+                    delay = 10;
                 }
-
-            } catch (InterruptedException e) {
+                int i = 0;
+                for (; i < delay - (delay * speed) / 10; i += 10) {
+                    updateMouse();
+                    do {
+                    Thread.sleep(10);
+                    repaint();
+                    } while(paused);
+                }
             }
+        } catch (InterruptedException e) {
+            
         }
-
     }
 
     private void updateMouse() {
@@ -500,6 +495,9 @@ public class BstObjPanel extends JPanel implements Runnable {
             }
             mouseIsOverNode = null;
         }
+    }
+    private void updateData() {
+        
     }
 
     public void toggleZoom() {

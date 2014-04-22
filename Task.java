@@ -44,21 +44,16 @@ public class Task {
             this.args = args;
         }
     }
+    
     /**
      * 
      * @param bst
      * @return The amount of time a thread should wait before the next task is executed
      */
-
     public int execute(BstObjPanel bst) {
-        String message = null;
         Person person = null;
         if (args.length > 0) {
-            if (args[0] instanceof Person) {
-                person = (Person) args[0];
-            } else if (args[0] instanceof String) {
-                message = (String) args[0];
-            }
+            person = (Person) args[0];
         }
         NodeShape node = null;
         if (args.length > 1) {
@@ -144,7 +139,7 @@ public class Task {
                 break;
             case DELETE:
                 if(bst.treeShape.root == null) {
-                    bst.addToBuffer("(Find For Delete) Root tree is empty and so we cannot find " + person);
+                    bst.addToBuffer("(Find For Delete) The tree is empty, so you cannot delete " + person);
                     bst.addTaskArgument(new Object[]{null});
                     break;
                 }
@@ -210,7 +205,7 @@ public class Task {
                         }
                     } else if (inOrderSuccessorNode != null) {
                         // TODO reword
-                        bst.addToBuffer("(Delete) Found the in-order successor, so now we will swap the values, and delete " + person);
+                        bst.addToBuffer("(Deleting) Found the in-order successor, so now we will swap the values, and delete " + person);
                         node.select(1000);
                         inOrderSuccessorNode.select(1000);
                         node.setVal(inOrderSuccessorNode.getVal());
@@ -303,12 +298,15 @@ public class Task {
                 }
                 break;
             case INSERT:
+                if(bst.treeShape.root == null) {
+                    bst.buffer.clear();
+                    bst.addToBuffer("The tree is empty, so you cannot insert " + person);
+                }
                 if(node == bst.treeShape.root || node == null) {
                     node = bst.treeShape.root;
                     bst.buffer.clear();
                     bst.addToBuffer("Inserting " + person + " into the list");
                 }
-
                 if(bst.getTaskArgumentsSize() == 1) { // actual insertion
                     bst.treeShape.insert();
                     if((boolean)bst.getNextTaskArgument()) {
@@ -367,14 +365,13 @@ public class Task {
             case FIND:
                 if(bst.treeShape.root == null) {
                     bst.buffer.clear();
-                    bst.addToBuffer("Finding " + person);
-                    bst.addToBuffer("Root tree is empty and so we cannot find the person you are looking for.");
+                    bst.addToBuffer("(Find) The tree is empty, so you cannot find " + person);
                     break;
                 }
                 if(node == bst.treeShape.root || node == null) {
                     node = bst.treeShape.root;
                     bst.buffer.clear();
-                    bst.addToBuffer("Finding " + person);
+                    bst.addToBuffer("(Find) Finding " + person);
                 }
                 if (person != null) {
                     node.select(1000);
@@ -405,13 +402,4 @@ public class Task {
         }
         return 1000;
     }
-    // Tasks
-    /*
-     * TODO build task class
-     * 
-     * Other Important Tasks
-     * 
-     * Print results Modify Shapes change color of shape delete a shape
-     */
-
 }
