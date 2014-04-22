@@ -258,7 +258,7 @@ public class Task {
             case FIND_SUCCESSOR:
                 //TODO finds the in order successor from the node given, add it with bst.addTaskArgument(inOrderSuccessor)
                 if(node == null) {
-                    
+                    bst.addToBuffer("(Find InOrder Successor) This node doesn't exist, so we will do nothing.");
                 } else if (node.getRkid() != null) {
                     bst.addTaskToFront(new Task(MIN, null, node.getRkid()));
                     bst.addToBuffer("(Find InOrder Successor) This node has a left child, so we will go to the left tree and find the maximum value");
