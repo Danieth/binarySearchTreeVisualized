@@ -45,6 +45,7 @@ public class Task {
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     public int execute(BstObjPanel bst) {
         Person person = null;
         if (args.length > 0) {
@@ -199,7 +200,6 @@ public class Task {
                             bst.treeShape.root = null;
                         }
                     } else if (inOrderSuccessorNode != null) {
-                        // TODO reword
                         bst.addToBuffer("(Deleting) Found the in-order successor, so now we will swap the values, and delete " + person);
                         node.select(1000);
                         inOrderSuccessorNode.select(1000);
