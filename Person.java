@@ -128,7 +128,7 @@ public class Person {
             this.age = 18;
             this.shortStateName = "VA";
             this.longStateName = "Virginia";
-        } else {
+        } else if (parse.length == 4) {
             this.firstName = parse[0];
             this.shortFirstName = (parse[0].length() > SHORT_LENGTH_CAP) ? parse[0].substring(0, SHORT_LENGTH_CAP) : parse[0];
             this.longFirstName = (parse[0].length() > LONG_LENGTH_CAP) ? parse[0].substring(0, LONG_LENGTH_CAP) : parse[0];
@@ -147,6 +147,8 @@ public class Person {
             } else {
                 throw new IllegalArgumentException("State not found");
             }
+        } else {
+            throw new IllegalArgumentException("Incorrect format of Person");
         }
     }
 
