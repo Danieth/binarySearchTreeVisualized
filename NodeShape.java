@@ -119,7 +119,6 @@ public class NodeShape extends TreeNode {
             }
         }
         gd.setColor(gd.getBackground());
-        boolean setImageAndUseImage = true;
         final long currentTime = System.currentTimeMillis() - timeSelected;
         if (selected) {
             if (size < MAX_RADIUS) {
