@@ -1,3 +1,4 @@
+<!--suppress ALL -->
 <project name="BSTvisualized" default="run" basedir=".">
     <description>
         A visualized example of a binary search tree.
