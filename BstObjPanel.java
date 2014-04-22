@@ -1,5 +1,4 @@
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -64,8 +63,8 @@ public class BstObjPanel extends JPanel implements Runnable {
     public ArrayList<String> buffer = new ArrayList<>(64);
     private boolean selectOn = true;
     
-    final JLabel[] data = new JLabel[5];
-    final String[] defaultDataText = {"Number of nodes: ", "Tasks completed: ", "Tasks in queue: ", "Speed: "};
+    final JLabel[] data = new JLabel[20];
+    final String[] defaultDataText = {"Number of nodes: ", "Tasks completed: ", "Tasks in queue: ", "Speed: ", "Paused: "};
     private int tasksInQueue = 0;
 
     public BstObjPanel() {
@@ -73,8 +72,12 @@ public class BstObjPanel extends JPanel implements Runnable {
         setDoubleBuffered(true);
         setVisible(true);
         setFocusable(true);
-        for(int i = 0; i < defaultDataText.length; i++) {
+        int i = 0;
+        for(; i < defaultDataText.length; i++) {
             data[i] = new JLabel(defaultDataText[i] + '0');
+        }
+        for(; i < data.length; i++) {
+            data[i] = new JLabel("");
         }
         
         addMouseWheelListener(new MouseWheelListener() {
@@ -139,9 +142,9 @@ public class BstObjPanel extends JPanel implements Runnable {
                         super.dispose();
                     }
                 };
+                JFrame.setDefaultLookAndFeelDecorated(true);
                 frame.setLayout(new GridBagLayout());
                 frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                JFrame.setDefaultLookAndFeelDecorated(true);
                 
                 // Create the weights for the main graphical panel
                 GridBagConstraints c = new GridBagConstraints();
@@ -173,8 +176,6 @@ public class BstObjPanel extends JPanel implements Runnable {
                 final JPanel dataPanel = new JPanel() {
                     {
                         setLayout(new GridLayout(bstObjPanel.data.length,1));
-                        //bstObjPanel.data[0] = new JLabel("Total number of nodes = 0");
-                        
                         for(int i = 0; i < bstObjPanel.data.length; i++) {
                             if(bstObjPanel.data[i] != null) {
                                 add(bstObjPanel.data[i]);
@@ -252,11 +253,26 @@ public class BstObjPanel extends JPanel implements Runnable {
                                         bstObjPanel.paused = true;
                                         if(bstObjPanel.treeShape.root == null) {
                                             bstObjPanel.personGenerator.reset();
+                                            bstObjPanel.paused = false;
                                         }
-                                        int i = Integer.parseInt(JOptionPane.showInputDialog("Please type the number of nodes you want to randomly insert", "50"));
-                                        while(i > 0) {
-                                            bstObjPanel.addTaskToEnd(new Task("insert",bstObjPanel.personGenerator.generateRandomPerson(), bstObjPanel.treeShape.root));
-                                            i--;
+                                        String extra = "";
+                                        while(true) {
+                                            String res = JOptionPane.showInputDialog("Please type the number of nodes you want to randomely insert" + ((extra.length() == 0)? "" : "\n(" + extra + ")"), "50");
+                                            if(res == null) {
+                                                bstObjPanel.paused = false;
+                                                return;
+                                            }
+                                            try {
+                                            int i = Integer.parseInt(res);
+                                            while(i > 0) {
+                                                bstObjPanel.addTaskToEnd(new Task("insert",bstObjPanel.personGenerator.generateRandomPerson(), bstObjPanel.treeShape.root));
+                                                i--;
+                                            }
+                                            } catch(Exception e1) {
+                                                extra = "Error: Must input a number";
+                                                continue;
+                                            }
+                                            break;
                                         }
                                         bstObjPanel.paused = false;
                                     }
@@ -423,6 +439,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
                                         bstObjPanel.paused = !bstObjPanel.paused;
+                                        bstObjPanel.updateData();
                                     }
                                 });
                             }
@@ -467,6 +484,7 @@ public class BstObjPanel extends JPanel implements Runnable {
             if(pauseBetweenTasks) {
                 System.gc();
                 paused = true;
+                updateData();
                 while(paused) {
                     updateMouse();
                     repaint();
@@ -526,6 +544,7 @@ public class BstObjPanel extends JPanel implements Runnable {
         data[1].setText(defaultDataText[1] + tasksCompleted);
         data[2].setText(defaultDataText[2] + tasksInQueue);
         data[3].setText(defaultDataText[3] + (speed+10));
+        data[4].setText(defaultDataText[4] + ((paused)?"Yes" : "No"));
     }
 
     public void toggleZoom() {
@@ -579,7 +598,7 @@ public class BstObjPanel extends JPanel implements Runnable {
         gd.setTransform(getAffineTransform());
 
         // Apply translation for data
-        gd.translate(30, -getHeight() / 2 + 50);
+        gd.translate(30, -getHeight() / 2 + 80);
         // Draw the Binary Search tree
         treeShape.draw(gd);
 
@@ -618,10 +637,12 @@ public class BstObjPanel extends JPanel implements Runnable {
 
     public void pause() {
         this.paused = true;
+        updateData();
     }
 
     public void unpause() {
         this.paused = false;
+        updateData();
     }
 
     public void addTaskToFront(Task newTask) {

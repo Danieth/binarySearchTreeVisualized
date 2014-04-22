@@ -237,7 +237,7 @@ public class Task {
                         if (n == null) {
                             bst.addTaskArgument(new Object[]{null});
                             bst.addTaskArgument(new Object[]{null});
-                            bst.addToBuffer("(Find For Delete) Right tree is empty. The person we are looking for is not in this tree.");
+                            bst.addToBuffer("(Find For Delete) Right tree is empty. Therefore, " + person + " is not in this tree.");
                         } else {
                             bst.addTaskToFront(new Task(FIND_FOR_DELETE, person, n, node));
                         }
@@ -247,7 +247,7 @@ public class Task {
                         if (n == null) {
                             bst.addTaskArgument(new Object[]{null});
                             bst.addTaskArgument(new Object[]{null});
-                            bst.addToBuffer("(Find For Delete) Left tree is empty. The person we are looking for is not in this tree.");
+                            bst.addToBuffer("(Find For Delete) Left tree is empty. Therefore, " + person + " is not in this tree.");
                         } else {
                             bst.addTaskToFront(new Task(FIND_FOR_DELETE, person, n, node));
                         }
