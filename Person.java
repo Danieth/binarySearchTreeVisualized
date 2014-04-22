@@ -97,7 +97,6 @@ public class Person {
     private int age;
     private String shortStateName;
     private String longStateName;
-    private String stateFrom;
 
     /**
      * Initialize this Person to the given parameters.
@@ -116,7 +115,6 @@ public class Person {
         this.longLastName = (lName.length() > LONG_LENGTH_CAP) ? lName.substring(0, LONG_LENGTH_CAP) : lName;
         this.age = age;
         if(STATE_MAP.containsKey(state) || STATE_MAP.containsValue(state)) {
-            this.stateFrom = state;
             if(state.length() == 2) {
                 shortStateName = state;
                 longStateName = getKeyByValue(STATE_MAP, state);
