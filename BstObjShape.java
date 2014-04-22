@@ -55,7 +55,6 @@ public class BstObjShape {
         gd.drawRect(-10, -60, 20, 20);
         if (root == null) {
             gd.drawLine(-10, -60, 10, -40);
-            return;
         } else {
             if (needsPreparation.get()) {
                 root.prepareDrawFromThisNode();
