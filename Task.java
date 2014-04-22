@@ -224,7 +224,7 @@ public class Task {
                     node = bst.treeShape.root;
                 }
                 if (person != null) {
-                    node.select(1000);
+                    node.select(100);
                     int compare = node.getVal().compareTo(person);
                     if (compare == 0) {
                         bst.addToBuffer("(Find For Delete) Found " + person + " for delete");

@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 public class BstObjPanel extends JPanel implements Runnable {
 
     private final static double zoomMax = 10000;
-    private final static double zoomMin = 0.5;
+    private final static double zoomMin = 1;
     final public BstObjShape treeShape = new BstObjShape();
     private final ConcurrentLinkedDeque<Task> tasksToExecute = new ConcurrentLinkedDeque<>();
     private final LinkedList<Object> taskArguments = new LinkedList<>();
@@ -103,6 +103,8 @@ public class BstObjPanel extends JPanel implements Runnable {
             public void mouseMoved(MouseEvent e) {
                 x = e.getX();
                 y = e.getY();
+                updateMouse();
+                repaint();
             }
 
             public void mouseDragged(MouseEvent e) {
@@ -198,7 +200,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                         });
                         add(new TreeNodeFunctionButton(bstObjPanel, frame,
                                 "Insert"));
-                        add(new JButton("Insert Median Node") {
+                        add(new JButton("Insert Median Node (If Empty)") {
                             {
                                 this.addActionListener(new ActionListener() {
                                     @Override
@@ -506,6 +508,8 @@ public class BstObjPanel extends JPanel implements Runnable {
                 Thread.sleep(10);
                 if(paused) {
                     System.gc();
+                    updateMouse();
+                    repaint();
                 }
                 } while(paused);
                 } catch (InterruptedException e) {
@@ -598,7 +602,7 @@ public class BstObjPanel extends JPanel implements Runnable {
         gd.setTransform(getAffineTransform());
 
         // Apply translation for data
-        gd.translate(30, -getHeight() / 2 + 80);
+        gd.translate(30, -getHeight() / 2 + 50);
         // Draw the Binary Search tree
         treeShape.draw(gd);
 
