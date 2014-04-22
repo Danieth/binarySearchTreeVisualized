@@ -254,7 +254,7 @@ public class BstObjPanel extends JPanel implements Runnable {
                                         if(bstObjPanel.treeShape.root == null) {
                                             bstObjPanel.personGenerator.reset();
                                         }
-                                        int i = Integer.parseInt(JOptionPane.showInputDialog("Please type the number of nodes you want to randomely insert", "50"));
+                                        int i = Integer.parseInt(JOptionPane.showInputDialog("Please type the number of nodes you want to randomly insert", "50"));
                                         while(i > 0) {
                                             bstObjPanel.addTaskToEnd(new Task("insert",bstObjPanel.personGenerator.generateRandomPerson(), bstObjPanel.treeShape.root));
                                             i--;
@@ -600,10 +600,10 @@ public class BstObjPanel extends JPanel implements Runnable {
     }
 
     private Point2D normalize(Point2D point) {
-        return getStaticlyTranslatedPoint(getAffineTranslatedPoint(point));
+        return getStaticallyTranslatedPoint(getAffineTranslatedPoint(point));
     }
 
-    private Point2D getStaticlyTranslatedPoint(Point2D point) {
+    private Point2D getStaticallyTranslatedPoint(Point2D point) {
         return new Point2D.Double(point.getX() - 30, point.getY()
                 + (getHeight() / 2 + 50) - 98);
     }
