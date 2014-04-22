@@ -147,6 +147,8 @@ public class Task {
                         // find the successor
                         bst.addTaskToFront(new Task(DELETE, person));
                         bst.addTaskToFront(new Task(FIND_SUCCESSOR, null, node));
+                    } else if (node != null && parentNode == null) {
+                        bst.addToBuffer("(Delete) Found the root node containing " + person);
                     } else {
                         bst.addToBuffer("(Delete) We could not find the person");
                     }
@@ -211,7 +213,7 @@ public class Task {
                         break;
                     } else if (compare < 0) {
                         bst.addToBuffer("(Find For Delete) " + node.getVal()
-                                .toString() + " < " + person + " so we will continue down the left tree.");
+                                .toString() + " < " + person + " so we will continue down the right tree.");
                         NodeShape n = (NodeShape) node.getLkid();
                         if (n == null) {
                             bst.addTaskArgument(new Object[]{null});
@@ -222,7 +224,7 @@ public class Task {
                         }
                     } else {
                         bst.addToBuffer("(Find For Delete) " + node.getVal()
-                                .toString() + " > " + person + " so we will continue down the right tree.");
+                                .toString() + " > " + person + " so we will continue down the left tree.");
                         NodeShape n = (NodeShape) node.getRkid();
                         if (n == null) {
                             bst.addTaskArgument(new Object[]{null});
