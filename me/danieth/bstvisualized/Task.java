@@ -258,7 +258,7 @@ public class Task {
             case MIN:
                 if (node != null && node.getLkid() == null) { // Found
                     bst.addToBuffer("(Found Min) Because " + node
-                            .getVal() + " has no right child, it is the maximum value of this tree");
+                            .getVal() + " has no left child, it is the minimum value of this tree");
                     bst.addTaskArgument(node);
                 } else if (node != null) {
                     bst.addToBuffer("(Searching For Min) Because " + node
